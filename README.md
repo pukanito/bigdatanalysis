@@ -1,4 +1,0 @@
-bigdatanalysis
-==============
-
-Big Data Analysis
