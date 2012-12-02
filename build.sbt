@@ -11,3 +11,5 @@ libraryDependencies += "com.novus" %% "salat-core" % "1.9.1"
 libraryDependencies += "org.mongodb" %% "casbah" % "2.4.1"
 
 libraryDependencies += "cc.abstra.pasilla" % "scuby" % "0.1.8"
+
+libraryDependencies += "org.scalatest" %% "scalatest" % "1.8" % "test"
