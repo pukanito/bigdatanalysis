@@ -16,8 +16,6 @@ class AttributeDefinitionTest extends FunSpec with ShouldMatchers {
       // implicit by making attributeId a 'val'
     }
 
-    it("should throw an exception when an AttributeDefinition with an existing identifier is created") (pending)
-    
     it("should have an attribute number") (pending)
     
     it("should not be possible to modify the attribute number") {

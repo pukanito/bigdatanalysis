@@ -1,7 +1,5 @@
 package model.attributes
 
-import scala.collection.mutable
-
 /**
  * The base class for all attribute definitions.
  *
@@ -13,7 +11,16 @@ import scala.collection.mutable
  * The attribute number is generated at creation time and cannot be modified afterwards.
  * 
  * @param attributeId the attribute identifier to assign to the AttributeDefinition
+ * @param attributesByIdMap an optional AttributeDefinitionsMap to add the AttributeDefinition to.
  */
-class AttributeDefinition(val attributeId: String) {
+class AttributeDefinition(
+  val attributeId: String,
+  attributesByIdMap: Option[AttributeDefinitionsMap] = None
+) {
   val attributeNumber: Int = 0
+  
+  attributesByIdMap match {
+    case Some(map) => map += this
+    case None =>
+  }
 }
