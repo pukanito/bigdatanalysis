@@ -23,4 +23,8 @@ class AttributeDefinition(
     case Some(map) => map += this
     case None =>
   }
+  
+  def this(attributeId: String, attributesByIdMap: AttributeDefinitionsMap) {
+    this(attributeId, Some(attributesByIdMap))
+  }
 }

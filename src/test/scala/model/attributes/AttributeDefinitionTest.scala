@@ -12,6 +12,14 @@ class AttributeDefinitionTest extends FunSpec with ShouldMatchers {
       a.attributeId should equal ("testid")
     }
     
+    it("should throw a DuplicateAttributeException when an AttributeDefinition is created in an AttributeDefinitionsMap that already contains the id") {
+   	  val m = new AttributeDefinitionsMap()
+      new AttributeDefinition("testid", m)
+	  intercept[DuplicateAttributeException] {
+		new AttributeDefinition("testid", m)
+	  }
+    }
+    
     it("should not be possible to modify the identifier") {
       // implicit by making attributeId a 'val'
     }

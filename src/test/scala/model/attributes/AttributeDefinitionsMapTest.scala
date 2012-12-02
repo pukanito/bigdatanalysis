@@ -8,23 +8,20 @@ class AttributeDefinitionsMapTest extends FunSpec with ShouldMatchers {
   describe("AttributeDefinitionsMap") {
     
     it("should be possible to retrieve an existing AttributeDefinition by its identifier") {
-      val a = new AttributeDefinition("testid")
       val m = new AttributeDefinitionsMap()
-      m += a
-      val a2 = m("testid")
-      a2.attributeId should equal ("testid")
+      m += new AttributeDefinition("testid")
+      m("testid").attributeId should equal ("testid")
     }
     
-    it("should throw a RuntimeException when an AttributeDefinition is added with an already existing id") {
-      val a = new AttributeDefinition("testid")
+    it("should throw a DuplicateAttributeException when an AttributeDefinition is added with an already existing id") {
       val m = new AttributeDefinitionsMap()
-      m += a
+      m += new AttributeDefinition("testid")
 	  intercept[DuplicateAttributeException] {
-		m += a
+		m += new AttributeDefinition("testid")
 	  }
     }
     
-    it("should throw an exception when a non existing AttributeDefinition is retrieved by its identifier") {
+    it("should throw a NoSuchElementException when a non existing AttributeDefinition is retrieved by its identifier") {
       val m = new AttributeDefinitionsMap()
 	  intercept[NoSuchElementException] {
 		m("testid")
