@@ -2,7 +2,7 @@ package model
 
 trait Datamodel {
     def id: String
-    def attributes = Map[String, Attribute]()
+    def attributes: Map[String, Attribute]
 }
 
 sealed trait Attribute {
