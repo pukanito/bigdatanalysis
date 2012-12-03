@@ -12,22 +12,12 @@ class DuplicateAttributeException(identifier: String)
 /**
  * A map containing AttributeDefinitions.
  */
-class AttributeDefinitionsMap {
-
-  private val attributesByIdMap = mutable.Map[String, AttributeDefinition]()
-  
-  def contains(key: String): Boolean = {
-    attributesByIdMap contains key
-  }
-  
-  def apply(key: String): AttributeDefinition = {
-    attributesByIdMap(key)
-  }
+class AttributeDefinitionsMap extends mutable.HashMap[String, AttributeDefinition] {
 
   def +=(value: AttributeDefinition) = {
-	if (attributesByIdMap contains value.attributeId)
+	if (this contains value.attributeId)
 	  throw new DuplicateAttributeException(value.attributeId)
-    attributesByIdMap(value.attributeId) = value
+    this(value.attributeId) = value
   }
 }
 
