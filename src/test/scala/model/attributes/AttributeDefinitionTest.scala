@@ -8,8 +8,8 @@ class AttributeDefinitionTest extends FunSpec with ShouldMatchers {
   describe("AttributeDefinition") {
     
     it("should have an identifier equal to the one specified at creation") {
-      val a = new AttributeDefinition("testid")
-      a.attributeId should equal ("testid")
+      val d = new AttributeDefinition("testid")
+      d.attributeId should equal ("testid")
     }
     
     it("should not be possible to modify the identifier") {
