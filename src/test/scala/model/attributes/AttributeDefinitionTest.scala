@@ -16,11 +16,5 @@ class AttributeDefinitionTest extends FunSpec with ShouldMatchers {
       // implicit by making attributeId a 'val'
     }
 
-    it("should have an attribute number") (pending)
-    
-    it("should not be possible to modify the attribute number") {
-      // implicit by  making attributeNumber a 'val'
-    }
-    
   }
 }
