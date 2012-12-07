@@ -12,5 +12,18 @@ abstract class AttributeValue(
   val attributeDefinition: AttributeDefinition,
   val parentAttributeValue: Option[AttributeValue] = None
 ) {
+  /**
+   * Its value.
+   */
   def value: Any
+  
+  /**
+   * Parent attributes of this attribute value.
+   */
+  def parents: AttributeDefinitionsMap
+  
+  /**
+   * Child attributes of this attribute value.
+   */
+  def children: AttributeDefinitionsMap
 }
