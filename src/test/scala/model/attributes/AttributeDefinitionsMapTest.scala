@@ -8,9 +8,11 @@ class AttributeDefinitionsMapTest extends FunSpec with ShouldMatchers {
   describe("AttributeDefinitionsMap") {
     
     it("should be possible to retrieve an existing attribute definition by its identifier") {
+   	  val d = new AttributeDefinition("testid")
       val m = new AttributeDefinitionsMap()
-      m += new AttributeDefinition("testid")
+      m += d
       m("testid").attributeId should equal ("testid")
+      assert(m("testid") eq d)
     }
     
     it("should throw a NoSuchElementException when a non existing attribute definition is retrieved by its identifier") {
@@ -29,18 +31,24 @@ class AttributeDefinitionsMapTest extends FunSpec with ShouldMatchers {
     }
     
     it("should be possible to add different attribute definitions with the same id to different maps") {
-      val m = new AttributeDefinitionsMap()
+      val m1 = new AttributeDefinitionsMap()
       val m2 = new AttributeDefinitionsMap()
-      m += new AttributeDefinition("testid")
-	  m2 += new AttributeDefinition("testid")
+      val d1 = new AttributeDefinition("testid")
+      val d2 = new AttributeDefinition("testid")
+      m1 += d1
+	  m2 += d2
+      assert(m1("testid") eq d1)
+      assert(m2("testid") eq d2)
     }
     
     it("should be possible to add the same attribute definition to different maps") {
-      val m = new AttributeDefinitionsMap()
+      val m1 = new AttributeDefinitionsMap()
       val m2 = new AttributeDefinitionsMap()
-      val a = new AttributeDefinition("testid")
-      m += a
-	  m2 += a
+      val d = new AttributeDefinition("testid")
+      m1 += d
+	  m2 += d
+      assert(m1("testid") eq d)
+      assert(m2("testid") eq d)
     }
     
   }
