@@ -22,11 +22,11 @@ class AttributeDefinitionsMapTest extends FunSpec with ShouldMatchers {
     }
 
     it("should throw a DuplicateAttributeException when an attribute definition is added with an already existing id") {
-        val m = new AttributeDefinitionsMap()
-        m += new AttributeDefinition("testid")
-        intercept[DuplicateAttributeException] {
-            m += new AttributeDefinition("testid")
-        }
+      val m = new AttributeDefinitionsMap()
+      m += new AttributeDefinition("testid")
+      intercept[DuplicateAttributeException] {
+          m += new AttributeDefinition("testid")
+      }
     }
 
     it("should be possible to add different attribute definitions with the same id to different maps") {
