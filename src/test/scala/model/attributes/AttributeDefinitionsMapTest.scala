@@ -11,7 +11,6 @@ class AttributeDefinitionsMapTest extends FunSpec with ShouldMatchers {
    	  val d = new AttributeDefinition("testid")
       val m = new AttributeDefinitionsMap()
       m += d
-      m("testid").attributeId should equal ("testid")
       assert(m("testid") eq d)
     }
     
