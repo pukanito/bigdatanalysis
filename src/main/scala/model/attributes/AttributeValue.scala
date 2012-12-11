@@ -11,7 +11,7 @@ import scala.collection.mutable
  * An attribute value without a parent attribute is a root attribute.
  *
  * @constructor Create a base attribute value.
- * @param attributeDefinition the definition of this attribute value.
+ * @param attributeDefinition The definition of this attribute value.
  */
 abstract class AttributeValue(
   val attributeDefinition: AttributeDefinition
@@ -25,17 +25,19 @@ abstract class AttributeValue(
   def value: Any
 
   /**
-   * Parent attribute values of this attribute value.
+   * Set of parent attribute values of this attribute value.
    */
   def parents: Set[AttributeValue] = { Set.empty ++ parentValues }
 
   /**
-   * Map with child attribute values of this attribute value.
+   * Map of child attribute values of this attribute value.
    */
   def children: AttributeValuesMap = { childrenMap }
 
   /**
    * Add a child value to this attribute value.
+   *
+   * @param value The attribute value to add as a child.
    */
   def +=(value: AttributeValue) = {
     childrenMap += value
