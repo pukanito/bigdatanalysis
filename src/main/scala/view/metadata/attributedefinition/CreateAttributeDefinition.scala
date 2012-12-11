@@ -1,5 +1,5 @@
 package view.metadata.attributedefinition
 
-class InsertAttributeDefinition {
+class CreateAttributeDefinition {
 
 }
