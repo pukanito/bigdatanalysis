@@ -9,6 +9,9 @@ import scala.collection.mutable
  * can be parent for other attribute values.
  *
  * An attribute value without a parent attribute is a root attribute.
+ *
+ * @constructor Create a base attribute value.
+ * @param attributeDefinition the definition of this attribute value.
  */
 abstract class AttributeValue(
   val attributeDefinition: AttributeDefinition
