@@ -7,7 +7,7 @@ class AttributeDefinitionTest extends FunSpec with ShouldMatchers {
 
   describe("AttributeDefinition") {
 
-    it("should have an identifier that only contains certain characters") (pending)
+    it("should have a valid identifier") (pending)
 
     it("should have an identifier equal to the one specified at creation") {
       val d = new AttributeDefinition("testid")
