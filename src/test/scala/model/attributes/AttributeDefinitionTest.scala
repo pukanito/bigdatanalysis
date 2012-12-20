@@ -7,7 +7,7 @@ class AttributeDefinitionTest extends FunSpec with ShouldMatchers {
 
   describe("AttributeDefinition") {
 
-    it("should have an identifier that only contains certain characters") {
+    it("should have a valid identifier") {
       intercept[IllegalArgumentException] { new AttributeDefinition("!illegal") }
       intercept[IllegalArgumentException] { new AttributeDefinition("ill!egal") }
       intercept[IllegalArgumentException] { new AttributeDefinition("1illegal") }
