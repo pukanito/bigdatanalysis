@@ -11,4 +11,7 @@ package model.attributes
 class AttributeDefinition(
   val attributeId: String
 ) {
+  if (!attributeId.head.isUnicodeIdentifierStart ||
+      !attributeId.tail.forall(_.isUnicodeIdentifierPart))
+    throw new IllegalArgumentException("'" + attributeId + "' is not a valid attribute identifier")
 }
