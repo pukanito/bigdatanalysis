@@ -13,6 +13,17 @@ class AttributeIdentifierTest extends FunSpec with ShouldMatchers {
       intercept[IllegalArgumentException] { new AttributeIdentifier("1illegal") }
     }
 
+    it("should compare different instances with the same id to be equal") {
+      val legalId = "legalId"
+      new AttributeIdentifier(legalId) should equal (new AttributeIdentifier(legalId))
+    }
+
+    it("should compare different instances with the different id to not be equal") {
+      val legalId = "legalId"
+      val otherLegalId = "otherLegalId"
+      new AttributeIdentifier(legalId) should not equal (new AttributeIdentifier(otherLegalId))
+    }
+
   }
 
 }

@@ -24,7 +24,7 @@ class AttributeIdentifier(
     case _ => false
   }
 
-  // Return the id as a string
+  // For convenience
   override def toString = attributeId
 }
 

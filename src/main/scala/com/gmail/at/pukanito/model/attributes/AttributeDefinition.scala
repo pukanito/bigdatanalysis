@@ -9,9 +9,7 @@ package com.gmail.at.pukanito.model.attributes
  * @param attributeId The attribute identifier to assign to the AttributeDefinition
  */
 class AttributeDefinition(
-  id: AttributeIdentifier
+  val attributeId: AttributeIdentifier
 ) {
-  private val attributeDefinitionId = id
 
-  def attributeId: String = { attributeDefinitionId.toString }
 }
