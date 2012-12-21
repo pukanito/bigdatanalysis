@@ -3,9 +3,9 @@ package com.gmail.at.pukanito.model.attributes
 /**
  * An attribute identifier.
  *
- * It uniquely identifies an attribute definition or attribute value.
+ * It identifies an attribute definition or attribute value.
  *
- * @constructor Create a base attribute definition.
+ * @constructor Create an attribute identifier.
  * @param attributeId The value to assign to the AttributeIdentifier
  */
 class AttributeIdentifier(
