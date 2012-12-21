@@ -7,7 +7,7 @@ import scala.collection.mutable
  *
  * @constructor Create an empty attribute values map.
  */
-class AttributeValuesMap extends mutable.HashMap[String, AttributeValue] {
+class AttributeValuesMap extends mutable.HashMap[AttributeIdentifier, AttributeValue] {
 
   /**
    * Add a new attribute value to this map.

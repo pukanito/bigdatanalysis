@@ -9,9 +9,9 @@ package com.gmail.at.pukanito.model.attributes
  * @param attributeId The attribute identifier to assign to the AttributeDefinition
  */
 class AttributeDefinition(
-  val attributeId: String
+  id: AttributeIdentifier
 ) {
-  if (!attributeId.head.isUnicodeIdentifierStart ||
-      !attributeId.tail.forall(_.isUnicodeIdentifierPart))
-    throw new IllegalArgumentException("'" + attributeId + "' is not a valid attribute identifier")
+  private val attributeDefinitionId = id
+
+  def attributeId: String = { attributeDefinitionId.toString }
 }

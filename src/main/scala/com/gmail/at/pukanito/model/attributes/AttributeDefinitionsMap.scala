@@ -9,7 +9,7 @@ import scala.collection.mutable
  * @constructor Create a duplicate attribute exception.
  * @param identifier The identifier of the duplicate attribute.
  */
-class DuplicateAttributeException(identifier: String)
+class DuplicateAttributeException(identifier: AttributeIdentifier)
   extends RuntimeException("Duplicate attribute id in AttributeDefinitionsMap: " + identifier) {}
 
 /**
@@ -17,7 +17,7 @@ class DuplicateAttributeException(identifier: String)
  *
  * @constructor Create an empty attribute definitions map.
  */
-class AttributeDefinitionsMap extends mutable.HashMap[String, AttributeDefinition] {
+class AttributeDefinitionsMap extends mutable.HashMap[AttributeIdentifier, AttributeDefinition] {
 
   /**
    * Add a new attribute definition to this map.
