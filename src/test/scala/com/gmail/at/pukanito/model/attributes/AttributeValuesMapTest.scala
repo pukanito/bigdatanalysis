@@ -24,6 +24,7 @@ class AttributeValuesMapTest extends FunSpec with ShouldMatchers {
     it("should return a default value when a non existing attribute value is retrieved by its identifier") {
       val m = new AttributeValuesMap()
 //      m("testid") should equal (None)
+      pending
     }
 
     it("should be possible to overwrite an already existing attribute value") {
