@@ -1,4 +1,4 @@
-package model.attributes
+package com.gmail.at.pukanito.model.attributes
 
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers

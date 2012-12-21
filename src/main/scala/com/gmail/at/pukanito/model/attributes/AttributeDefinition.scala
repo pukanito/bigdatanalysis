@@ -1,4 +1,4 @@
-package model.attributes
+package com.gmail.at.pukanito.model.attributes
 
 /**
  * The base class for all attribute definitions.

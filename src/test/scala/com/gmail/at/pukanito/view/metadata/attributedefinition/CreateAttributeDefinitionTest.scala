@@ -1,4 +1,4 @@
-package view.metadata.attributedefinition
+package com.gmail.at.pukanito.view.metadata.attributedefinition
 
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers

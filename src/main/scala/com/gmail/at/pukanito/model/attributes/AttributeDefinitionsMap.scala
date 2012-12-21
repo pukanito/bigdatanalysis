@@ -1,4 +1,4 @@
-package model.attributes
+package com.gmail.at.pukanito.model.attributes
 
 import scala.collection.mutable
 
