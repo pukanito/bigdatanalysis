@@ -9,6 +9,8 @@ class AttributeModelTest extends FunSpec with ShouldMatchers {
 
     it("should model parent-child relations between attribute definitions") (pending)
 
+    it("should throw an exception when a cycle is detected") (pending)
+
     it("should model attribute definitions without a parent as root attributes") (pending)
 
     it("should be possible to uniquely identify a modelled attribute definition by its path (root -> child -> child -> ...)") (pending)
