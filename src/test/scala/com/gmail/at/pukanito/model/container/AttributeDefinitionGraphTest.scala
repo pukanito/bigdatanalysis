@@ -3,9 +3,9 @@ package com.gmail.at.pukanito.model.container
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
-class DataGraphTest extends FunSpec with ShouldMatchers {
+class AttributeDefinitionGraphTest extends FunSpec with ShouldMatchers {
 
-  describe("DataGraph") {
+  describe("AttributeDefinitionGraph") {
 
     it("should model parent-child relations between data graph items") (pending)
 
