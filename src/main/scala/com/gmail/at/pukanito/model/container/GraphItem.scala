@@ -6,7 +6,7 @@ package com.gmail.at.pukanito.model.container
 trait GraphItem {
   type GraphItemKey = Map[String, Any]
   private var parentValues: Set[GraphItem] = Set()
-  private var childrenMap: Map[GraphItemKey, GraphItem] = Map()
+  private[this] var childrenMap: Map[GraphItemKey, GraphItem] = Map()
 
   /**
    * The key of a graph item. Should be immutable!

@@ -23,7 +23,18 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
       t1.key should not equal (t2.key)
     }
 
-    it("should model parent-child relations between graph items") (pending)
+    it("should model parent-child relations between graph items") {
+      val t1 = new TestGraphItem(1)
+      val t2 = new TestGraphItem(1)
+      t1 += t2
+      t1.parents should have size (0)
+      t1.children should have size (1)
+      t2.parents should have size (1)
+      t2.children should have size (0)
+      assert(t2.parents contains t1)
+      assert(t1.children contains t2.key)
+      (pending)
+    }
 
     it("should throw an exception when a cycle is detected") (pending)
 
