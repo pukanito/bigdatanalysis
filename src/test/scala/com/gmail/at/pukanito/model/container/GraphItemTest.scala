@@ -34,6 +34,7 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
 //      t2.parents should contain (t1)
       assert(t2.parents contains t1)
       t1.children should contain key (t2.key)
+      t1.children(t2.key) should be theSameInstanceAs (t2)
       (pending)
     }
 
