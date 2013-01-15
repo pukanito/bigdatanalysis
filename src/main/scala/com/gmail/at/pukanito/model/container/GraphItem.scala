@@ -30,14 +30,14 @@ trait GraphItem {
   def parents: Set[GraphItem] = { parentValues }
 
   /**
-   * Map of child graph items of this graph items.
+   * Map of child graph items of this graph item.
    */
   def children: Map[GraphItemKey, GraphItem] = { childrenMap }
 
   /**
    * Add a new child to this graph item.
    *
-   * @param child The child to add.
+   * @param value The child to add.
    */
   def +=(value: GraphItem) = {
     def testCycleExists(items: Set[GraphItem]): Boolean = {
