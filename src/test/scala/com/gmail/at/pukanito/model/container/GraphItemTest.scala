@@ -39,9 +39,7 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
       val t1 = new TestGraphItem(1)
       def testRecursively(depth: Int, item: GraphItem): Unit = {
         val t = new TestGraphItem(1)
-        intercept[GraphCycleException] {
-          item += t1
-        }
+        intercept[GraphCycleException] { item += t1 }
         item += t
         if (depth > 0) testRecursively(depth-1, t)
       }
