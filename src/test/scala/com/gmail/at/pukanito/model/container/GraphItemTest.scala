@@ -37,19 +37,15 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
 
     it("should throw an exception when a cycle is detected") {
       val t1 = new TestGraphItem(1)
-      val t2 = new TestGraphItem(1)
-      val t3 = new TestGraphItem(1)
-      t1 += t2
-      intercept[GraphCycleException] {
-        t1 += t1
+      def testRecursively(depth: Int, item: GraphItem): Unit = {
+        val t = new TestGraphItem(1)
+        intercept[GraphCycleException] {
+          item += t1
+        }
+        item += t
+        if (depth > 0) testRecursively(depth-1, t)
       }
-      intercept[GraphCycleException] {
-        t2 += t1
-      }
-      t2 += t3
-      intercept[GraphCycleException] {
-        t3 += t1
-      }
+      testRecursively(40, t1)
     }
 
     it("should be possible to uniquely identify a graph item by its path (root / childkey / childkey / ...)") (pending)

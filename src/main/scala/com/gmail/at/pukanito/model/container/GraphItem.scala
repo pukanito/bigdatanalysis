@@ -37,6 +37,8 @@ trait GraphItem {
   /**
    * Add a new child to this graph item.
    *
+   * Throws GraphCycleException when a cycle is detected.
+   *
    * @param value The child to add.
    */
   def +=(value: GraphItem) = {
