@@ -1,6 +1,16 @@
 package com.gmail.at.pukanito.model.container
 
 /**
+ * Exception thrown when an AttributeDescription is added to an AttributeDefinitionsMap
+ * and the map already contains an AttributeDescription with the same identifier.
+ *
+ * @constructor Create a duplicate attribute exception.
+ * @param identifier The identifier of the duplicate attribute.
+ */
+class GraphCycleException(value: GraphItem)
+  extends RuntimeException("Cycle in graph with: " + value) {}
+
+/**
  * Trait for making items graph compatible.
  */
 trait GraphItem {
@@ -30,6 +40,10 @@ trait GraphItem {
    * @param child The child to add.
    */
   def +=(value: GraphItem) = {
+    def testCycleExists(items: Set[GraphItem]): Boolean = {
+      if (items.isEmpty) false else items.exists( (x) => (x eq value) || testCycleExists(x.parents) )
+    }
+    if (testCycleExists(Set(this))) throw new GraphCycleException(value)
     childrenMap += (value.key -> value)
     value.parentValues += this
   }

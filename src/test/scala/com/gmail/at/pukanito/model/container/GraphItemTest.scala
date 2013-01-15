@@ -35,7 +35,22 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
       t1.children(t2.key) should be theSameInstanceAs (t2)
     }
 
-    it("should throw an exception when a cycle is detected") (pending)
+    it("should throw an exception when a cycle is detected") {
+      val t1 = new TestGraphItem(1)
+      val t2 = new TestGraphItem(1)
+      val t3 = new TestGraphItem(1)
+      t1 += t2
+      intercept[GraphCycleException] {
+        t1 += t1
+      }
+      intercept[GraphCycleException] {
+        t2 += t1
+      }
+      t2 += t3
+      intercept[GraphCycleException] {
+        t3 += t1
+      }
+    }
 
     it("should be possible to uniquely identify a graph item by its path (root / childkey / childkey / ...)") (pending)
 
