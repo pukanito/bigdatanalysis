@@ -31,11 +31,8 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
       t1.children should have size (1)
       t2.parents should have size (1)
       t2.children should have size (0)
-//      t2.parents should contain (t1)
-      assert(t2.parents contains t1)
-      t1.children should contain key (t2.key)
+      t2.parents.head should be theSameInstanceAs (t1)
       t1.children(t2.key) should be theSameInstanceAs (t2)
-      (pending)
     }
 
     it("should throw an exception when a cycle is detected") (pending)
