@@ -5,7 +5,7 @@ package com.gmail.at.pukanito.model.container
  */
 class GraphPath {
   import GraphPath.GraphItemKey
-  private[this] var pathList: List[GraphItemKey] = List()
+  private var pathList: List[GraphItemKey] = List()
 
   def depth = pathList.size
 }
