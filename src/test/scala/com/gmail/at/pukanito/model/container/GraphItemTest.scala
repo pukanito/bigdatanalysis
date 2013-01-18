@@ -4,7 +4,7 @@ import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
 class TestGraphItem(val k: Int) extends GraphItem {
-  override def key: GraphItemKey = { Map("A" -> k) }
+  override def key: GraphPath.GraphItemKey = { Map("A" -> k) }
 }
 
 class GraphItemTest extends FunSpec with ShouldMatchers {

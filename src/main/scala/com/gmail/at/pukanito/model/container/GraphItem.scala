@@ -1,5 +1,7 @@
 package com.gmail.at.pukanito.model.container
 
+import scala.collection.immutable.HashMap
+
 /**
  * Exception thrown when an AttributeDescription is added to an AttributeDefinitionsMap
  * and the map already contains an AttributeDescription with the same identifier.
@@ -14,7 +16,7 @@ class GraphCycleException(value: GraphItem)
  * Trait for making items graph compatible.
  */
 trait GraphItem {
-  type GraphItemKey = Map[String, Any]
+  import GraphPath.GraphItemKey
   private var parentValues: Set[GraphItem] = Set()
   private[this] var childrenMap: Map[GraphItemKey, GraphItem] = Map()
 
