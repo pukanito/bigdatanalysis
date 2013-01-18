@@ -8,4 +8,5 @@ TODO
 - ChildNode: has multiple parents and multiple children.
 - <del>Cycles are not allowed: a child my not have one of its parents as its direct child.</del>
 - Attribute definition and attribute value have different containers. In Attribute definition container a leaf attribute definition may appear only once on each node. In Attribute value container a leaf attribute value may appear multiple times as long as the keys are different.
+- GraphPath should be immutable
 
