@@ -1,15 +1,37 @@
 package com.gmail.at.pukanito.model.container
 
+import GraphPath.GraphItemKey
+
 /**
  * Representation of a relative or absolute path through GraphItems.
  */
-class GraphPath {
-  import GraphPath.GraphItemKey
-  private var pathList: List[GraphItemKey] = List()
+abstract class GraphPath (val path: GraphItemKey*){
 
-  def depth = pathList.size
+  def size = path.size
+
+  def isAbsolute: Boolean
 }
 
 object GraphPath {
   type GraphItemKey = Map[String, Any]
+}
+
+class AbsolutePath(path: GraphItemKey*) extends GraphPath(path: _*) {
+
+  def +(p: RelativePath): AbsolutePath = {
+    new AbsolutePath(this.path: _*)
+  }
+
+  val isAbsolute = true
+
+}
+
+class RelativePath(path: GraphItemKey*) extends GraphPath(path: _*) {
+
+  def +(p: RelativePath): RelativePath = {
+    new RelativePath(this.path: _*)
+  }
+
+  val isAbsolute = false
+
 }
