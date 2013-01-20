@@ -5,9 +5,7 @@ import com.gmail.at.pukanito.model.container.SimpleGraphItem
 /**
  * The base class for all attribute definitions.
  *
- * The attribute id is specified at creation time and cannot be modified afterwards.
- *
- * @constructor Create a base attribute definition.
+ * @constructor Create a base attribute definition with a specific id.
  * @param attributeId The attribute identifier to assign to the AttributeDefinition
  */
 class AttributeDefinition (

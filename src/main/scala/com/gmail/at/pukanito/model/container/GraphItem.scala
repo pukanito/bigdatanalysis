@@ -55,6 +55,8 @@ trait GraphItem {
    * Throws GraphCycleException when a cycle is detected.
    *
    * @param value The child to add.
+   * @throws GraphCycleException when a cycle is detected when the value would be added.
+   * @throws DuplicateGraphItemException when an item with the same key already exists.
    */
   def +=(value: GraphItem) = {
     def testCycleExists(items: Set[GraphItem]): Boolean = {
@@ -96,6 +98,9 @@ trait SimpleGraphItem extends GraphItem {
 
   override def key = Map(simpleGraphItemId -> simpleKey)
 
+  /**
+   * @return the key of a graph item. Should be immutable!
+   */
   def simpleKey: String
 
   /**

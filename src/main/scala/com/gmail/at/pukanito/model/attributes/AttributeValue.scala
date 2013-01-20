@@ -9,8 +9,6 @@ import com.gmail.at.pukanito.model.container.GraphItem
  * An attribute value contains a value of a specific type and
  * can be parent for other attribute values.
  *
- * An attribute value without a parent attribute is a root attribute.
- *
  * @constructor Create a base attribute value.
  * @param attributeDefinition The definition of this attribute value.
  */
