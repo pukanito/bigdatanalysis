@@ -6,8 +6,8 @@ import scala.collection.immutable.HashMap
  * Exception thrown when an AttributeDescription is added to an AttributeDefinitionsMap
  * and the map already contains an AttributeDescription with the same identifier.
  *
- * @constructor Create a duplicate attribute exception.
- * @param identifier The identifier of the duplicate attribute.
+ * @constructor Create a graph cycle exception.
+ * @param value The duplicate graph item.
  */
 class GraphCycleException(value: GraphItem)
   extends RuntimeException("Cycle in graph with: " + value) {}
@@ -21,18 +21,17 @@ trait GraphItem {
   private[this] var childrenMap: Map[GraphItemKey, GraphItem] = Map()
 
   /**
-   * The key of a graph item. Should be immutable!
+   * @return the key of a graph item. Should be immutable!
    */
   def key: GraphItemKey
 
   /**
-   * Set of parent graph items of this graph item. Empty when
-   * this is a root item.
+   * @return set of parent graph items of this graph item, empty when this is a root item.
    */
   def parents: Set[GraphItem] = { parentValues }
 
   /**
-   * Map of child graph items of this graph item.
+   * @return map of child graph items of this graph item.
    */
   def children: Map[GraphItemKey, GraphItem] = { childrenMap }
 
