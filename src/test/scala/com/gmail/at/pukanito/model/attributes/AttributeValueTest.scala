@@ -17,7 +17,7 @@ class AttributeValueTest extends FunSpec with ShouldMatchers {
     it("should be associated with an attribute definition") {
       val d = new AttributeDefinition("testid")
       val v: AttributeValue = new AttributeTestValue(d)
-      assert(v.attributeDefinition eq d)
+      v.attributeDefinition should be theSameInstanceAs (d)
     }
 
   }
