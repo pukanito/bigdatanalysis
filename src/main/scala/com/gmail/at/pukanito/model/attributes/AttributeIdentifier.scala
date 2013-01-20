@@ -15,6 +15,8 @@ class AttributeIdentifier(
       !attributeId.tail.forall(_.isUnicodeIdentifierPart))
     throw new IllegalArgumentException("'" + attributeId + "' is not a valid attribute identifier")
 
+  override def toString() = attributeId
+
   // For usage in a map
   override def hashCode() = attributeId.hashCode
 

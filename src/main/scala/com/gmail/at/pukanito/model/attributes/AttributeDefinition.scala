@@ -1,6 +1,6 @@
 package com.gmail.at.pukanito.model.attributes
 
-import com.gmail.at.pukanito.model.container.GraphItem
+import com.gmail.at.pukanito.model.container.SimpleGraphItem
 
 /**
  * The base class for all attribute definitions.
@@ -12,8 +12,8 @@ import com.gmail.at.pukanito.model.container.GraphItem
  */
 class AttributeDefinition (
   val attributeId: AttributeIdentifier
-) extends GraphItem {
+) extends SimpleGraphItem {
 
-  override def key = Map("id" -> attributeId)
+  override def simpleKey = attributeId.toString()
 
 }

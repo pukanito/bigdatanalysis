@@ -23,6 +23,11 @@ class DuplicateGraphItemException(value: GraphItem)
 
 /**
  * Trait for making items graph compatible.
+ *
+ * GraphItem can have:
+ *  - compound key
+ *  - multiple children
+ *  - multiple parents
  */
 trait GraphItem {
   import GraphPath.GraphItemKey
@@ -43,11 +48,6 @@ trait GraphItem {
    * @return map of child graph items of this graph item.
    */
   def children: Map[GraphItemKey, GraphItem] = childrenMap
-
-  /**
-   * @return child graph item with this specific key.
-   */
-  def children(s: String): GraphItem = children(Map(s -> s))
 
   /**
    * Add a new child to this graph item.
@@ -78,6 +78,31 @@ trait GraphItem {
       this
     else
       children(p.head)(p.tail)
+  }
+
+}
+
+/**
+ * Trait for making items graph compatible.
+ *
+ * GraphItem can have:
+ *  - single key
+ *  - multiple children
+ *  - multiple parents
+ */
+trait SimpleGraphItem extends GraphItem {
+
+  def simpleGraphItemId = "!id!"
+
+  override def key = Map(simpleGraphItemId -> simpleKey)
+
+  def simpleKey: String
+
+  /**
+   * @return child graph item with this specific key.
+   */
+  def apply(s: String): GraphItem = {
+    children(Map(simpleGraphItemId -> s))
   }
 
 }
