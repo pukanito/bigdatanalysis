@@ -4,7 +4,11 @@ import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
 class TestGraphItem(val k: Int) extends GraphItem {
-  override def key = { Map("A" -> k) }
+  override def key = Map("A" -> k)
+}
+
+class TestSimpleGraphItem(val k: String) extends SimpleGraphItem {
+  override def simpleKey = k
 }
 
 class GraphItemTest extends FunSpec with ShouldMatchers {
@@ -83,6 +87,26 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
       val t2 = new TestGraphItem(2)
       t1 += t2
       intercept[DuplicateGraphItemException] { t1 += t2 }
+    }
+
+  }
+
+}
+
+class SimpleGraphItemTest extends FunSpec with ShouldMatchers {
+
+  describe("SimpleGraphItem") {
+
+    it("should compare keys of different graph items with the same key as equal") {
+      val t1 = new TestSimpleGraphItem("A")
+      val t2 = new TestSimpleGraphItem("A")
+      t1.key should equal (t2.key)
+    }
+
+    it("should compare keys of different graph items with different keys as not equal") {
+      val t1 = new TestSimpleGraphItem("A")
+      val t2 = new TestSimpleGraphItem("B")
+      t1.key should not equal (t2.key)
     }
 
   }

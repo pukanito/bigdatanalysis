@@ -87,10 +87,7 @@ trait GraphItem {
 /**
  * Trait for making items graph compatible.
  *
- * GraphItem can have:
- *  - single key
- *  - multiple children
- *  - multiple parents
+ * SimpleGraphItem is a GraphItem with single key.
  */
 trait SimpleGraphItem extends GraphItem {
 
