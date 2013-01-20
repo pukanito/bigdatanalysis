@@ -36,6 +36,17 @@ class GraphPathTest extends FunSpec with ShouldMatchers  {
       x.tail should equal (new GraphPath(Map("B"->2), Map("C"->3)))
     }
 
+    it("should behave correctly when testing equality") {
+      val p1, p2 = new GraphPath(Map("A"->1), Map("B"->2))
+      p1 should equal (p2)
+      p2 should equal (p1)
+      p1.hashCode should equal (p2.hashCode)
+      val p2a: Any = p2
+      p1 should equal (p2a)
+      p2a should equal (p1)
+      p1.hashCode should equal (p2a.hashCode)
+    }
+
   }
 
 }

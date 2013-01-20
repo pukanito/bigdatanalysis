@@ -54,13 +54,23 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
       val t1 = new TestGraphItem(1)
       val t2 = new TestGraphItem(2)
       val t3 = new TestGraphItem(3)
-      val toT2 = new GraphPath(Map("A"->2))
-      val toT3 = new GraphPath(Map("A"->3))
       t1 += t2
       t1 += t3
+      val toT2 = new GraphPath(Map("A"->2))
+      val toT3 = new GraphPath(Map("A"->3))
+      t1 should be theSameInstanceAs(t1.get(new GraphPath))
       t2 should be theSameInstanceAs(t1.get(toT2))
       t3 should be theSameInstanceAs(t1.get(toT3))
-      (pending)
+      val t4 = new TestGraphItem(4)
+      val t5 = new TestGraphItem(5)
+      t2 += t4
+      t3 += t5
+      val toT4 = new GraphPath(Map("A"->2), Map("A"->4))
+      val toT5 = new GraphPath(Map("A"->3), Map("A"->5))
+      t4 should be theSameInstanceAs(t1.get(toT4))
+      t5 should be theSameInstanceAs(t1.get(toT5))
+      t4 should be theSameInstanceAs(t2.get(toT4.tail))
+      t5 should be theSameInstanceAs(t3.get(toT5.tail))
     }
 
     it("should throw a NoSuchElementException when a non existing path is retrieved") (pending)
