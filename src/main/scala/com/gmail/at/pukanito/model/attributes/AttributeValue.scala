@@ -1,6 +1,7 @@
 package com.gmail.at.pukanito.model.attributes
 
 import scala.collection.mutable
+import com.gmail.at.pukanito.model.container.GraphItem
 
 /**
  * The base class for all attribute value types.
@@ -15,32 +16,13 @@ import scala.collection.mutable
  */
 abstract class AttributeValue(
   val attributeDefinition: AttributeDefinition
-) {
-  private val parentValues: mutable.Set[AttributeValue] = mutable.Set()
-  private val childrenMap: AttributeValuesMap = new AttributeValuesMap()
+) extends GraphItem {
+
+  override def key = Map(attributeDefinition.attributeId.toString() -> value)
 
   /**
    * Its value.
    */
   def value: Any
 
-  /**
-   * Set of parent attribute values of this attribute value.
-   */
-  def parents: Set[AttributeValue] = { Set.empty ++ parentValues }
-
-  /**
-   * Map of child attribute values of this attribute value.
-   */
-  def children: AttributeValuesMap = { childrenMap }
-
-  /**
-   * Add a child value to this attribute value.
-   *
-   * @param value The attribute value to add as a child.
-   */
-  def +=(value: AttributeValue) = {
-    childrenMap += value
-    value.parentValues += this
-  }
 }

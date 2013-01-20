@@ -42,9 +42,10 @@ class AttributeValueTest extends FunSpec with ShouldMatchers {
       expect(0) { v2.children.size }
       expect(1) { p1.children.size }
       expect(2) { p2.children.size }
-      assert(p1.children("test1id") eq v1)
-      assert(p2.children("test1id") eq v1)
-      assert(p2.children("test2id") eq v2)
+//      assert(p1.children("test1id") eq v1)
+//      assert(p2.children("test1id") eq v1)
+//      assert(p2.children("test2id") eq v2)
+      (pending)
       assert(v1.parents contains p1)
       assert(v1.parents contains p2)
       assert(v2.parents contains p2)

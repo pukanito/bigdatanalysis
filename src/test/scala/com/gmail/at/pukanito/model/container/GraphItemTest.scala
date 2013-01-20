@@ -4,7 +4,7 @@ import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
 class TestGraphItem(val k: Int) extends GraphItem {
-  override def key: GraphPath.GraphItemKey = { Map("A" -> k) }
+  override def key = { Map("A" -> k) }
 }
 
 class GraphItemTest extends FunSpec with ShouldMatchers {
@@ -56,8 +56,8 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
       val t3 = new TestGraphItem(3)
       t1 += t2
       t1 += t3
-      val toT2 = new GraphPath(Map("A"->2))
-      val toT3 = new GraphPath(Map("A"->3))
+      val toT2 = new GraphPath(Map("A" -> 2))
+      val toT3 = new GraphPath(Map("A" -> 3))
       t1 should be theSameInstanceAs(t1(new GraphPath))
       t2 should be theSameInstanceAs(t1(toT2))
       t3 should be theSameInstanceAs(t1(toT3))
@@ -65,8 +65,8 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
       val t5 = new TestGraphItem(5)
       t2 += t4
       t3 += t5
-      val toT4 = new GraphPath(Map("A"->2), Map("A"->4))
-      val toT5 = new GraphPath(Map("A"->3), Map("A"->5))
+      val toT4 = new GraphPath(Map("A" -> 2), Map("A" -> 4))
+      val toT5 = new GraphPath(Map("A" -> 3), Map("A" -> 5))
       t4 should be theSameInstanceAs(t1(toT4))
       t5 should be theSameInstanceAs(t1(toT5))
       t4 should be theSameInstanceAs(t2(toT4.tail))
