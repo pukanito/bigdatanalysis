@@ -19,7 +19,7 @@ object GraphPath {
 class AbsolutePath(path: GraphItemKey*) extends GraphPath(path: _*) {
 
   def +(p: RelativePath): AbsolutePath = {
-    new AbsolutePath(this.path: _*)
+    new AbsolutePath((this.path ++ p.path): _*)
   }
 
   val isAbsolute = true
@@ -29,7 +29,7 @@ class AbsolutePath(path: GraphItemKey*) extends GraphPath(path: _*) {
 class RelativePath(path: GraphItemKey*) extends GraphPath(path: _*) {
 
   def +(p: RelativePath): RelativePath = {
-    new RelativePath(this.path: _*)
+    new RelativePath((this.path ++ p.path): _*)
   }
 
   val isAbsolute = false

@@ -9,16 +9,19 @@ class GraphPathTest extends FunSpec with ShouldMatchers  {
 
     it("should be possible to represent a root item") {
       val x = new AbsolutePath()
+      x should have size (0)
       (pending)
     }
 
     it("should be possible to represent an absolute path") {
       val x = new AbsolutePath(Map("A"->1))
+      x should have size (1)
       (pending)
     }
 
     it("should be possible to represent a relative path") {
-      val x = new RelativePath(Map("A"->1))
+      val x = new RelativePath(Map("A"->1, "B"->2))
+      x should have size (1)
       (pending)
     }
 
