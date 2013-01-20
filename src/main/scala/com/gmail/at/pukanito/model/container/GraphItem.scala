@@ -51,4 +51,17 @@ trait GraphItem {
     value.parentValues += this
   }
 
+  /**
+   * Get a specific item of the graph.
+   *
+   * @param p path to the child item.
+   * @return a child item according to the specified path.
+   */
+  def get(p: GraphPath): GraphItem = {
+    if (p.size == 0)
+      this
+    else
+      children(p.head).get(p.tail)
+  }
+
 }

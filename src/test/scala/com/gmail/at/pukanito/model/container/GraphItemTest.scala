@@ -50,7 +50,18 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
       testRecursively(40, t1)
     }
 
-    it("should be possible to uniquely identify a graph item by its path (root / childkey / childkey / ...)") (pending)
+    it("should be possible to uniquely identify a graph item by its path (root / childkey / childkey / ...)") {
+      val t1 = new TestGraphItem(1)
+      val t2 = new TestGraphItem(2)
+      val t3 = new TestGraphItem(3)
+      val toT2 = new GraphPath(Map("A"->2))
+      val toT3 = new GraphPath(Map("A"->3))
+      t1 += t2
+      t1 += t3
+      t2 should be theSameInstanceAs(t1.get(toT2))
+      t3 should be theSameInstanceAs(t1.get(toT3))
+      (pending)
+    }
 
     it("should throw a NoSuchElementException when a non existing path is retrieved") (pending)
 

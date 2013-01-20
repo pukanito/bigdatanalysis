@@ -33,7 +33,7 @@ class GraphPathTest extends FunSpec with ShouldMatchers  {
     it("should return the remainder of the path with 'tail'") {
       val x = new GraphPath(Map("A"->1), Map("B"->2), Map("C"->3))
       x.tail should have size (2)
-      x.tail should equal ((new GraphPath(Map("B"->2), Map("C"->3)).path))
+      x.tail should equal (new GraphPath(Map("B"->2), Map("C"->3)))
     }
 
   }
