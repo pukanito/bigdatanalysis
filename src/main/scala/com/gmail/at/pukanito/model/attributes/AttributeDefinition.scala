@@ -15,4 +15,5 @@ class AttributeDefinition (
 ) extends GraphItem {
 
   override def key = Map("id" -> attributeId)
+
 }

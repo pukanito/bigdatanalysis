@@ -37,12 +37,17 @@ trait GraphItem {
   /**
    * @return set of parent graph items of this graph item, empty when this is a root item.
    */
-  def parents: Set[GraphItem] = { parentValues }
+  def parents: Set[GraphItem] = parentValues
 
   /**
    * @return map of child graph items of this graph item.
    */
-  def children: Map[GraphItemKey, GraphItem] = { childrenMap }
+  def children: Map[GraphItemKey, GraphItem] = childrenMap
+
+  /**
+   * @return child graph item with this specific key.
+   */
+  def children(s: String): GraphItem = children(Map(s -> s))
 
   /**
    * Add a new child to this graph item.
