@@ -15,6 +15,16 @@ class GraphPath (val path: GraphItemKey*){
   def size = path.size
 
   /**
+   * @return the first item of the path.
+   */
+  def head = path.head
+
+  /**
+   * @return the path except the first item.
+   */
+  def tail = path.tail
+
+  /**
    * Append another path to this path.
    *
    * @param p the other path to append.

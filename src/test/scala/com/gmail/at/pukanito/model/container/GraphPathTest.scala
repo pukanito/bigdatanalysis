@@ -24,6 +24,18 @@ class GraphPathTest extends FunSpec with ShouldMatchers  {
       z should have size (2)
     }
 
+    it("should return the first item of the path with 'head'") {
+      val x = new GraphPath(Map("A"->1), Map("B"->2), Map("C"->3))
+      x.head should have size (1)
+      x.head should equal (Map("A"->1))
+    }
+
+    it("should return the remainder of the path with 'tail'") {
+      val x = new GraphPath(Map("A"->1), Map("B"->2), Map("C"->3))
+      x.tail should have size (2)
+      x.tail should equal ((new GraphPath(Map("B"->2), Map("C"->3)).path))
+    }
+
   }
 
 }
