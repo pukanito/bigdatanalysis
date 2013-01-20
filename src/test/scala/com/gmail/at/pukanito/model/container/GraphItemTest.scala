@@ -85,14 +85,6 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
       intercept[DuplicateGraphItemException] { t1 += t2 }
     }
 
-    it("should throw a NoSuchElementException when a deleted graph item is retrieved by its path") (pending)
-
-    it("should throw a NoSuchElementException when a renamed graph item is retrieved by its old path") (pending)
-
-    it("should be possible to retrieve the children of a graph item") (pending)
-
-    it("should be possible to retrieve the parents of a graph item") (pending)
-
   }
 
 }
