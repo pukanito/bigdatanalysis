@@ -27,7 +27,7 @@ class GraphPathTest extends FunSpec with ShouldMatchers  {
       x.isAbsolute should equal (false)
     }
 
-    it("should be possible to add a relative path to a relative path giving a new relative path") {
+    it("should be possible to add a relative path to an absolute path giving an absolute path") {
       val x = new AbsolutePath(Map("A"->1))
       val y = new RelativePath(Map("A"->1))
       val z = x + y
@@ -35,7 +35,7 @@ class GraphPathTest extends FunSpec with ShouldMatchers  {
       z.isAbsolute should equal (true)
     }
 
-    it("should be possible to add a relative path to an absolute path giving an absolute path") {
+    it("should be possible to add a relative path to a relative path giving a new relative path") {
       val x = new RelativePath(Map("A"->1))
       val y = new RelativePath(Map("A"->1))
       val z = x + y
