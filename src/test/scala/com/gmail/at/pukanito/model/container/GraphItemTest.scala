@@ -58,24 +58,32 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
       t1 += t3
       val toT2 = new GraphPath(Map("A"->2))
       val toT3 = new GraphPath(Map("A"->3))
-      t1 should be theSameInstanceAs(t1.get(new GraphPath))
-      t2 should be theSameInstanceAs(t1.get(toT2))
-      t3 should be theSameInstanceAs(t1.get(toT3))
+      t1 should be theSameInstanceAs(t1(new GraphPath))
+      t2 should be theSameInstanceAs(t1(toT2))
+      t3 should be theSameInstanceAs(t1(toT3))
       val t4 = new TestGraphItem(4)
       val t5 = new TestGraphItem(5)
       t2 += t4
       t3 += t5
       val toT4 = new GraphPath(Map("A"->2), Map("A"->4))
       val toT5 = new GraphPath(Map("A"->3), Map("A"->5))
-      t4 should be theSameInstanceAs(t1.get(toT4))
-      t5 should be theSameInstanceAs(t1.get(toT5))
-      t4 should be theSameInstanceAs(t2.get(toT4.tail))
-      t5 should be theSameInstanceAs(t3.get(toT5.tail))
+      t4 should be theSameInstanceAs(t1(toT4))
+      t5 should be theSameInstanceAs(t1(toT5))
+      t4 should be theSameInstanceAs(t2(toT4.tail))
+      t5 should be theSameInstanceAs(t3(toT5.tail))
     }
 
-    it("should throw a NoSuchElementException when a non existing path is retrieved") (pending)
+    it("should throw a NoSuchElementException when a non existing path is retrieved") {
+      val t1 = new TestGraphItem(1)
+      intercept[NoSuchElementException] { t1(new GraphPath(Map("non-existing-key"->0))) }
+    }
 
-    it("should throw a DuplicateAttributeException when a graph item is added with an already existing path") (pending)
+    it("should throw a DuplicateAttributeException when a child graph item is added with an already existing key") {
+      val t1 = new TestGraphItem(1)
+      val t2 = new TestGraphItem(2)
+      t1 += t2
+      intercept[DuplicateGraphItemException] { t1 += t2 }
+    }
 
     it("should throw a NoSuchElementException when a deleted graph item is retrieved by its path") (pending)
 

@@ -3,14 +3,23 @@ package com.gmail.at.pukanito.model.container
 import scala.collection.immutable.HashMap
 
 /**
- * Exception thrown when an AttributeDescription is added to an AttributeDefinitionsMap
- * and the map already contains an AttributeDescription with the same identifier.
+ * Exception thrown when an item is added to a GraphItem and the item is the same object
+ * as the GraphItem or one of its (in)direct parents.
  *
  * @constructor Create a graph cycle exception.
  * @param value The duplicate graph item.
  */
 class GraphCycleException(value: GraphItem)
   extends RuntimeException("Cycle in graph with: " + value) {}
+
+/**
+ * Exception thrown when an item is added to a GraphItem with an already existing key.
+ *
+ * @constructor Create a duplicate item exception.
+ * @param value The item that failed to added.
+ */
+class DuplicateGraphItemException(value: GraphItem)
+  extends RuntimeException("Duplicate graph item: " + value) {}
 
 /**
  * Trait for making items graph compatible.
@@ -47,6 +56,7 @@ trait GraphItem {
       if (items.isEmpty) false else items.exists( (x) => (x eq value) || testCycleExists(x.parents) )
     }
     if (testCycleExists(Set(this))) throw new GraphCycleException(value)
+    if (childrenMap contains value.key) throw new DuplicateGraphItemException(value)
     childrenMap += (value.key -> value)
     value.parentValues += this
   }
@@ -55,13 +65,14 @@ trait GraphItem {
    * Get a specific item of the graph.
    *
    * @param p path to the child item.
-   * @return a child item according to the specified path.
+   * @return a child item according to the specified path (NoSuchElementException if
+   *         an item in the path does not exist.
    */
-  def get(p: GraphPath): GraphItem = {
+  def apply(p: GraphPath): GraphItem = {
     if (p.size == 0)
       this
     else
-      children(p.head).get(p.tail)
+      children(p.head)(p.tail)
   }
 
 }
