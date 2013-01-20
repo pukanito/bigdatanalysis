@@ -9,5 +9,3 @@ TODO
 - <del>Cycles are not allowed: a child my not have one of its parents as its direct child.</del>
 - Attribute definition and attribute value have different containers. In Attribute definition container a leaf attribute definition may appear only once on each node. In Attribute value container a leaf attribute value may appear multiple times as long as the keys are different.
 - <del>GraphPath should be immutable.</del>
-- GraphPath should recoginize ".." and "." keys in its path (which parent should it choose -> the one in the path, ".." can not go before the first item in the path).
-

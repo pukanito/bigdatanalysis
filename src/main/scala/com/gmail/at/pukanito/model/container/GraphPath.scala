@@ -1,26 +1,18 @@
 package com.gmail.at.pukanito.model.container
 
-import GraphPath.GraphItemKey
+import GraphPath._
 
 /**
  * Representation of a relative or absolute path through GraphItems.
  *
- * @constructor Create a path
- * @param keys the keys representing the path (can contain "." and ".." keys)
+ * @param path the keys representing the path.
  */
-abstract class GraphPath (keys: GraphItemKey*){
-
-  protected val normalizedPath = keys
-
-  /**
-   * @return the normalized path (without "." and ".." keys)
-   */
-  def path = normalizedPath
+abstract class GraphPath (val path: GraphItemKey*){
 
   /**
    * @return the depth of the path.
    */
-  def size = normalizedPath.size
+  def size = path.size
 
   /**
    * @return whether this is an absolute path (true) or not (false).
@@ -30,13 +22,22 @@ abstract class GraphPath (keys: GraphItemKey*){
   /**
    * @return whether this is a root path (true) or not (false).
    */
-  def isRoot = isAbsolute && (normalizedPath.size == 0)
+  def isRoot = isAbsolute && (size == 0)
 }
 
+/**
+ * Types and helper methods for GraphPath.
+ */
 object GraphPath {
   type GraphItemKey = Map[String, Any]
 }
 
+/**
+ * Representation of an absolute path.
+ *
+ * @constructor Create an absolute path.
+ * @param rawPath the keys representing the path.
+ */
 class AbsolutePath(rawPath: GraphItemKey*) extends GraphPath(rawPath: _*) {
 
   /**
@@ -52,13 +53,19 @@ class AbsolutePath(rawPath: GraphItemKey*) extends GraphPath(rawPath: _*) {
   val isAbsolute = true
 }
 
-class RelativePath(rawPath: GraphItemKey*) extends GraphPath(rawPath: _*) {
+/**
+ * Representation of a relative path.
+ *
+ * @constructor Create a relative path.
+ * @param p the keys representing the path.
+ */
+class RelativePath(p: GraphItemKey*) extends GraphPath(p: _*) {
 
   /**
    * Append a relative path to this path.
    *
    * @param p the relative path to append.
-   * @return a new relative path consisting of the relative paht with p appended.
+   * @return a new relative path consisting of the relative path with p appended.
    */
   def +(p: RelativePath): RelativePath = {
     new RelativePath((this.path ++ p.path): _*)

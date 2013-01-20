@@ -43,10 +43,6 @@ class GraphPathTest extends FunSpec with ShouldMatchers  {
       z.isAbsolute should equal (false)
     }
 
-    it("should not e possible to add an absolute path to an absolute path") (pending)
-
-    it("should not e possible to add an absolute path to a relative path") (pending)
-
   }
 
 }
