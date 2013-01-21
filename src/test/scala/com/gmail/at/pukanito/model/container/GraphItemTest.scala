@@ -60,17 +60,17 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
       val t3 = new TestGraphItem(3)
       t1 += t2
       t1 += t3
-      val toT2 = new GraphPath(Map("A" -> 2))
-      val toT3 = new GraphPath(Map("A" -> 3))
-      t1 should be theSameInstanceAs(t1(new GraphPath))
+      val toT2 = GraphPath(Map("A" -> 2))
+      val toT3 = GraphPath(Map("A" -> 3))
+      t1 should be theSameInstanceAs(t1(GraphPath()))
       t2 should be theSameInstanceAs(t1(toT2))
       t3 should be theSameInstanceAs(t1(toT3))
       val t4 = new TestGraphItem(4)
       val t5 = new TestGraphItem(5)
       t2 += t4
       t3 += t5
-      val toT4 = new GraphPath(Map("A" -> 2), Map("A" -> 4))
-      val toT5 = new GraphPath(Map("A" -> 3), Map("A" -> 5))
+      val toT4 = GraphPath(Map("A" -> 2), Map("A" -> 4))
+      val toT5 = GraphPath(Map("A" -> 3), Map("A" -> 5))
       t4 should be theSameInstanceAs(t1(toT4))
       t5 should be theSameInstanceAs(t1(toT5))
       t4 should be theSameInstanceAs(t2(toT4.tail))
@@ -79,7 +79,7 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
 
     it("should throw a NoSuchElementException when a non existing path is retrieved") {
       val t1 = new TestGraphItem(1)
-      intercept[NoSuchElementException] { t1(new GraphPath(Map("non-existing-key"->0))) }
+      intercept[NoSuchElementException] { t1(GraphPath(Map("non-existing-key"->0))) }
     }
 
     it("should throw a DuplicateAttributeException when a child graph item is added with an already existing key") {
@@ -107,6 +107,29 @@ class SimpleGraphItemTest extends FunSpec with ShouldMatchers {
       val t1 = new TestSimpleGraphItem("A")
       val t2 = new TestSimpleGraphItem("B")
       t1.key should not equal (t2.key)
+    }
+
+    it("should be possible to uniquely identify a graph item by its path (root / childkey / childkey / ...)") {
+      val t1 = new TestSimpleGraphItem("1")
+      val t2 = new TestSimpleGraphItem("2")
+      val t3 = new TestSimpleGraphItem("3")
+      t1 += t2
+      t1 += t3
+      val toT2 = SimpleGraphPath("2")
+      val toT3 = SimpleGraphPath("3")
+      t1 should be theSameInstanceAs(t1(GraphPath()))
+      t2 should be theSameInstanceAs(t1(toT2))
+      t3 should be theSameInstanceAs(t1(toT3))
+      val t4 = new TestSimpleGraphItem("4")
+      val t5 = new TestSimpleGraphItem("5")
+      t2 += t4
+      t3 += t5
+      val toT4 = SimpleGraphPath("2", "4")
+      val toT5 = SimpleGraphPath("3", "5")
+      t4 should be theSameInstanceAs(t1(toT4))
+      t5 should be theSameInstanceAs(t1(toT5))
+      t4 should be theSameInstanceAs(t2(toT4.tail))
+      t5 should be theSameInstanceAs(t3(toT5.tail))
     }
 
   }
