@@ -30,7 +30,7 @@ class GraphPath (val path: GraphItemKey*){
    * @param p the other path to append.
    * @return a new path consisting of this path with p appended.
    */
-  def +(p: GraphPath): GraphPath = {
+  def +(p: GraphPath) = {
     new GraphPath((this.path ++ p.path): _*)
   }
 

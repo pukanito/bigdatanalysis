@@ -52,8 +52,6 @@ trait GraphItem {
   /**
    * Add a new child to this graph item.
    *
-   * Throws GraphCycleException when a cycle is detected.
-   *
    * @param value The child to add.
    * @throws GraphCycleException when a cycle is detected when the value would be added.
    * @throws DuplicateGraphItemException when an item with the same key already exists.
@@ -103,7 +101,7 @@ trait SimpleGraphItem extends GraphItem {
   /**
    * @return child graph item with this specific key.
    */
-  def apply(s: String): GraphItem = {
+  def apply(s: String) = {
     children(Map(simpleGraphItemId -> s))
   }
 
