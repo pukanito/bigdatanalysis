@@ -72,7 +72,7 @@ object SimpleGraphPath {
   /**
    * @return a GraphPath with keys made from the specified Strings.
    */
-  def apply(p1: String, path: String*): GraphPath = {
-    new GraphPath((p1 +: path).map(x => Map(simpleGraphItemId -> x)): _*)
+  def apply(path: String*): GraphPath = {
+    new GraphPath(path.map(x => Map(simpleGraphItemId -> x)): _*)
   }
 }
