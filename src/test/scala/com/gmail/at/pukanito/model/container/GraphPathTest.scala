@@ -49,9 +49,7 @@ class GraphPathTest extends FunSpec with ShouldMatchers  {
 
     it("Should create a special GraphPath when using SimpleGraphPath") {
       import SimpleGraphPath.simpleGraphItemId
-      val x = SimpleGraphPath("A", "B")
-      val y = GraphPath(Map(simpleGraphItemId -> "A"), Map(simpleGraphItemId -> "B"))
-      x should equal (y)
+      SimpleGraphPath("A", "B") should equal (GraphPath(Map(simpleGraphItemId -> "A"), Map(simpleGraphItemId -> "B")))
     }
 
   }
