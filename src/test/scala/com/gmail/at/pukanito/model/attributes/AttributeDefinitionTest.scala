@@ -17,12 +17,6 @@ class AttributeDefinitionTest extends FunSpec with ShouldMatchers {
       // implicit by making attributeId a 'val'
     }
 
-    it("should be possible to get attribute definitions by simple id") {
-      val d1 = new AttributeDefinition("testid1")
-      val d2 = new AttributeDefinition("testid2")
-      d1 += d2
-      d1("testid2") should be theSameInstanceAs (d2)
-    }
-
   }
+
 }

@@ -70,14 +70,27 @@ trait GraphItem {
    * Get a specific item of the graph.
    *
    * @param p path to the child item.
-   * @return a child item according to the specified path (NoSuchElementException if
-   *         an item in the path does not exist.
+   * @return a child item according to the specified path.
+   * @throws NoSuchElementException if an item in the path does not exist.
    */
   def apply(p: GraphPath): GraphItem = {
     if (p.size == 0)
       this
     else
       children(p.head)(p.tail)
+  }
+
+  /**
+   * Get a specific item of the graph using simple GraphPath
+   *
+   * @param p first item of the path to the child item.
+   * @param path other items of the path to the child item (specified as two
+   *             parameters to not conflict with other apply() method)
+   * @return child graph item according to the specified path.
+   * @throws NoSuchElementException if an item in the path does not exist.
+   */
+  def apply(p: String, path: String*): GraphItem = {
+    apply(GraphPath(p, path:_*))
   }
 
 }
@@ -96,12 +109,5 @@ trait SimpleGraphItem extends GraphItem {
    * @return the key of a graph item. Should be immutable!
    */
   def simpleKey: String
-
-  /**
-   * @return child graph item with this specific key.
-   */
-  def apply(s: String) = {
-    children(Map(simpleGraphItemId -> s))
-  }
 
 }
