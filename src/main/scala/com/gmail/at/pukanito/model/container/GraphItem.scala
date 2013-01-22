@@ -88,7 +88,7 @@ trait GraphItem {
  * SimpleGraphItem is a GraphItem with single key.
  */
 trait SimpleGraphItem extends GraphItem {
-  import SimpleGraphPath.simpleGraphItemId
+  import GraphPath.simpleGraphItemId
 
   override def key = Map(simpleGraphItemId -> simpleKey)
 

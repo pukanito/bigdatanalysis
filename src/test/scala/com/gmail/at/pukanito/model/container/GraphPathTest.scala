@@ -47,9 +47,9 @@ class GraphPathTest extends FunSpec with ShouldMatchers  {
       p1.hashCode should equal (p2a.hashCode)
     }
 
-    it("Should create a special GraphPath when using SimpleGraphPath") {
-      import SimpleGraphPath.simpleGraphItemId
-      SimpleGraphPath("A", "B") should equal (GraphPath(Map(simpleGraphItemId -> "A"), Map(simpleGraphItemId -> "B")))
+    it("Should create a special GraphPath when using simple GraphPath") {
+      import GraphPath.simpleGraphItemId
+      GraphPath("A", "B") should equal (GraphPath(Map(simpleGraphItemId -> "A"), Map(simpleGraphItemId -> "B")))
     }
 
   }

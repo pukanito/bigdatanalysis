@@ -53,6 +53,7 @@ class GraphPath (val path: GraphItemKey*){
  * Types and helper methods for GraphPath.
  */
 object GraphPath {
+  def simpleGraphItemId = "!id!"
   type GraphItemKey = Map[String, Any]
 
   /**
@@ -61,18 +62,11 @@ object GraphPath {
   def apply(path: GraphItemKey*): GraphPath = {
     new GraphPath(path: _*)
   }
-}
-
-/**
- * Helpers for creating a GraphPath from only String values (SimpleGraphPath, for SimpleGraphItem).
- */
-object SimpleGraphPath {
-  def simpleGraphItemId = "!id!"
 
   /**
-   * @return a GraphPath with keys made from the specified Strings.
+   * @return a GraphPath with keys made from the specified Strings (simple GraphPath).
    */
-  def apply(path: String*): GraphPath = {
-    new GraphPath(path.map(x => Map(simpleGraphItemId -> x)): _*)
+  def apply(p: String, path: String*): GraphPath = {
+    new GraphPath((p +: path).map(x => Map(simpleGraphItemId -> x)): _*)
   }
 }
