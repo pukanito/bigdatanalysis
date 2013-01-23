@@ -58,7 +58,7 @@ trait GraphItem {
    */
   def +=(value: GraphItem) = {
     def testCycleExists(items: Set[GraphItem]): Boolean = {
-      if (items.isEmpty) false else items.exists( (x) => (x eq value) || testCycleExists(x.parents) )
+      if (items.isEmpty) false else items.exists( x => (x eq value) || testCycleExists(x.parents) )
     }
     if (testCycleExists(Set(this))) throw new GraphCycleException(value)
     if (childrenMap contains value.key) throw new DuplicateGraphItemException(value)
