@@ -53,20 +53,37 @@ class GraphPath (val path: GraphItemKey*){
  * Types and helper methods for GraphPath.
  */
 object GraphPath {
-  def simpleGraphItemId = "!id!"
+  private def simpleGraphItemId = "!id!"
   type GraphItemKey = Map[String, Any]
 
   /**
-   * @return a GraphPath with the specified keys.
+   * Helper to convert String to a GraphItemKey.
+   *
+   * @param key string to use as simple key.
+   * @return a GraphItemKey
    */
-  def apply(path: GraphItemKey*): GraphPath = {
-    new GraphPath(path: _*)
+  def string2GraphItemKey(key: String): GraphItemKey = {
+    Map(simpleGraphItemId -> key)
   }
 
   /**
-   * @return a GraphPath with keys made from the specified Strings (simple GraphPath).
+   * Helper to create a GraphPath from key maps.
+   *
+   * @param keys maps containing the keys of each level in the path to be created.
+   * @return a GraphPath with the specified keys.
    */
-  def apply(p: String, path: String*): GraphPath = {
-    new GraphPath((p +: path).map(x => Map(simpleGraphItemId -> x)): _*)
+  def apply(keys: GraphItemKey*): GraphPath = {
+    new GraphPath(keys: _*)
+  }
+
+  /**
+   * Helper to create a GraphPath from Strings.
+   *
+   * @param key first level key.
+   * @param keys next level keys.
+   * @return a GraphPath with keys made from the specified Strings.
+   */
+  def apply(key: String, keys: String*): GraphPath = {
+    new GraphPath((key +: keys).map(x => string2GraphItemKey(x)): _*)
   }
 }

@@ -7,8 +7,9 @@ class TestGraphItem(val k: Int) extends GraphItem {
   override def key = Map("A" -> k)
 }
 
-class TestSimpleGraphItem(val k: String) extends SimpleGraphItem {
-  override def simpleKey = k
+class TestSimpleGraphItem(val k: String) extends GraphItem {
+  import GraphPath.string2GraphItemKey
+  override def key = string2GraphItemKey(k)
 }
 
 class GraphItemTest extends FunSpec with ShouldMatchers {

@@ -1,7 +1,5 @@
 package com.gmail.at.pukanito.model.container
 
-import scala.collection.immutable.HashMap
-
 /**
  * Exception thrown when an item is added to a GraphItem and the item is the same object
  * as the GraphItem or one of its (in)direct parents.
@@ -52,62 +50,45 @@ trait GraphItem {
   /**
    * Add a new child to this graph item.
    *
-   * @param value The child to add.
+   * @param childItem The child to add.
    * @throws GraphCycleException when a cycle is detected when the value would be added.
    * @throws DuplicateGraphItemException when an item with the same key already exists.
    */
-  def +=(value: GraphItem) = {
+  def +=(childItem: GraphItem) = {
     def testCycleExists(items: Set[GraphItem]): Boolean = {
-      if (items.isEmpty) false else items.exists( x => (x eq value) || testCycleExists(x.parents) )
+      if (items.isEmpty) false else items.exists( x => (x eq childItem) || testCycleExists(x.parents) )
     }
-    if (testCycleExists(Set(this))) throw new GraphCycleException(value)
-    if (childrenMap contains value.key) throw new DuplicateGraphItemException(value)
-    childrenMap += (value.key -> value)
-    value.parentValues += this
+    if (testCycleExists(Set(this))) throw new GraphCycleException(childItem)
+    if (childrenMap contains childItem.key) throw new DuplicateGraphItemException(childItem)
+    childrenMap += (childItem.key -> childItem)
+    childItem.parentValues += this
   }
 
   /**
-   * Get a specific item of the graph.
+   * Get a specific item in the graph.
    *
-   * @param p path to the child item.
+   * @param path path to the child item.
    * @return a child item according to the specified path.
    * @throws NoSuchElementException if an item in the path does not exist.
    */
-  def apply(p: GraphPath): GraphItem = {
-    if (p.size == 0)
+  def apply(path: GraphPath): GraphItem = {
+    if (path.size == 0)
       this
     else
-      children(p.head)(p.tail)
+      children(path.head)(path.tail)
   }
 
   /**
    * Get a specific item of the graph using simple GraphPath
    *
-   * @param p first item of the path to the child item.
-   * @param path other items of the path to the child item (specified as two
+   * @param key first level of the path to the child item.
+   * @param keys next levels of the path to the child item (specified as two
    *             parameters to not conflict with other apply() method)
    * @return child graph item according to the specified path.
    * @throws NoSuchElementException if an item in the path does not exist.
    */
-  def apply(p: String, path: String*): GraphItem = {
-    apply(GraphPath(p, path:_*))
+  def apply(key: String, keys: String*): GraphItem = {
+    apply(GraphPath(key, keys:_*))
   }
-
-}
-
-/**
- * Trait for making items graph compatible.
- *
- * SimpleGraphItem is a GraphItem with single key.
- */
-trait SimpleGraphItem extends GraphItem {
-  import GraphPath.simpleGraphItemId
-
-  override def key = Map(simpleGraphItemId -> simpleKey)
-
-  /**
-   * @return the key of a graph item. Should be immutable!
-   */
-  def simpleKey: String
 
 }
