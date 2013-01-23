@@ -77,7 +77,7 @@ object GraphPath {
   }
 
   /**
-   * Helper to create a GraphPath from Strings.
+   * Helper to create a GraphPath from Strings (convenience).
    *
    * @param key first level key.
    * @param keys next level keys.

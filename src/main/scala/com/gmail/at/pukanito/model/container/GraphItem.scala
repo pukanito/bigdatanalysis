@@ -78,17 +78,4 @@ trait GraphItem {
       children(path.head)(path.tail)
   }
 
-  /**
-   * Get a specific item of the graph using simple GraphPath
-   *
-   * @param key first level of the path to the child item.
-   * @param keys next levels of the path to the child item (specified as two
-   *             parameters to not conflict with other apply() method)
-   * @return child graph item according to the specified path.
-   * @throws NoSuchElementException if an item in the path does not exist.
-   */
-  def apply(key: String, keys: String*): GraphItem = {
-    apply(GraphPath(key, keys:_*))
-  }
-
 }

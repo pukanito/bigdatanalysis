@@ -129,11 +129,6 @@ class SimpleGraphItemTest extends FunSpec with ShouldMatchers {
       val toT5 = GraphPath("3", "5")
       t4 should be theSameInstanceAs(t1(toT4))
       t5 should be theSameInstanceAs(t1(toT5))
-      // Also test simple GraphPath
-      t4 should be theSameInstanceAs(t1("2", "4"))
-      t5 should be theSameInstanceAs(t1("3", "5"))
-      t4 should be theSameInstanceAs(t1("2")("4"))
-      t5 should be theSameInstanceAs(t1("3")("5"))
       t4 should be theSameInstanceAs(t2(toT4.tail))
       t5 should be theSameInstanceAs(t3(toT5.tail))
     }
