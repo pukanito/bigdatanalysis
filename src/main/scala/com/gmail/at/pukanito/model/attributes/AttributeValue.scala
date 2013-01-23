@@ -16,7 +16,7 @@ abstract class AttributeValue(
   val attributeDefinition: AttributeDefinition
 ) extends GraphItem {
 
-  override def key = Map(attributeDefinition.attributeId.toString() -> value)
+  override def key = Map(attributeDefinition.attributeId.toString -> value)
 
   /**
    * Its value.
