@@ -96,7 +96,7 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
 
 class SimpleGraphItemTest extends FunSpec with ShouldMatchers {
 
-  describe("GraphItem with String key") {
+  describe("GraphItem") {
 
     it("should compare keys of different graph items with the same key as equal") {
       val t1 = new TestSimpleGraphItem("A")
