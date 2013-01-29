@@ -12,9 +12,11 @@ class GraphPathTest extends FunSpec with ShouldMatchers  {
       x should have size (0)
     }
 
-    it("should be possible to represent a path") {
+    it("should be possible to represent a path for simple and compound keys") {
       val x = GraphPath("A" -> 1)
       x should have size (1)
+      val y = GraphPath(GraphItemKey("A" -> 1, "B" -> 2))
+      y should have size (1)
     }
 
     it("should be possible to add a path to another path giving a new path") {
@@ -30,10 +32,13 @@ class GraphPathTest extends FunSpec with ShouldMatchers  {
       x.head should equal (GraphItemKey("A" -> 1))
     }
 
-    it("should return the remainder of the path with 'tail'") {
+    it("should return the remainder of the path with 'tail' for simple and compound keys") {
       val x = GraphPath("A"->1, "B" -> 2, "C" -> 3)
       x.tail should have size (2)
       x.tail should equal (GraphPath("B" -> 2, "C" -> 3))
+      val y = GraphPath("A"->1, GraphItemKey("B" -> 2, "C" -> 3))
+      y.tail should have size (1)
+      y.tail should equal (GraphPath(GraphItemKey("B" -> 2, "C" -> 3)))
     }
 
     it("should behave correctly when testing equality") {
