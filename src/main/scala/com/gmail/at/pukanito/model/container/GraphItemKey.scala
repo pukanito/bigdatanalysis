@@ -2,6 +2,11 @@ package com.gmail.at.pukanito.model.container
 
 import collection._
 
+/**
+ * Representation of the keys in a GraphPath.
+ *
+ * @param elems the keys representing a level of a path.
+ */
 class GraphItemKey private (
   elems: (String, Any)*
 ) extends Map[String, Any] with MapLike[String, Any, GraphItemKey] {
@@ -27,6 +32,9 @@ class GraphItemKey private (
   override def empty = new GraphItemKey
 }
 
+/**
+ * Helpers for GraphItemKey
+ */
 object GraphItemKey extends {
 
   private def simpleGraphItemId = "!id!"
@@ -34,7 +42,7 @@ object GraphItemKey extends {
   def empty = new GraphItemKey
 
   /**
-   * Helper to convert String to a GraphItemKey.
+   * Helper to convert String to a GraphItemKey (for implicit conversion).
    *
    * @param key string to use as simple key.
    * @return a GraphItemKey
@@ -43,6 +51,11 @@ object GraphItemKey extends {
     GraphItemKey(simpleGraphItemId -> key)
   }
 
+  /**
+   * Helper to create a new GraphItemKey.
+   *
+   * @param elems the keys representing a level of a path.
+   */
   def apply(elems: (String, Any)*): GraphItemKey = {
     new GraphItemKey(elems:_*)
   }
