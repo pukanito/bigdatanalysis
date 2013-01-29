@@ -39,8 +39,6 @@ object GraphItemKey extends {
 
   private def simpleGraphItemId = "!id!"
 
-  def empty = new GraphItemKey
-
   /**
    * Helper to convert String to a GraphItemKey (for implicit conversion).
    *
