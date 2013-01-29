@@ -28,7 +28,6 @@ class DuplicateGraphItemException(value: GraphItem)
  *  - multiple parents
  */
 trait GraphItem {
-  import GraphPath.GraphItemKey
   private var parentValues: Set[GraphItem] = Set()
   private[this] var childrenMap: Map[GraphItemKey, GraphItem] = Map()
 

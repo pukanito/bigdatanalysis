@@ -4,12 +4,11 @@ import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
 class TestGraphItem(val k: Int) extends GraphItem {
-  override def key = Map("A" -> k)
+  override def key = GraphItemKey("A" -> k)
 }
 
 class TestSimpleGraphItem(val k: String) extends GraphItem {
-  import GraphPath.string2GraphItemKey
-  override def key = string2GraphItemKey(k)
+  override def key = k
 }
 
 class GraphItemTest extends FunSpec with ShouldMatchers {
@@ -61,8 +60,8 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
       val t3 = new TestGraphItem(3)
       t1 += t2
       t1 += t3
-      val toT2 = GraphPath(Map("A" -> 2))
-      val toT3 = GraphPath(Map("A" -> 3))
+      val toT2 = GraphPath(GraphItemKey("A" -> 2))
+      val toT3 = GraphPath(GraphItemKey("A" -> 3))
       t1 should be theSameInstanceAs(t1(GraphPath()))
       t2 should be theSameInstanceAs(t1(toT2))
       t3 should be theSameInstanceAs(t1(toT3))
@@ -70,8 +69,8 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
       val t5 = new TestGraphItem(5)
       t2 += t4
       t3 += t5
-      val toT4 = GraphPath(Map("A" -> 2), Map("A" -> 4))
-      val toT5 = GraphPath(Map("A" -> 3), Map("A" -> 5))
+      val toT4 = GraphPath(GraphItemKey("A" -> 2), GraphItemKey("A" -> 4))
+      val toT5 = GraphPath(GraphItemKey("A" -> 3), GraphItemKey("A" -> 5))
       t4 should be theSameInstanceAs(t1(toT4))
       t5 should be theSameInstanceAs(t1(toT5))
       t4 should be theSameInstanceAs(t2(toT4.tail))
@@ -80,7 +79,7 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
 
     it("should throw a NoSuchElementException when a non existing path is retrieved") {
       val t1 = new TestGraphItem(1)
-      intercept[NoSuchElementException] { t1(GraphPath(Map("non-existing-key"->0))) }
+      intercept[NoSuchElementException] { t1(GraphPath(GraphItemKey("non-existing-key"->0))) }
     }
 
     it("should throw a DuplicateAttributeException when a child graph item is added with an already existing key") {

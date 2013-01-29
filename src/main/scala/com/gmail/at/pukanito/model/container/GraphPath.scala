@@ -1,7 +1,5 @@
 package com.gmail.at.pukanito.model.container
 
-import GraphPath._
-
 /**
  * Representation of a relative or absolute path through GraphItems.
  *
@@ -53,19 +51,6 @@ class GraphPath (val path: GraphItemKey*){
  * Types and helper methods for GraphPath.
  */
 object GraphPath {
-  private def simpleGraphItemId = "!id!"
-  type GraphItemKey = Map[String, Any]
-
-  /**
-   * Helper to convert String to a GraphItemKey.
-   *
-   * @param key string to use as simple key.
-   * @return a GraphItemKey
-   */
-  def string2GraphItemKey(key: String): GraphItemKey = {
-    Map(simpleGraphItemId -> key)
-  }
-
   /**
    * Helper to create a GraphPath from key maps.
    *
@@ -74,16 +59,5 @@ object GraphPath {
    */
   def apply(keys: GraphItemKey*): GraphPath = {
     new GraphPath(keys: _*)
-  }
-
-  /**
-   * Helper to create a GraphPath from Strings (convenience).
-   *
-   * @param key first level key.
-   * @param keys next level keys.
-   * @return a GraphPath with keys made from the specified Strings.
-   */
-  def apply(key: String, keys: String*): GraphPath = {
-    new GraphPath((key +: keys).map(x => string2GraphItemKey(x)): _*)
   }
 }
