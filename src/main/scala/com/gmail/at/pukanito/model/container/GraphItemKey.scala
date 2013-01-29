@@ -13,19 +13,19 @@ class GraphItemKey private (
 
   val graphItemKeys = Map[String, Any](elems:_*)
 
-  def get(key: String): Option[Any] =
+  override def get(key: String): Option[Any] =
     if (key.isEmpty) None
     else Some(graphItemKeys(key))
 
-  def +[B1 >: Any](kv: (String, B1)): Map[String, B1] = {
+  override def +[B1 >: Any](kv: (String, B1)): Map[String, B1] = {
     new GraphItemKey((graphItemKeys + kv).toSeq:_*)
   }
 
-  def -(key: String): GraphItemKey = {
+  override def -(key: String): GraphItemKey = {
     new GraphItemKey((graphItemKeys - key).toSeq:_*)
   }
 
-  def iterator: Iterator[(String, Any)] = {
+  override def iterator: Iterator[(String, Any)] = {
     graphItemKeys.iterator
   }
 
