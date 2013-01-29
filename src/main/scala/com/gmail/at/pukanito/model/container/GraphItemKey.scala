@@ -52,6 +52,16 @@ object GraphItemKey extends {
   }
 
   /**
+   * Helper to convert Tuple to a GraphItemKey (for implicit conversion).
+   *
+   * @param key tuple to use as a key.
+   * @return a GraphItemKey
+   */
+  implicit def string2GraphItemKey(key: (String, Any)): GraphItemKey = {
+    GraphItemKey(key._1 -> key._2)
+  }
+
+  /**
    * Helper to create a new GraphItemKey.
    *
    * @param elems the keys representing a level of a path.

@@ -2,7 +2,6 @@ package com.gmail.at.pukanito.model.attributes
 
 import scala.collection.mutable
 import com.gmail.at.pukanito.model.container.GraphItem
-import com.gmail.at.pukanito.model.container.GraphItemKey
 
 /**
  * The base class for all attribute value types.
@@ -17,7 +16,7 @@ abstract class AttributeValue(
   val attributeDefinition: AttributeDefinition
 ) extends GraphItem {
 
-  override def key = GraphItemKey(attributeDefinition.attributeId.toString -> value)
+  override def key = attributeDefinition.attributeId.toString -> value
 
   /**
    * Its value.
