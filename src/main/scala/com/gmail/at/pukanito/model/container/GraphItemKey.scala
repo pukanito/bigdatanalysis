@@ -15,7 +15,7 @@ class GraphItemKey private (
 
   override def get(key: String): Option[Any] =
     if (key.isEmpty) None
-    else Some(graphItemKeys(key))
+    else graphItemKeys get key
 
   override def +[B1 >: Any](kv: (String, B1)): Map[String, B1] = {
     new GraphItemKey((graphItemKeys + kv).toSeq:_*)
