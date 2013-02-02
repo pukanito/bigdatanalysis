@@ -17,7 +17,7 @@ class GraphItemKey private (
     if (key.isEmpty) None
     else graphItemKeys get key
 
-  override def +[B1 >: Any](kv: (String, B1)): Map[String, B1] = {
+  override def +[B1 >: Any](kv: (String, B1)): GraphItemKey = {
     new GraphItemKey((graphItemKeys + kv).toSeq:_*)
   }
 
@@ -28,6 +28,8 @@ class GraphItemKey private (
   override def iterator: Iterator[(String, Any)] = {
     graphItemKeys.iterator
   }
+
+  override def stringPrefix: String = "GraphItemKey"
 
   override def empty = new GraphItemKey
 }
@@ -55,7 +57,7 @@ object GraphItemKey extends {
    * @param key tuple to use as a key.
    * @return a GraphItemKey
    */
-  implicit def string2GraphItemKey(key: (String, Any)): GraphItemKey = {
+  implicit def tuple2GraphItemKey(key: (String, Any)): GraphItemKey = {
     GraphItemKey(key._1 -> key._2)
   }
 
