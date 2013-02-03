@@ -5,11 +5,11 @@ import org.scalatest.matchers.ShouldMatchers
 
 import com.gmail.at.pukanito.model.container.{GraphItem,GraphItemKey}
 
-class TestSimpleGraphItem(val k: String, val v: Int) extends GraphItem[TestSimpleGraphItem] {
-  override def key = k
-}
-
 class GraphItemStoreTest extends FunSpec with ShouldMatchers {
+
+  private class TestSimpleGraphItem(val k: String, val v: Int) extends GraphItem[TestSimpleGraphItem] {
+    override def key = k
+  }
 
   describe("GraphItemStore") {
 

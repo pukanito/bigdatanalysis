@@ -3,15 +3,15 @@ package com.gmail.at.pukanito.model.container
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
-class TestGraphItem(val k: Int) extends GraphItem[TestGraphItem] {
-  override def key = "A" -> k
-}
-
-class TestSimpleGraphItem(val k: String) extends GraphItem[TestSimpleGraphItem] {
-  override def key = k
-}
-
 class GraphItemTest extends FunSpec with ShouldMatchers {
+
+  private class TestGraphItem(val k: Int) extends GraphItem[TestGraphItem] {
+    override def key = "A" -> k
+  }
+
+  private class TestSimpleGraphItem(val k: String) extends GraphItem[TestSimpleGraphItem] {
+    override def key = k
+  }
 
   describe("GraphItem") {
 
@@ -98,11 +98,7 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
 
   }
 
-}
-
-class SimpleGraphItemTest extends FunSpec with ShouldMatchers {
-
-  describe("GraphItem") {
+  describe("simple GraphItem") {
 
     it("should compare keys of different graph items with the same key as equal") {
       val t1 = new TestSimpleGraphItem("A")
