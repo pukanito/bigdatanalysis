@@ -39,10 +39,10 @@ class StoreTest extends FunSpec with ShouldMatchers {
       val t2 = new TestSimpleGraphItem("B", 2)
       val t3 = new TestSimpleGraphItem("A", 3)
       store.put(t1, t2)
-      store(t1.key).first should be theSameInstanceAs (t1)
-      store(t2.key).first should be theSameInstanceAs (t2)
+      store(t1.key).first should equal (t1)
+      store(t2.key).first should equal (t2)
       store.put(t3)
-      store(t1.key).first should be theSameInstanceAs (t3)
+      store(t1.key).first should equal (t3)
     }
 
     it("should be possible to delete items from the store") {
