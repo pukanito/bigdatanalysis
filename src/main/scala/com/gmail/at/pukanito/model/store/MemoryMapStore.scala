@@ -7,7 +7,7 @@ import com.gmail.at.pukanito.model.container.{GraphItem,GraphItemKey}
  */
 class MemoryMapGraphItemStore[T] extends GraphItemStore[T] {
 
-  var items: Map[GraphItemKey, GraphItem[T]] = Map.empty
+  private var items: Map[GraphItemKey, GraphItem[T]] = Map.empty
 
   def put(values: GraphItem[T]*) = {
     items ++= { values map (x => (x.key, x)) }
