@@ -12,8 +12,6 @@ class AttributeDefinition (
   val attributeId: AttributeIdentifier
 ) extends GraphItem[AttributeDefinition] {
 
-  import com.gmail.at.pukanito.model.container.GraphItemKey
-
   override def key = attributeId.toString
 
 }
