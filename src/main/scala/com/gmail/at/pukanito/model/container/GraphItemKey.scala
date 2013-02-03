@@ -11,22 +11,22 @@ class GraphItemKey private (
   elems: (String, Any)*
 ) extends Map[String, Any] with MapLike[String, Any, GraphItemKey] {
 
-  val graphItemKeys = Map[String, Any](elems:_*)
+  val graphItemKeyElements = Map[String, Any](elems:_*)
 
   override def get(key: String): Option[Any] =
     if (key.isEmpty) None
-    else graphItemKeys get key
+    else graphItemKeyElements get key
 
   override def +[B1 >: Any](kv: (String, B1)): GraphItemKey = {
-    new GraphItemKey((graphItemKeys + kv).toSeq:_*)
+    new GraphItemKey((graphItemKeyElements + kv).toSeq:_*)
   }
 
   override def -(key: String): GraphItemKey = {
-    new GraphItemKey((graphItemKeys - key).toSeq:_*)
+    new GraphItemKey((graphItemKeyElements - key).toSeq:_*)
   }
 
   override def iterator: Iterator[(String, Any)] = {
-    graphItemKeys.iterator
+    graphItemKeyElements.iterator
   }
 
   override def stringPrefix: String = "GraphItemKey"
