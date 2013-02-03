@@ -18,8 +18,8 @@ class StoreTest extends FunSpec with ShouldMatchers {
       val t1 = new TestSimpleGraphItem("A", 1)
       val t2 = new TestSimpleGraphItem("B", 2)
       store.put(t1, t2)
-      store(t1.key).first should be theSameInstanceAs (t1)
-      store(t2.key).first should be theSameInstanceAs (t2)
+      store(t1.key).first should equal (t1)
+      store(t2.key).first should equal (t2)
       intercept[NoSuchElementException] { store(t1.key, t2.key, "C") }
       store.get(t1.key, "C") should equal (Set(Some(t1), None))
     }
