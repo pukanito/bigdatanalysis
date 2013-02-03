@@ -5,7 +5,7 @@ import com.gmail.at.pukanito.model.container.{GraphItem,GraphItemKey}
 /**
  * Trait for storing graph items.
  */
-trait Store {
+trait GraphItemStore {
 
   /**
    * Store values.

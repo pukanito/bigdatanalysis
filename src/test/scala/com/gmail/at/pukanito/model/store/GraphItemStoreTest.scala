@@ -9,12 +9,12 @@ class TestSimpleGraphItem(val k: String, val v: Int) extends GraphItem {
   override def key = k
 }
 
-class StoreTest extends FunSpec with ShouldMatchers {
+class GraphItemStoreTest extends FunSpec with ShouldMatchers {
 
-  describe("Store") {
+  describe("GraphItemStore") {
 
     it("should be possible to add and retrieve items to/from the store") {
-      val store = new MemoryMapStore
+      val store = new MemoryMapGraphItemStore
       val t1 = new TestSimpleGraphItem("A", 1)
       val t2 = new TestSimpleGraphItem("B", 2)
       store.put(t1, t2)
@@ -25,7 +25,7 @@ class StoreTest extends FunSpec with ShouldMatchers {
     }
 
     it("should be possible to check if items exist in the store") {
-      val store = new MemoryMapStore
+      val store = new MemoryMapGraphItemStore
       val t1 = new TestSimpleGraphItem("A", 1)
       val t2 = new TestSimpleGraphItem("B", 2)
       val t3 = new TestSimpleGraphItem("C", 3)
@@ -34,7 +34,7 @@ class StoreTest extends FunSpec with ShouldMatchers {
     }
 
     it("should be possible to replace items in the store") {
-      val store = new MemoryMapStore
+      val store = new MemoryMapGraphItemStore
       val t1 = new TestSimpleGraphItem("A", 1)
       val t2 = new TestSimpleGraphItem("B", 2)
       val t3 = new TestSimpleGraphItem("A", 3)
@@ -46,7 +46,7 @@ class StoreTest extends FunSpec with ShouldMatchers {
     }
 
     it("should be possible to delete items from the store") {
-      val store = new MemoryMapStore
+      val store = new MemoryMapGraphItemStore
       val t1 = new TestSimpleGraphItem("A", 1)
       val t2 = new TestSimpleGraphItem("B", 2)
       val t3 = new TestSimpleGraphItem("C", 3)

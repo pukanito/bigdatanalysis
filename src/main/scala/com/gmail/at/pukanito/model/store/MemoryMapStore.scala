@@ -5,7 +5,7 @@ import com.gmail.at.pukanito.model.container.{GraphItem,GraphItemKey}
 /**
  * Simple in memory storage.
  */
-class MemoryMapStore extends Store {
+class MemoryMapGraphItemStore extends GraphItemStore {
 
   var items: Map[GraphItemKey, GraphItem] = Map.empty
 
