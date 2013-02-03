@@ -26,6 +26,8 @@ class DuplicateGraphItemException(value: GraphItem[_])
  *  - compound key
  *  - multiple children
  *  - multiple parents
+ *
+ *  @param T the type that can be contained with this graph item.
  */
 trait GraphItem[T] {
   this: GraphItem[T] =>
