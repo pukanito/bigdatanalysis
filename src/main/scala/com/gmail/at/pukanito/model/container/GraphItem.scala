@@ -37,6 +37,22 @@ abstract class GraphItem[T](
 ) {
   this: GraphItem[T] =>
 
+  private var parentValues: Set[GraphItem[T]] = Set[GraphItem[T]]()
+  private[this] var childrenMap: Map[GraphItemKey, GraphItem[T]] = Map[GraphItemKey, GraphItem[T]]()
+
+  // Before adding initial children and parents, check for cycles and duplicates.
+  testCycleExistsInParents(initialParents, this)
+  initialChildren foreach (testCycleExistsInParents(Set(this), _))
+  initialChildren foreach (testCycleExistsInParents(initialParents, _))
+  initialChildren foreach (
+    (x) => initialChildren foreach (
+      (y) => if (!(x eq y) && (x.key == y.key)) throw new DuplicateGraphItemException(x)))
+  initialParents foreach ((x) => if (x.children contains this.key) throw new DuplicateGraphItemException(x))
+
+  // No cycles or duplicates, go ahead and add.
+  initialParents foreach (_.addWithoutException(this))
+  initialChildren foreach (addWithoutException(_))
+
   /**
    * Check if child item is equal to one of the items or one of items' parents. This also
    * checks if one of the children of the child item is equal to one of the items or
@@ -53,19 +69,15 @@ abstract class GraphItem[T](
       items.exists( x => (x eq childItem) || testCycleExistsInParents(x.parents, childItem) )
   }
 
-  private var parentValues: Set[GraphItem[T]] = Set[GraphItem[T]]()
-  private[this] var childrenMap: Map[GraphItemKey, GraphItem[T]] = Map[GraphItemKey, GraphItem[T]]()
-
-  testCycleExistsInParents(initialParents, this)
-  initialChildren foreach (testCycleExistsInParents(Set(this), _))
-  initialChildren foreach (testCycleExistsInParents(initialParents, _))
-  initialChildren foreach (
-    (x) => initialChildren foreach (
-      (y) => if (!(x eq y) && (x.key == y.key)) throw new DuplicateGraphItemException(x)))
-  initialParents foreach ((x) => if ((x.key == key)) throw new DuplicateGraphItemException(x))
-
-  initialParents foreach (_ += this)
-  initialChildren foreach (this += _)
+  /**
+   * Add a child item without checking for cycles or duplicate keys.
+   *
+   * @param childItem The child to add.
+   */
+  private def addWithoutException(childItem: GraphItem[T]) = {
+    childrenMap += (childItem.key -> childItem)
+    childItem.parentValues += this
+  }
 
   /**
    * @return the key of a graph item. Should be immutable!
@@ -92,8 +104,7 @@ abstract class GraphItem[T](
   def +=(childItem: GraphItem[T]) = {
     if (testCycleExistsInParents(Set(this), childItem)) throw new GraphCycleException(childItem)
     if (childrenMap contains childItem.key) throw new DuplicateGraphItemException(childItem)
-    childrenMap += (childItem.key -> childItem)
-    childItem.parentValues += this
+    addWithoutException(childItem)
   }
 
   /**

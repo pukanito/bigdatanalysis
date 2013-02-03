@@ -94,9 +94,9 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
 
     it("should throw an exception when an item is created in a parent that already has a child with the same key") {
       val t1 = new TestGraphItem(1)
-      val t2 = new TestGraphItem(1)
+      val t2 = new TestGraphItem(2)
       t1 += t2
-      intercept[DuplicateGraphItemException] { new TestGraphItem(1, Set(), Set(t1)) }
+      intercept[DuplicateGraphItemException] { new TestGraphItem(2, Set(), Set(t1)) }
     }
 
     it("should be possible to uniquely identify a graph item by its path (root / childkey / childkey / ...)") {
