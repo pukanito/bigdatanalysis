@@ -5,11 +5,17 @@ import org.scalatest.matchers.ShouldMatchers
 
 class GraphItemTest extends FunSpec with ShouldMatchers {
 
-  private class TestGraphItem(val k: Int) extends GraphItem[TestGraphItem] {
+  private class TestGraphItem(
+    val k: Int,
+    initialChildren: Set[GraphItem[TestGraphItem]] = Set[GraphItem[TestGraphItem]](),
+    initialParents: Set[GraphItem[TestGraphItem]] = Set[GraphItem[TestGraphItem]]()
+  ) extends GraphItem[TestGraphItem](initialChildren, initialParents) {
     override def key = "A" -> k
   }
 
-  private class TestSimpleGraphItem(val k: String) extends GraphItem[TestSimpleGraphItem] {
+  private class TestSimpleGraphItem(
+    val k: String
+  ) extends GraphItem[TestSimpleGraphItem] {
     override def key = k
   }
 
@@ -39,19 +45,58 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
       t1.children(t2.key) should be theSameInstanceAs (t2)
     }
 
-    it("should throw an exception when a cycle is detected") {
-      // Root item.
+    it("should throw an exception when a cycle is detected when adding a child that is also parent") {
       val t1 = new TestGraphItem(1)
-      // Test helper method, add 'depth' child levels to 'item' and check cycle exception.
       def testRecursively(depth: Int, item: GraphItem[TestGraphItem]): Unit = {
-        // Try to add 't1' as child to 'item' (should throw cycle exception)
         intercept[GraphCycleException] { item += t1 }
-        // Add child levels.
         val t = new TestGraphItem(1)
         item += t
         if (depth > 0) testRecursively(depth-1, t)
       }
-      testRecursively(40, t1)
+      testRecursively(10, t1)
+    }
+
+    it("should throw an exception when a cycle is detected when adding a child that has a child that is also parent") {
+      val t1 = new TestGraphItem(1)
+      def testRecursively(depth: Int, item1: GraphItem[TestGraphItem], item2: GraphItem[TestGraphItem]): Unit = {
+        val t3 = new TestGraphItem(1)
+        val t4 = new TestGraphItem(1)
+        item1 += t3
+        t4 += item2
+        intercept[GraphCycleException] { t3 += t4 }
+        if (depth > 0) testRecursively(depth-1, t3, t4)
+      }
+      testRecursively(10, t1, t1)
+    }
+
+    it("should throw an exception when a cycle is detected in specific use cases") {
+      val t4 = new TestGraphItem(1)
+      val t3 = new TestGraphItem(2, Set(t4))
+      val t2 = new TestGraphItem(3)
+      val t1 = new TestGraphItem(4, Set(t2))
+      intercept[GraphCycleException] { t1 += t1 }
+      intercept[GraphCycleException] { t2 += t1 }
+      intercept[GraphCycleException] { t2 += t2 }
+      intercept[GraphCycleException] { t3 += t3 }
+      intercept[GraphCycleException] { t4 += t3 }
+      intercept[GraphCycleException] { t4 += t4 }
+      t1 += t3
+      t1 += t4
+      t2 += t3
+      t2 += t4
+    }
+
+    it("should throw an exception when an item is created with duplicate key in initial children") {
+      val t1 = new TestGraphItem(1)
+      val t2 = new TestGraphItem(1)
+      intercept[DuplicateGraphItemException] { new TestGraphItem(1, Set(t1, t2)) }
+    }
+
+    it("should throw an exception when an item is created in a parent that already has a child with the same key") {
+      val t1 = new TestGraphItem(1)
+      val t2 = new TestGraphItem(1)
+      t1 += t2
+      intercept[DuplicateGraphItemException] { new TestGraphItem(1, Set(), Set(t1)) }
     }
 
     it("should be possible to uniquely identify a graph item by its path (root / childkey / childkey / ...)") {
@@ -85,8 +130,10 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
     it("should throw a DuplicateAttributeException when a child graph item is added with an already existing key") {
       val t1 = new TestGraphItem(1)
       val t2 = new TestGraphItem(2)
+      val t3 = new TestGraphItem(2)
       t1 += t2
       intercept[DuplicateGraphItemException] { t1 += t2 }
+      intercept[DuplicateGraphItemException] { t1 += t3 }
     }
 
     it("should not be possible to add different graph item types to each other") {

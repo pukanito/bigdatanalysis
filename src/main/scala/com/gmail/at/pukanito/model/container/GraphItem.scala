@@ -28,12 +28,44 @@ class DuplicateGraphItemException(value: GraphItem[_])
  *  - multiple parents
  *
  *  @param T the type that can be contained with this graph item.
+ *  @param initialChildren a list of the initial children of this graph item.
+ *  @param initialParents a list of the initial parents of this graph item.
  */
-trait GraphItem[T] {
+abstract class GraphItem[T](
+  initialChildren: Set[GraphItem[T]] = Set[GraphItem[T]](),
+  initialParents: Set[GraphItem[T]] = Set[GraphItem[T]]()
+) {
   this: GraphItem[T] =>
 
-  private var parentValues: Set[GraphItem[T]] = Set()
-  private[this] var childrenMap: Map[GraphItemKey, GraphItem[T]] = Map()
+  /**
+   * Check if child item is equal to one of the items or one of items' parents. This also
+   * checks if one of the children of the child item is equal to one of the items or
+   * one of items' parents because if this is the case than the child item itself will
+   * also be one of the parents.
+   *
+   * @param items the items to check (also check items' parents).
+   * @param childItem the child item to check against.
+   */
+  private def testCycleExistsInParents(items: Set[GraphItem[T]], childItem: GraphItem[T]): Boolean = {
+    if (items.isEmpty)
+      false
+    else
+      items.exists( x => (x eq childItem) || testCycleExistsInParents(x.parents, childItem) )
+  }
+
+  private var parentValues: Set[GraphItem[T]] = Set[GraphItem[T]]()
+  private[this] var childrenMap: Map[GraphItemKey, GraphItem[T]] = Map[GraphItemKey, GraphItem[T]]()
+
+  testCycleExistsInParents(initialParents, this)
+  initialChildren foreach (testCycleExistsInParents(Set(this), _))
+  initialChildren foreach (testCycleExistsInParents(initialParents, _))
+  initialChildren foreach (
+    (x) => initialChildren foreach (
+      (y) => if (!(x eq y) && (x.key == y.key)) throw new DuplicateGraphItemException(x)))
+  initialParents foreach ((x) => if ((x.key == key)) throw new DuplicateGraphItemException(x))
+
+  initialParents foreach (_ += this)
+  initialChildren foreach (this += _)
 
   /**
    * @return the key of a graph item. Should be immutable!
@@ -58,10 +90,7 @@ trait GraphItem[T] {
    * @throws DuplicateGraphItemException when an item with the same key already exists.
    */
   def +=(childItem: GraphItem[T]) = {
-    def testCycleExists(items: Set[GraphItem[T]]): Boolean = {
-      if (items.isEmpty) false else items.exists( x => (x eq childItem) || testCycleExists(x.parents) )
-    }
-    if (testCycleExists(Set(this))) throw new GraphCycleException(childItem)
+    if (testCycleExistsInParents(Set(this), childItem)) throw new GraphCycleException(childItem)
     if (childrenMap contains childItem.key) throw new DuplicateGraphItemException(childItem)
     childrenMap += (childItem.key -> childItem)
     childItem.parentValues += this

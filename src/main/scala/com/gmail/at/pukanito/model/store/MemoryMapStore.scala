@@ -22,7 +22,7 @@ class MemoryMapGraphItemStore[T] extends GraphItemStore[T] {
   }
 
   def contains(keys: GraphItemKey*): Map[GraphItemKey, Boolean] = {
-    (keys map { v => (v, items contains v) }) (collection.breakOut)
+    (keys map { k => (k, items contains k) }) (collection.breakOut)
   }
 
   def delete(keys: GraphItemKey*) = {
