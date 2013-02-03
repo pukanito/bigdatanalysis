@@ -5,28 +5,28 @@ import com.gmail.at.pukanito.model.container.{GraphItem,GraphItemKey}
 /**
  * Trait for storing graph items.
  */
-trait GraphItemStore {
+trait GraphItemStore[T] {
 
   /**
    * Store values.
    *
    * @param value the value(s) to store.
    */
-  def put(value: GraphItem*)
+  def put(value: GraphItem[T]*)
 
   /**
    * Retrieve values.
    *
    * @param key the key(s) of the item(s) to retrieve.
    */
-  def apply(key: GraphItemKey*): Set[GraphItem]
+  def apply(key: GraphItemKey*): Set[GraphItem[T]]
 
   /**
    * Retrieve values.
    *
    * @param key the key(s) of the item(s) to retrieve.
    */
-  def get(key: GraphItemKey*): Set[Option[GraphItem]]
+  def get(key: GraphItemKey*): Set[Option[GraphItem[T]]]
 
   /**
    * Check existence of values.

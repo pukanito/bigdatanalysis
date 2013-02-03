@@ -14,7 +14,7 @@ import com.gmail.at.pukanito.model.container.GraphItem
  */
 abstract class AttributeValue(
   val attributeDefinition: AttributeDefinition
-) extends GraphItem {
+) extends GraphItem[AttributeValue] {
 
   override def key = attributeDefinition.attributeId.toString -> value
 

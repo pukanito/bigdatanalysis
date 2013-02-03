@@ -14,7 +14,7 @@ class AttributeDefinitionTest extends FunSpec with ShouldMatchers {
     }
 
     it("should not be possible to modify the identifier") {
-      // implicit by making attributeId a 'val'
+      // implicit by making attributeId a 'val' -> compiler error
     }
 
   }

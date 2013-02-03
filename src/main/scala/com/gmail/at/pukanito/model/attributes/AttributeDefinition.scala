@@ -10,7 +10,7 @@ import com.gmail.at.pukanito.model.container.GraphItem
  */
 class AttributeDefinition (
   val attributeId: AttributeIdentifier
-) extends GraphItem {
+) extends GraphItem[AttributeDefinition] {
 
   import com.gmail.at.pukanito.model.container.GraphItemKey
 

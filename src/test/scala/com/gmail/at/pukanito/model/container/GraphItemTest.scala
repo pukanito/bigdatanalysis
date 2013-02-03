@@ -3,11 +3,11 @@ package com.gmail.at.pukanito.model.container
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
-class TestGraphItem(val k: Int) extends GraphItem {
+class TestGraphItem(val k: Int) extends GraphItem[TestGraphItem] {
   override def key = "A" -> k
 }
 
-class TestSimpleGraphItem(val k: String) extends GraphItem {
+class TestSimpleGraphItem(val k: String) extends GraphItem[TestSimpleGraphItem] {
   override def key = k
 }
 
@@ -43,7 +43,7 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
       // Root item.
       val t1 = new TestGraphItem(1)
       // Test helper method, add 'depth' child levels to 'item' and check cycle exception.
-      def testRecursively(depth: Int, item: GraphItem): Unit = {
+      def testRecursively(depth: Int, item: GraphItem[TestGraphItem]): Unit = {
         // Try to add 't1' as child to 'item' (should throw cycle exception)
         intercept[GraphCycleException] { item += t1 }
         // Add child levels.
@@ -87,6 +87,13 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
       val t2 = new TestGraphItem(2)
       t1 += t2
       intercept[DuplicateGraphItemException] { t1 += t2 }
+    }
+
+    it("should not be possible to add different graph item types to each other") {
+      val t1 = new TestGraphItem(1)
+      val t2 = new TestSimpleGraphItem("A")
+      // implicit by compiler error
+      //t1 += t2
     }
 
   }

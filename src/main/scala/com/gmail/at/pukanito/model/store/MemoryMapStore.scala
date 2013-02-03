@@ -5,19 +5,19 @@ import com.gmail.at.pukanito.model.container.{GraphItem,GraphItemKey}
 /**
  * Simple in memory storage.
  */
-class MemoryMapGraphItemStore extends GraphItemStore {
+class MemoryMapGraphItemStore[T] extends GraphItemStore[T] {
 
-  var items: Map[GraphItemKey, GraphItem] = Map.empty
+  var items: Map[GraphItemKey, GraphItem[T]] = Map.empty
 
-  def put(values: GraphItem*) = {
+  def put(values: GraphItem[T]*) = {
     items ++= { values map (x => (x.key, x)) }
   }
 
-  def apply(keys: GraphItemKey*): Set[GraphItem] = {
+  def apply(keys: GraphItemKey*): Set[GraphItem[T]] = {
     (for (k <- keys ) yield items(k)) (collection.breakOut)
   }
 
-  def get(keys: GraphItemKey*): Set[Option[GraphItem]] = {
+  def get(keys: GraphItemKey*): Set[Option[GraphItem[T]]] = {
     (for (k <- keys ) yield items.get(k)) (collection.breakOut)
   }
 

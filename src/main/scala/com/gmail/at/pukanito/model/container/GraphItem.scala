@@ -7,7 +7,7 @@ package com.gmail.at.pukanito.model.container
  * @constructor Create a graph cycle exception.
  * @param value The duplicate graph item.
  */
-class GraphCycleException(value: GraphItem)
+class GraphCycleException(value: GraphItem[_])
   extends RuntimeException("Cycle in graph with: " + value) {}
 
 /**
@@ -16,7 +16,7 @@ class GraphCycleException(value: GraphItem)
  * @constructor Create a duplicate item exception.
  * @param value The item that failed to added.
  */
-class DuplicateGraphItemException(value: GraphItem)
+class DuplicateGraphItemException(value: GraphItem[_])
   extends RuntimeException("Duplicate graph item: " + value) {}
 
 /**
@@ -27,9 +27,11 @@ class DuplicateGraphItemException(value: GraphItem)
  *  - multiple children
  *  - multiple parents
  */
-trait GraphItem {
-  private var parentValues: Set[GraphItem] = Set()
-  private[this] var childrenMap: Map[GraphItemKey, GraphItem] = Map()
+trait GraphItem[T] {
+  this: GraphItem[T] =>
+
+  private var parentValues: Set[GraphItem[T]] = Set()
+  private[this] var childrenMap: Map[GraphItemKey, GraphItem[T]] = Map()
 
   /**
    * @return the key of a graph item. Should be immutable!
@@ -39,12 +41,12 @@ trait GraphItem {
   /**
    * @return set of parent graph items of this graph item, empty when this is a root item.
    */
-  def parents: Set[GraphItem] = parentValues
+  def parents: Set[GraphItem[T]] = parentValues
 
   /**
    * @return map of child graph items of this graph item.
    */
-  def children: Map[GraphItemKey, GraphItem] = childrenMap
+  def children: Map[GraphItemKey, GraphItem[T]] = childrenMap
 
   /**
    * Add a new child to this graph item.
@@ -53,8 +55,8 @@ trait GraphItem {
    * @throws GraphCycleException when a cycle is detected when the value would be added.
    * @throws DuplicateGraphItemException when an item with the same key already exists.
    */
-  def +=(childItem: GraphItem) = {
-    def testCycleExists(items: Set[GraphItem]): Boolean = {
+  def +=(childItem: GraphItem[T]) = {
+    def testCycleExists(items: Set[GraphItem[T]]): Boolean = {
       if (items.isEmpty) false else items.exists( x => (x eq childItem) || testCycleExists(x.parents) )
     }
     if (testCycleExists(Set(this))) throw new GraphCycleException(childItem)
@@ -70,7 +72,7 @@ trait GraphItem {
    * @return a child item according to the specified path.
    * @throws NoSuchElementException if an item in the path does not exist.
    */
-  def apply(path: GraphPath): GraphItem = {
+  def apply(path: GraphPath): GraphItem[T] = {
     if (path.size == 0)
       this
     else
