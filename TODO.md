@@ -1,12 +1,9 @@
-TODO
-====
+= TODO
 
-- <del>Simplify AttributeValue: remove parent child from class to separate container class.</del>
-- <del>Move maps from model.attributes to model.containers.</del>
-- <del>ParentChildContainer: hierarchical structure with nodes having multiple parents and multiple children.</del>
-- <del>RootNode: has no parents, only children.</del>
-- <del>ChildNode: has multiple parents and multiple children.</del>
-- <del>Cycles are not allowed: a child my not have one of its parents as its direct child.</del>
-- Attribute definition and attribute value have different containers. In Attribute definition container a leaf attribute definition may appear only once on each node. In Attribute value container a leaf attribute value may appear multiple times as long as the keys are different.
-- <del>GraphPath should be immutable.</del>
-- SimpleGraphPath?
+
+== DSL for attribute definition
+
+It should be easy to create attribute definitions.
+
+Use objects for attribute models.
+
