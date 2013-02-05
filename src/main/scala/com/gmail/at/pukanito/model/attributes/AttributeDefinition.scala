@@ -19,4 +19,70 @@ class AttributeDefinition (
 
   override def key = attributeId.toString
 
+  def this(attributeId: AttributeIdentifier, body: => Unit) = {
+    this(attributeId)
+    body
+  }
+
+}
+
+trait attributeWord {
+
+  class hasKey(val h: hasWord) {
+    def and(key: String): hasKey = {
+      this
+    }
+  }
+
+  class hasParents(val h: hasWord) {
+    def and(key: String): hasParents = {
+      this
+    }
+  }
+
+  class hasChildren(val h: hasWord) {
+    def and(key: String): hasChildren = {
+      this
+    }
+  }
+
+  class hasWord {
+    def keys(key: String*): hasKey = {
+      new hasKey(this)
+    }
+    def parents(key: String*): hasParents = {
+      new hasParents(this)
+    }
+    def children(key: String*): hasChildren = {
+      new hasChildren(this)
+    }
+    def x = {}
+  }
+
+  val has = new hasWord
+
+  class isOfType(val id: String) {
+  }
+
+  val IntegerAttribute = new isOfType("Integer")
+
+  class attributeWord {
+    def apply(id: String)(body: => Unit): AttributeDefinition = {
+      body
+      new AttributeDefinition(id)
+    }
+  }
+
+  val attribute = new attributeWord
+
+}
+
+object testmodel extends attributeWord {
+  attribute("test") {
+    IntegerAttribute
+    has keys "A" and "B"
+    has parents "P" and "Q"
+    has children "X" and "Y" and "Z"
+    has children ("A", "B", "N", "M", "O", "P")
+  }
 }
