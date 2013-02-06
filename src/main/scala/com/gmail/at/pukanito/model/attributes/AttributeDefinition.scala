@@ -28,58 +28,58 @@ class AttributeDefinition (
 
 trait AttributeModel {
 
-  class hasKey(val h: hasWord) {
-    def and(key: String): hasKey = {
-      this
-    }
+  private[AttributeModel] class isOfType(val id: String) {
   }
 
-  class hasParents(val h: hasWord) {
-    def and(key: String): hasParents = {
-      this
-    }
+  private[AttributeModel] val IntegerAttribute = new isOfType("Integer")
+
+  private[AttributeModel] class hasName {  }
+
+  private[AttributeModel] class hasKey(val h: hasWord) {
+    def and(id: AttributeIdentifier) = { h.attributeValueKeyIds += id; this }
   }
 
-  class hasChildren(val h: hasWord) {
-    def and(key: String): hasChildren = {
-      this
-    }
+  private[AttributeModel] class hasParents(val h: hasWord) {
+    def and(id: AttributeIdentifier) = { h.initialParents += id; this }
   }
 
-  class hasWord {
-    def keys(key: String*): hasKey = {
-      new hasKey(this)
-    }
-    def parents(key: String*): hasParents = {
-      new hasParents(this)
-    }
-    def children(key: String*): hasChildren = {
-      new hasChildren(this)
-    }
-    def x = {}
+  private[AttributeModel] class hasChildren(val h: hasWord) {
+    def and(id: AttributeIdentifier) = { h.initialChildren += id; this }
   }
 
-  val has = new hasWord
-
-  class isOfType(val id: String) {
+  private[AttributeModel] class hasWord {
+    private[AttributeModel] var attributeId: AttributeIdentifier = ""
+    private[AttributeModel] var attributeValueKeyIds: Set[AttributeIdentifier] = Set()
+    private[AttributeModel] var initialChildren: Set[AttributeIdentifier] = Set()
+    private[AttributeModel] var initialParents: Set[AttributeIdentifier] = Set()
+    private[AttributeModel] def clear: Unit = { attributeId = ""; attributeValueKeyIds = Set(); initialChildren = Set(); initialParents = Set() }
+    private[AttributeModel] def build: AttributeDefinition = { new AttributeDefinition("x") }
+    def name(id: AttributeIdentifier): hasName = { attributeId = id; new hasName }
+    def keys(ids: AttributeIdentifier*): hasKey = { attributeValueKeyIds ++= ids; new hasKey(this)  }
+    def parents(ids: AttributeIdentifier*): hasParents = { initialParents ++= ids; new hasParents(this) }
+    def children(ids: AttributeIdentifier*): hasChildren = { initialChildren ++= ids; new hasChildren(this) }
   }
 
-  val IntegerAttribute = new isOfType("Integer")
+  protected[AttributeModel] val has = new hasWord
 
-  class attributeWord {
-    def apply(id: String)(body: => Unit): AttributeDefinition = {
+  private[AttributeModel] class attributeWord(val t: isOfType = IntegerAttribute) {
+    def apply(body: => Unit): AttributeDefinition = {
+      has.clear
       body
-      new AttributeDefinition(id)
+      has.build
     }
   }
 
-  val attribute = new attributeWord
+  protected[AttributeModel] val attribute = new attributeWord
 
 }
 
 object testmodel extends AttributeModel {
-  attribute("test") {
-    IntegerAttribute
+
+  val x = "testprefix"
+
+  attribute {
+    has name x + "test"
     has keys "A" and "B"
     has parents "P" and "Q"
     has children "X" and "Y" and "Z"
