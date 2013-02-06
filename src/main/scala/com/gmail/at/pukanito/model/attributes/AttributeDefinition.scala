@@ -26,7 +26,7 @@ class AttributeDefinition (
 
 }
 
-trait attributeWord {
+trait AttributeModel {
 
   class hasKey(val h: hasWord) {
     def and(key: String): hasKey = {
@@ -77,7 +77,7 @@ trait attributeWord {
 
 }
 
-object testmodel extends attributeWord {
+object testmodel extends AttributeModel {
   attribute("test") {
     IntegerAttribute
     has keys "A" and "B"
