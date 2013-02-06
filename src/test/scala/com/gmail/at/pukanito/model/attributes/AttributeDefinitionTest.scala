@@ -2,7 +2,6 @@ package com.gmail.at.pukanito.model.attributes
 
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
-import com.gmail.at.pukanito.model.container.GraphPath
 
 class AttributeDefinitionTest extends FunSpec with ShouldMatchers {
 
