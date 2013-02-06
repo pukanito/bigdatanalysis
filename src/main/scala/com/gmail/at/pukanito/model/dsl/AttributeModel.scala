@@ -4,29 +4,29 @@ import com.gmail.at.pukanito.model.attributes.{AttributeIdentifier,AttributeDefi
 
 trait AttributeModel {
 
-  var definedAttributes: Map[AttributeIdentifier, AttributeDefinition] = Map()
+  private var definedAttributes: Map[AttributeIdentifier, AttributeDefinition] = Map()
 
-  private[AttributeModel] class isOfType(val id: String) {
+  private class isOfType(val id: String) {
   }
 
-  private[AttributeModel] val IntegerAttribute = new isOfType("Integer")
+  private val IntegerAttribute = new isOfType("Integer")
 
-  private[AttributeModel] class hasName {  }
+  private class hasName {  }
 
-  private[AttributeModel] class hasKey(val h: hasWord) {
+  private class hasKey(val h: hasWord) {
     def and(id: AttributeIdentifier) = { h.attributeValueKeyIds += id; this }
   }
 
-  private[AttributeModel] class hasParents(val h: hasWord) {
+  private class hasParents(val h: hasWord) {
     def and(id: AttributeIdentifier) = { h.initialParents += id; this }
   }
 
-  private[AttributeModel] class hasChildren(val h: hasWord) {
+  private class hasChildren(val h: hasWord) {
     def and(id: AttributeIdentifier) = { h.initialChildren += id; this }
   }
 
-  private[AttributeModel] class hasWord {
-    private[AttributeModel] var attributeId: AttributeIdentifier = ""
+  private class hasWord {
+    private var attributeId: AttributeIdentifier = ""
     private[AttributeModel] var attributeValueKeyIds: Set[AttributeIdentifier] = Set()
     private[AttributeModel] var initialChildren: Set[AttributeIdentifier] = Set()
     private[AttributeModel] var initialParents: Set[AttributeIdentifier] = Set()
@@ -42,7 +42,7 @@ trait AttributeModel {
 
   protected[AttributeModel] val has = new hasWord
 
-  private[AttributeModel] class attributeWord(val t: isOfType = IntegerAttribute) {
+  private class attributeWord(val t: isOfType = IntegerAttribute) {
     def apply(body: => Unit): AttributeDefinition = {
       has.clear
       body
