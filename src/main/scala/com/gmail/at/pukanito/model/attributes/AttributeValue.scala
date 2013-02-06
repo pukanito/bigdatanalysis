@@ -16,7 +16,10 @@ abstract class AttributeValue(
   val attributeDefinition: AttributeDefinition
 ) extends GraphItem[AttributeValue] {
 
-  override def key = attributeDefinition.attributeId.toString -> value
+  /**
+   * The default key of an attribute definition: its attribute id.
+   */
+  override def key = attributeDefinition.attributeId.toString
 
   /**
    * Its value.

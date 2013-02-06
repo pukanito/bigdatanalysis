@@ -20,7 +20,7 @@ class DuplicateGraphItemException(value: GraphItem[_])
   extends RuntimeException("Duplicate graph item: " + value) {}
 
 /**
- * Trait for making items graph compatible.
+ * Trait for making items graph item compatible.
  *
  * GraphItem can have:
  *  - compound key
@@ -49,7 +49,7 @@ abstract class GraphItem[T](
       (y) => if (!(x eq y) && (x.key == y.key)) throw new DuplicateGraphItemException(x)))
   initialParents foreach ((x) => if (x.children contains this.key) throw new DuplicateGraphItemException(x))
 
-  // No cycles or duplicates, go ahead and add.
+  // No cycles or duplicates found, go ahead and add.
   initialParents foreach (_.addWithoutException(this))
   initialChildren foreach (addWithoutException(_))
 
