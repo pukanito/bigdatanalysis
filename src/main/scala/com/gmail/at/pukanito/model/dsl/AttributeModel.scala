@@ -132,15 +132,3 @@ trait AttributeModel {
   protected[AttributeModel] val attribute = new attributeWord
 
 }
-
-object testmodel extends AttributeModel {
-
-  val x = "testprefix"
-
-  attribute(x + "test") {
-    has keys "A" and "B"
-    has parents "P" and "Q"
-    has children "X" and "Y" and "Z"
-    has children ("A", "B", "N", "M", "O", "P")
-  }
-}

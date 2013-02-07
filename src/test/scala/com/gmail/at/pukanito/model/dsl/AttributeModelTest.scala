@@ -7,9 +7,17 @@ class AttributeModelTest extends FunSpec with ShouldMatchers {
 
   describe("AttributeModel") {
 
-    it("should throw an exception when an attribute with the same identifier is defined more than once in the same model") (pending)
-
-    it("should not throw an exception when an attribute with the same identifier is defined in different models") (pending)
+    it("should not throw an exception when an attribute with the same identifier is defined in different models") {
+      println("#")
+      object testmodel1 extends AttributeModel {
+        println("1")
+        attribute("test") { }
+      }
+      object testmodel2 extends AttributeModel {
+        println("2")
+        attribute("test") { }
+      }
+    }
 
     it("should be possible to create a parent-child hierarchy of attribute definitions") (pending)
 
