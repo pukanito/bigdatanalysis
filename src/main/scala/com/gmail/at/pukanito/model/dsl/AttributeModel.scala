@@ -68,12 +68,22 @@ trait AttributeModel {
     private[AttributeModel] def clear: Unit = { attributeValueKeyIds = Set(); initialChildren = Set(); initialParents = Set() }
 
     /**
-     * Build the attribute definition from the collected properties.
+     * Build the attribute definition from the collected properties or add properties to an already existing definition.
      *
      * @param id the id of the attribute to create.
      */
     private[AttributeModel] def build(id: String): AttributeDefinition = {
-      new AttributeDefinition(id, attributeValueKeyIds.toList, (initialChildren ++ attributeValueKeyIds).map(definedAttributes(_)), initialParents.map(definedAttributes(_)))
+      definedAttributes get id match {
+        case Some(a) =>
+          if (attributeValueKeyIds.size > 0) throw new RuntimeException("Cannot add attribute keys after first definition of attribute '" + a.attributeId + "'")
+          initialChildren foreach (a += definedAttributes(_))
+          initialParents foreach (definedAttributes(_) += a)
+          a
+        case None =>
+          val a = new AttributeDefinition(id, attributeValueKeyIds.toList, (initialChildren ++ attributeValueKeyIds).map(definedAttributes(_)), initialParents.map(definedAttributes(_)))
+          definedAttributes += a.attributeId -> a
+          a
+      }
     }
 
     /**
@@ -112,9 +122,7 @@ trait AttributeModel {
     def apply(id: String)(body: => Unit): AttributeDefinition = {
       has.clear
       body
-      val a = has.build(id)
-      definedAttributes += a.attributeId -> a
-      return a
+      has.build(id)
     }
   }
 
