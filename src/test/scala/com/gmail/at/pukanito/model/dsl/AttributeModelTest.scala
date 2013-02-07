@@ -9,7 +9,7 @@ class AttributeModelTest extends FunSpec with ShouldMatchers {
 
     it("should not throw an exception when an attribute with the same identifier is defined in different models") {
       println("#")
-      object testmodel1 extends AttributeModel {
+      class testmodel1 extends AttributeModel {
         println("1")
         attribute("test") { }
       }
@@ -17,6 +17,7 @@ class AttributeModelTest extends FunSpec with ShouldMatchers {
         println("2")
         attribute("test") { }
       }
+      new testmodel1
     }
 
     it("should be possible to create a parent-child hierarchy of attribute definitions") (pending)
