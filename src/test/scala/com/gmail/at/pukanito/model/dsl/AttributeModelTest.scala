@@ -41,6 +41,7 @@ class AttributeModelTest extends FunSpec with ShouldMatchers {
       object testmodel extends AttributeModel {
         intercept[NoSuchElementException] { attribute("test") { has children "child1" } }
       }
+      // Due to lazy initialization of an object it has to be pushed a little bit.
       testmodel.attributes
     }
 
@@ -94,7 +95,6 @@ class AttributeModelTest extends FunSpec with ShouldMatchers {
       object testmodel2 extends AttributeModel {
         attribute("test") { }
       }
-      // Due to lazy initialization of an object it has to be pushed a little bit.
       testmodel1.attributes
       testmodel2.attributes
     }
