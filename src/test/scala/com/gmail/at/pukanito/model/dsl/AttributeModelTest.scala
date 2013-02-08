@@ -86,6 +86,7 @@ class AttributeModelTest extends FunSpec with ShouldMatchers {
         intercept[RuntimeException] { attribute("test") { has keys "key2" } }
       }
       testmodel.attributes
+      (pending) // Check exception that is thrown
     }
 
     it("should not throw an exception when an attribute with the same identifier is defined in different models") {
