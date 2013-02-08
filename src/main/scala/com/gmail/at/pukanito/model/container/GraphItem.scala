@@ -31,14 +31,14 @@ class DuplicateGraphItemException(value: GraphItem[_])
  *  @param initialChildren a list of the initial children of this graph item.
  *  @param initialParents a list of the initial parents of this graph item.
  */
-abstract class GraphItem[T](
-  initialChildren: Set[GraphItem[T]] = Set[GraphItem[T]](),
-  initialParents: Set[GraphItem[T]] = Set[GraphItem[T]]()
+abstract class GraphItem[T <: GraphItem[T]](
+  initialChildren: Set[T] = Set[T](),
+  initialParents: Set[T] = Set[T]()
 ) {
-  this: GraphItem[T] =>
+  this: T =>
 
-  private var parentValues: Set[GraphItem[T]] = Set[GraphItem[T]]()
-  private[this] var childrenMap: Map[GraphItemKey, GraphItem[T]] = Map[GraphItemKey, GraphItem[T]]()
+  private var parentValues: Set[T] = Set[T]()
+  private[this] var childrenMap: Map[GraphItemKey, T] = Map[GraphItemKey, T]()
 
   // Before adding initial children and parents, check for cycles and duplicates.
   testCycleExistsInParents(initialParents, this)
@@ -62,7 +62,7 @@ abstract class GraphItem[T](
    * @param items the items to check (also check items' parents).
    * @param childItem the child item to check against.
    */
-  private def testCycleExistsInParents(items: Set[GraphItem[T]], childItem: GraphItem[T]): Boolean = {
+  private def testCycleExistsInParents(items: Set[T], childItem: T): Boolean = {
     if (items.isEmpty)
       false
     else
@@ -74,7 +74,7 @@ abstract class GraphItem[T](
    *
    * @param childItem The child to add.
    */
-  private def addWithoutException(childItem: GraphItem[T]) = {
+  private def addWithoutException(childItem: T) = {
     childrenMap += (childItem.key -> childItem)
     childItem.parentValues += this
   }
@@ -87,12 +87,12 @@ abstract class GraphItem[T](
   /**
    * @return set of parent graph items of this graph item, empty when this is a root item.
    */
-  def parents: Set[GraphItem[T]] = parentValues
+  def parents: Set[T] = parentValues
 
   /**
    * @return map of child graph items of this graph item.
    */
-  def children: Map[GraphItemKey, GraphItem[T]] = childrenMap
+  def children: Map[GraphItemKey, T] = childrenMap
 
   /**
    * Add a new child to this graph item.
@@ -101,7 +101,7 @@ abstract class GraphItem[T](
    * @throws GraphCycleException when a cycle is detected when the value would be added.
    * @throws DuplicateGraphItemException when an item with the same key already exists.
    */
-  def +=(childItem: GraphItem[T]) = {
+  def +=(childItem: T) = {
     if (testCycleExistsInParents(Set(this), childItem)) throw new GraphCycleException(childItem)
     if (childrenMap contains childItem.key) throw new DuplicateGraphItemException(childItem)
     addWithoutException(childItem)
@@ -114,7 +114,7 @@ abstract class GraphItem[T](
    * @return a child item according to the specified path.
    * @throws NoSuchElementException if an item in the path does not exist.
    */
-  def apply(path: GraphPath): GraphItem[T] = {
+  def apply(path: GraphPath): T = {
     if (path.size == 0)
       this
     else

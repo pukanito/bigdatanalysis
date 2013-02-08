@@ -7,8 +7,8 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
 
   private class TestGraphItem(
     val k: Int,
-    initialChildren: Set[GraphItem[TestGraphItem]] = Set[GraphItem[TestGraphItem]](),
-    initialParents: Set[GraphItem[TestGraphItem]] = Set[GraphItem[TestGraphItem]]()
+    initialChildren: Set[TestGraphItem] = Set[TestGraphItem](),
+    initialParents: Set[TestGraphItem] = Set[TestGraphItem]()
   ) extends GraphItem[TestGraphItem](initialChildren, initialParents) {
     override def key = "A" -> k
   }
@@ -47,7 +47,7 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
 
     it("should throw an exception when a cycle is detected when adding a child that is also parent") {
       val t1 = new TestGraphItem(1)
-      def testRecursively(depth: Int, item: GraphItem[TestGraphItem]): Unit = {
+      def testRecursively(depth: Int, item: TestGraphItem): Unit = {
         intercept[GraphCycleException] { item += t1 }
         val t = new TestGraphItem(1)
         item += t
@@ -58,7 +58,7 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
 
     it("should throw an exception when a cycle is detected when adding a child that has a child that is also parent") {
       val t1 = new TestGraphItem(1)
-      def testRecursively(depth: Int, item1: GraphItem[TestGraphItem], item2: GraphItem[TestGraphItem]): Unit = {
+      def testRecursively(depth: Int, item1: TestGraphItem, item2: TestGraphItem): Unit = {
         val t3 = new TestGraphItem(1)
         val t4 = new TestGraphItem(1)
         item1 += t3

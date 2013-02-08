@@ -110,8 +110,7 @@ class AttributeModelTest extends FunSpec with ShouldMatchers {
       }
       testmodel1.attributes should have size (1)
       testmodel2.attributes should have size (2)
-      println(testmodel1.attributes("test1"))
-      println(testmodel2.attributes("test1"))
+      testmodel1.attributes("test1") should not be theSameInstanceAs (testmodel2.attributes("test1"))
     }
 
 
