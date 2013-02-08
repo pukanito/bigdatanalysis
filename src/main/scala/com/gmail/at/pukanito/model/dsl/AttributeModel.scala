@@ -140,6 +140,8 @@ trait AttributeModel {
 
   /**
    * Class which implements including another attribute model using the 'include' word.
+   *
+   * The included model will be a copy of the original because AttributeDefinition is not immutable.
    */
   private class includeWord {
     def apply(that: AttributeModel): Unit = {
