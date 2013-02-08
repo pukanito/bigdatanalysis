@@ -138,4 +138,23 @@ trait AttributeModel {
    */
   protected[AttributeModel] val attribute = new attributeWord
 
+  /**
+   * Class which implements including another attribute model using the 'include' word.
+   */
+  private class includeWord {
+    def apply(that: AttributeModel): Unit = {
+      that.definedAttributes foreach { x =>
+        if (definedAttributes contains x._1) throw new RuntimeException
+        definedAttributes += x._1 -> new AttributeDefinition(x._1, x._2.attributeValueKeyIds)
+      }
+      that.definedAttributes foreach { x =>
+        x._2.children foreach { y => definedAttributes(x._1) +=  } }
+    }
+  }
+
+  /**
+   * Definition of the 'include' word so that it can be used in attribute models.
+   */
+  protected[AttributeModel] val include = new includeWord
+
 }

@@ -99,7 +99,21 @@ class AttributeModelTest extends FunSpec with ShouldMatchers {
       testmodel2.attributes
     }
 
-    it("should be possible to import a copy of another model") (pending)
+    it("should be possible to import a copy of another model") {
+      object testmodel1 extends AttributeModel {
+        attribute("test1") { }
+      }
+      object testmodel2 extends AttributeModel {
+        attribute("test2") { }
+
+        include(testmodel1)
+      }
+      testmodel1.attributes should have size (1)
+      testmodel2.attributes should have size (2)
+      println(testmodel1.attributes("test1"))
+      println(testmodel2.attributes("test1"))
+    }
+
 
   }
 
