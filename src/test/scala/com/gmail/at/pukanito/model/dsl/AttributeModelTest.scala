@@ -14,7 +14,7 @@ class AttributeModelTest extends FunSpec with ShouldMatchers {
       object testmodel2 extends AttributeModel {
         attribute("test") { }
       }
-      // Due to lazy initialization object has to be pushed a little bit.
+      // Due to lazy initialization of an object it has to be pushed a little bit.
       testmodel1.attributes
       testmodel2.attributes
     }
