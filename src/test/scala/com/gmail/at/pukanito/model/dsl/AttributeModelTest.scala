@@ -102,18 +102,20 @@ class AttributeModelTest extends FunSpec with ShouldMatchers {
     it("should be possible to import a copy of another model") {
       object testmodel1 extends AttributeModel {
         attribute("test1") { }
+        attribute("test3") { has parents "test1" }
       }
       object testmodel2 extends AttributeModel {
         include(testmodel1)
         attribute("test2") { has parents "test1" }
       }
-      testmodel1.attributes should have size (1)
-      testmodel2.attributes should have size (2)
+      testmodel1.attributes should have size (2)
+      testmodel2.attributes should have size (3)
       testmodel1.attributes("test1") should not be theSameInstanceAs (testmodel2.attributes("test1"))
-      testmodel1.attributes("test1").children should have size (0)
-      testmodel2.attributes("test1").children should have size (1)
+      testmodel1.attributes("test1").children should have size (1)
+      testmodel2.attributes("test1").children should have size (2)
     }
 
+    it("should throw an exception when an included model contains an attribute with an already existing id") (pending)
 
   }
 
