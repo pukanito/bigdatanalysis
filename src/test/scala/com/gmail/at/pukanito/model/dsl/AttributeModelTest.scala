@@ -104,13 +104,14 @@ class AttributeModelTest extends FunSpec with ShouldMatchers {
         attribute("test1") { }
       }
       object testmodel2 extends AttributeModel {
-        attribute("test2") { }
-
         include(testmodel1)
+        attribute("test2") { has parents "test1" }
       }
       testmodel1.attributes should have size (1)
       testmodel2.attributes should have size (2)
       testmodel1.attributes("test1") should not be theSameInstanceAs (testmodel2.attributes("test1"))
+      testmodel1.attributes("test1").children should have size (0)
+      testmodel2.attributes("test1").children should have size (1)
     }
 
 
