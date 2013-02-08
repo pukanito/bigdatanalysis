@@ -8,23 +8,68 @@ class AttributeModelTest extends FunSpec with ShouldMatchers {
   describe("AttributeModel") {
 
     it("should not throw an exception when an attribute with the same identifier is defined in different models") {
-      println("#")
-      class testmodel1 extends AttributeModel {
-        println("1")
+      object testmodel1 extends AttributeModel {
         attribute("test") { }
       }
       object testmodel2 extends AttributeModel {
-        println("2")
         attribute("test") { }
       }
-      new testmodel1
+      // Due to lazy initialization object has to be pushed a little bit.
+      testmodel1.attributes
+      testmodel2.attributes
     }
 
     it("should be possible to create a parent-child hierarchy of attribute definitions") (pending)
 
-    it("should be possible to add parents and or children after the first definition") (pending)
+    it("should throw an exception when a non existing child is added on creation") {
+      object testmodel extends AttributeModel {
+        intercept[NoSuchElementException] { attribute("test") { has children "child1" } }
+      }
+      testmodel.attributes
+    }
 
-    it("should throw an exception when keys are added after the first definition") (pending)
+    it("should throw an exception when a non existing parent is added on creation") {
+      object testmodel extends AttributeModel {
+        intercept[NoSuchElementException] { attribute("test") { has parents "parent1" } }
+      }
+      testmodel.attributes
+    }
+
+    it("should throw an exception when a non existing child is added after creation") {
+      object testmodel extends AttributeModel {
+        attribute("test") { }
+        intercept[NoSuchElementException] { attribute("test") { has children "child1" } }
+      }
+      testmodel.attributes
+    }
+
+    it("should throw an exception when a non existing parent is added after creation") {
+            object testmodel extends AttributeModel {
+        attribute("test") { }
+        intercept[NoSuchElementException] { attribute("test") { has children "child1" } }
+      }
+      testmodel.attributes
+    }
+
+    it("should be possible to add parents and or children after creation") {
+      object testmodel extends AttributeModel {
+        attribute("key1") { }
+        attribute("child1") { }
+        attribute("test") { has keys "key1" }
+        attribute("test") { has children "child1" }
+      }
+      testmodel.attributes
+    }
+
+    it("should throw an exception when keys are added after creation") {
+      object testmodel extends AttributeModel {
+        attribute("key1") { }
+        attribute("key2") { }
+        attribute("test") { has keys "key1" }
+        intercept[RuntimeException] { attribute("test") { has keys "key2" } }
+      }
+      testmodel.attributes
+    }
 
     it("should be possible to import a copy of another model") (pending)
 

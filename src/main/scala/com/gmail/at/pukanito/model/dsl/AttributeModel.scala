@@ -17,6 +17,13 @@ trait AttributeModel {
   private val IntegerAttribute = new isOfType("Integer")
 
   /**
+   * @return a map of all defined attributes.
+   */
+  def attributes = definedAttributes
+
+  /** The DSL fields and methods **/
+
+  /**
    * Class which can handle 'and' word in 'has keys .. and .. and ..'
    *
    * @param h the hasWord instance which manages the keys.
