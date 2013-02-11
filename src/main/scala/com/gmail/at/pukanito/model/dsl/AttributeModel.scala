@@ -146,13 +146,13 @@ trait AttributeModel {
   private class includeWord {
     def apply(that: AttributeModel): Unit = {
       // Create attributes first.
-      that.definedAttributes foreach { x =>
-        if (definedAttributes contains x._1) throw new RuntimeException
-        definedAttributes += x._1 -> new AttributeDefinition(x._1, x._2.attributeValueKeyIds)
+      that.definedAttributes foreach { case (id, attrDef) =>
+        if (definedAttributes contains id) throw new RuntimeException
+        definedAttributes += id -> new AttributeDefinition(id, attrDef.attributeValueKeyIds)
       }
       // Then add children of all added attributes to added attributes.
-      that.definedAttributes foreach { x =>
-        x._2.children foreach { y => definedAttributes(x._1) +=  definedAttributes(y._2.attributeId)} }
+      that.definedAttributes foreach { case (id, attrDef) =>
+        attrDef.children foreach { case (key, child) => definedAttributes(id) +=  definedAttributes(child.attributeId)} }
     }
   }
 
