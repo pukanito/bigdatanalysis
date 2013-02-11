@@ -3,6 +3,15 @@ package com.gmail.at.pukanito.model.dsl
 import com.gmail.at.pukanito.model.attributes.{AttributeIdentifier,AttributeDefinition}
 
 /**
+ * Exception thrown when an attribute definition is added to a model with an already existing id.
+ *
+ * @constructor Create a duplicate attribute definition exception.
+ * @param value The item that failed to added.
+ */
+class DuplicateAttributeDefinitionException(value: AttributeDefinition)
+  extends RuntimeException("Duplicate attribute definition: " + value.attributeId) {}
+
+/**
  * Trait for constructing attribute definitions with a special DSL.
  */
 trait AttributeModel {
@@ -147,7 +156,7 @@ trait AttributeModel {
     def apply(that: AttributeModel): Unit = {
       // Create attributes first.
       that.definedAttributes foreach { case (id, attrDef) =>
-        if (definedAttributes contains id) throw new RuntimeException
+        if (definedAttributes contains id) throw new DuplicateAttributeDefinitionException(attrDef)
         definedAttributes += id -> new AttributeDefinition(id, attrDef.attributeValueKeyIds)
       }
       // Then add children of all added attributes to added attributes.

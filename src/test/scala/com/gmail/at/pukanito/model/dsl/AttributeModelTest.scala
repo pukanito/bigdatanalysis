@@ -86,7 +86,6 @@ class AttributeModelTest extends FunSpec with ShouldMatchers {
         intercept[RuntimeException] { attribute("test") { has keys "key2" } }
       }
       testmodel.attributes
-      (pending) // Check exception that is thrown
     }
 
     it("should not throw an exception when an attribute with the same identifier is defined in different models") {
@@ -116,7 +115,16 @@ class AttributeModelTest extends FunSpec with ShouldMatchers {
       testmodel2.attributes("test1").children should have size (2)
     }
 
-    it("should throw an exception when an included model contains an attribute with an already existing id") (pending)
+    it("should throw an exception when an included model contains an attribute with an already existing id") {
+      object testmodel1 extends AttributeModel {
+        attribute("test1") { }
+      }
+      object testmodel2 extends AttributeModel {
+        attribute("test1") { }
+        intercept[DuplicateAttributeDefinitionException] { include(testmodel1) }
+      }
+      testmodel2.attributes
+    }
 
   }
 
