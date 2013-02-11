@@ -154,12 +154,12 @@ trait AttributeModel {
    */
   private class includeWord {
     def apply(that: AttributeModel): Unit = {
-      // Create attributes first.
+      // Create copies of attributes first.
       that.definedAttributes foreach { case (id, attrDef) =>
         if (definedAttributes contains id) throw new DuplicateAttributeDefinitionException(attrDef)
         definedAttributes += id -> new AttributeDefinition(id, attrDef.attributeValueKeyIds)
       }
-      // Then add children of all added attributes to added attributes.
+      // Then add parent-child relationships of all added attributes.
       that.definedAttributes foreach { case (id, attrDef) =>
         attrDef.children foreach { case (key, child) => definedAttributes(id) +=  definedAttributes(child.attributeId)} }
     }
