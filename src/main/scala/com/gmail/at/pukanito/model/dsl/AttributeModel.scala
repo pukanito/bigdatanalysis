@@ -90,15 +90,15 @@ trait AttributeModel {
      */
     private[AttributeModel] def build(id: String): AttributeDefinition = {
       definedAttributes get id match {
-        case Some(a) =>
-          if (attributeValueKeyIds.size > 0) throw new RuntimeException("Cannot add attribute keys after first definition of attribute '" + a.attributeId + "'")
-          initialChildren foreach (a += definedAttributes(_))
-          initialParents foreach (definedAttributes(_) += a)
-          a
+        case Some(attr) =>
+          if (attributeValueKeyIds.size > 0) throw new RuntimeException("Cannot add attribute keys after first definition of attribute '" + attr.attributeId + "'")
+          initialChildren foreach (attr += definedAttributes(_))
+          initialParents foreach (definedAttributes(_) += attr)
+          attr
         case None =>
-          val a = new AttributeDefinition(id, attributeValueKeyIds.toList, (initialChildren ++ attributeValueKeyIds).map(definedAttributes(_)), initialParents.map(definedAttributes(_)))
-          definedAttributes += a.attributeId -> a
-          a
+          val attr = new AttributeDefinition(id, attributeValueKeyIds.toList, (initialChildren ++ attributeValueKeyIds).map(definedAttributes(_)), initialParents.map(definedAttributes(_)))
+          definedAttributes += attr.attributeId -> attr
+          attr
       }
     }
 
@@ -155,13 +155,13 @@ trait AttributeModel {
   private class includeWord {
     def apply(that: AttributeModel): Unit = {
       // Create copies of attributes first.
-      that.definedAttributes foreach { case (id, attrDef) =>
-        if (definedAttributes contains id) throw new DuplicateAttributeDefinitionException(attrDef)
-        definedAttributes += id -> new AttributeDefinition(id, attrDef.attributeValueKeyIds)
+      that.definedAttributes foreach { case (thatAttrId, thatAttrDef) =>
+        if (definedAttributes contains thatAttrId) throw new DuplicateAttributeDefinitionException(thatAttrDef)
+        definedAttributes += thatAttrId -> new AttributeDefinition(thatAttrId, thatAttrDef.attributeValueKeyIds)
       }
       // Then add parent-child relationships of all added attributes.
-      that.definedAttributes foreach { case (id, attrDef) =>
-        attrDef.children foreach { case (key, child) => definedAttributes(id) +=  definedAttributes(child.attributeId)} }
+      that.definedAttributes foreach { case (thatAttrId, thatAttrDef) =>
+        thatAttrDef.children foreach { case (_, childAttrDef) => definedAttributes(thatAttrId) +=  definedAttributes(childAttrDef.attributeId)} }
     }
   }
 
