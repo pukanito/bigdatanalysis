@@ -126,6 +126,16 @@ class AttributeModelTest extends FunSpec with ShouldMatchers {
       testmodel2.attributes
     }
 
+    it("should be possible to add the same attribute to different parents") {
+      object testmodel extends AttributeModel {
+        attribute("child1") { }
+        attribute("child2") { }
+        attribute("test") { has children "child1" and "child2" }
+        attribute("childofchildren") { has parents "child1" and "child2" }
+      }
+      testmodel.attributes
+    }
+
   }
 
 }
