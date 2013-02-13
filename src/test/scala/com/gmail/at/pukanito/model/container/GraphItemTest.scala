@@ -52,6 +52,7 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
       t1 += t2
       t3 += t2
       t2.paths should have size (2)
+      t2.path should have size (2)
     }
 
     it("should throw an exception when a cycle is detected when adding a child that is also parent") {

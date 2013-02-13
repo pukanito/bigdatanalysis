@@ -95,6 +95,16 @@ abstract class GraphItem[T <: GraphItem[T]](
   }
 
   /**
+   * @return a path of the graph item.
+   */
+  def path: GraphPath = {
+    if (parents.size == 0)
+      GraphPath(key)
+    else
+      parents.first.path + GraphPath(key)
+  }
+
+  /**
    * @return set of parent graph items of this graph item, empty when this is a root item.
    */
   def parents: Set[T] = parentValues
