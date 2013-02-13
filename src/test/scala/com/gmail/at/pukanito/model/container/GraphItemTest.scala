@@ -45,8 +45,14 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
       t1.children(t2.key) should be theSameInstanceAs (t2)
     }
 
-    it("should be possible to get the graph path(s) of an item") (pending)
-    // There can be multiple paths due to multiple parents.
+    it("should be possible to get the graph path(s) of an item") {
+      val t1 = new TestGraphItem(1)
+      val t2 = new TestGraphItem(2)
+      val t3 = new TestGraphItem(3)
+      t1 += t2
+      t3 += t2
+      t2.paths should have size (2)
+    }
 
     it("should throw an exception when a cycle is detected when adding a child that is also parent") {
       val t1 = new TestGraphItem(1)

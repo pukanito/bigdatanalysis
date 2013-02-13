@@ -45,6 +45,10 @@ class GraphPath (val path: GraphItemKey*){
 
   def canEqual(other: Any): Boolean = other.isInstanceOf[GraphPath]
 
+  override def toString: String = {
+    path.mkString("GraphPath(", ",", ")")
+  }
+
 }
 
 /**

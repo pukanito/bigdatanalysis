@@ -85,6 +85,16 @@ abstract class GraphItem[T <: GraphItem[T]](
   def key: GraphItemKey
 
   /**
+   * @return the path(s) of the graph item.
+   */
+  def paths: Set[GraphPath] = {
+    if (parents.size == 0)
+      Set(GraphPath(key))
+    else
+      parents flatMap { _.paths } map { _ + GraphPath(key) }
+  }
+
+  /**
    * @return set of parent graph items of this graph item, empty when this is a root item.
    */
   def parents: Set[T] = parentValues
