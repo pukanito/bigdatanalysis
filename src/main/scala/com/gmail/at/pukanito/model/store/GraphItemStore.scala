@@ -1,6 +1,6 @@
 package com.gmail.at.pukanito.model.store
 
-import com.gmail.at.pukanito.model.container.{GraphItem,GraphItemKey}
+import com.gmail.at.pukanito.model.container.{GraphItem,GraphPath}
 
 /**
  * Trait for storing graph items.
@@ -17,29 +17,29 @@ trait GraphItemStore[T <: GraphItem[T]] {
   /**
    * Retrieve values.
    *
-   * @param key the key(s) of the item(s) to retrieve.
+   * @param paths the path(s) of the item(s) to retrieve.
    */
-  def apply(key: GraphItemKey*): Set[T]
+  def apply(paths: GraphPath*): Set[T]
 
   /**
    * Retrieve values.
    *
-   * @param key the key(s) of the item(s) to retrieve.
+   * @param paths the path(s) of the item(s) to retrieve.
    */
-  def get(key: GraphItemKey*): Set[Option[T]]
+  def get(paths: GraphPath*): Set[Option[T]]
 
   /**
    * Check existence of values.
    *
-   * @param key the key(s) of the item(s) to check.
+   * @param paths the path(s) of the item(s) to check.
    */
-  def contains(key: GraphItemKey*): Map[GraphItemKey, Boolean]
+  def contains(paths: GraphPath*): Map[GraphPath, Boolean]
 
   /**
    * Delete values.
    *
-   * @param key the key(s) of the item(s) to delete.
+   * @param paths the path(s) of the item(s) to delete.
    */
-  def delete(key: GraphItemKey*)
+  def delete(paths: GraphPath*)
 
 }

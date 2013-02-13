@@ -55,6 +55,17 @@ class GraphPath (val path: GraphItemKey*){
  * Types and helper methods for GraphPath.
  */
 object GraphPath {
+
+  /**
+   * Helper to convert a GraphItemKey to a GraphPath (for implicit conversion).
+   *
+   * @param key graph item key to convert.
+   * @return a GraphPath
+   */
+  implicit def graphItemKey2GraphPath(key: GraphItemKey): GraphPath = {
+    GraphPath(key)
+  }
+
   /**
    * Helper to create a GraphPath from key maps.
    *
@@ -64,4 +75,5 @@ object GraphPath {
   def apply(keys: GraphItemKey*): GraphPath = {
     new GraphPath(keys: _*)
   }
+
 }

@@ -1,32 +1,32 @@
 package com.gmail.at.pukanito.model.store
 
-import com.gmail.at.pukanito.model.container.{GraphItem,GraphItemKey}
+import com.gmail.at.pukanito.model.container.{GraphItem,GraphPath}
 
 /**
  * Simple in memory storage.
  */
 class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
 
-  private var items: Map[GraphItemKey, T] = Map.empty
+  private var items: Map[GraphPath, T] = Map.empty
 
   def put(values: T*) = {
-    items ++= { values map (x => (x.key, x)) }
+    items ++= { values map (x => (GraphPath(x.key), x)) }
   }
 
-  def apply(keys: GraphItemKey*): Set[T] = {
-    (for (k <- keys ) yield items(k)) (collection.breakOut)
+  def apply(paths: GraphPath*): Set[T] = {
+    (for (p <- paths ) yield items(p)) (collection.breakOut)
   }
 
-  def get(keys: GraphItemKey*): Set[Option[T]] = {
-    (for (k <- keys ) yield items.get(k)) (collection.breakOut)
+  def get(paths: GraphPath*): Set[Option[T]] = {
+    (for (p <- paths ) yield items.get(p)) (collection.breakOut)
   }
 
-  def contains(keys: GraphItemKey*): Map[GraphItemKey, Boolean] = {
-    (keys map { k => (k, items contains k) }) (collection.breakOut)
+  def contains(paths: GraphPath*): Map[GraphPath, Boolean] = {
+    (paths map { p => (p, items contains p) }) (collection.breakOut)
   }
 
-  def delete(keys: GraphItemKey*) = {
-    items --= keys
+  def delete(paths: GraphPath*) = {
+    items --= paths
   }
 
 }
