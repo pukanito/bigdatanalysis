@@ -1,6 +1,5 @@
 package com.gmail.at.pukanito.model.attributes
 
-import scala.collection.mutable
 import com.gmail.at.pukanito.model.container.GraphItem
 
 /**
