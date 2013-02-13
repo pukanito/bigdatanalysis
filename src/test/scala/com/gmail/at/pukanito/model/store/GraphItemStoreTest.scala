@@ -55,6 +55,15 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
       store.delete(t2.key, t1.key)
       store.contains(t1.key, t2.key, t3.key) should equal (Map(t1.key -> false, t2.key -> false, t3.key -> true))
     }
+
+    it("should be possible to create an item by its path") (pending)
+    // There can be multiple paths due to multiple parents.
+
+    it("should be possible to modify an item by its path") (pending)
+
+    it("should be possible to delete an item by its path") (pending)
+
+    it("should be possible to retrieve an item by its path") (pending)
   }
 
 }
