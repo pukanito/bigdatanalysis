@@ -57,7 +57,6 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
     }
 
     it("should be possible to create an item by its path") (pending)
-    // There can be multiple paths due to multiple parents.
 
     it("should be possible to modify an item by its path") (pending)
 
