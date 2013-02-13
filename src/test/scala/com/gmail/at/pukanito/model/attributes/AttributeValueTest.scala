@@ -9,7 +9,7 @@ class AttributeValueTest extends FunSpec with ShouldMatchers {
     attributeDefinition: AttributeDefinition
   ) extends AttributeValue(attributeDefinition) {
 
-    def value: Any = { 0 }
+    def value: Any = 0
   }
 
   describe("AttributeValue") {
