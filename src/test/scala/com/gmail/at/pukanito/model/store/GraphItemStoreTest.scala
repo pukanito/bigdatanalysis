@@ -68,6 +68,13 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
     it("should be possible to retrieve an item by its path") (pending)
 
     it("should be possible to retrieve all items with a specific sub path") (pending)
+
+    it("should throw an exception when creating an item without path") (pending)
+
+    it("should throw an exception when modifying an item without path") (pending)
+
+    it("should throw an exception when deleting an item without path") (pending)
+
   }
 
 }

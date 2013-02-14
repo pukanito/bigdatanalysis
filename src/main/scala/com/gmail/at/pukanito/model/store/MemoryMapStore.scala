@@ -1,32 +1,65 @@
 package com.gmail.at.pukanito.model.store
 
-import com.gmail.at.pukanito.model.container.{GraphItem,GraphPath}
+import com.gmail.at.pukanito.model.container.{GraphItem,GraphPath,GraphItemKey}
 
 /**
  * Simple in memory storage.
  */
 class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
 
-  private var items: Map[GraphPath, T] = Map.empty
+  private var leafs: Map[GraphItemKey, T] = Map.empty
+  private var children: Map[GraphItemKey, MemoryMapGraphItemStore[T]] = Map.empty
 
-  def put(values: T*) = {
-    items ++= { values map (x => (GraphPath(x.key), x)) }
+  def put(path: GraphPath, value: T): Unit = {
+    if (path.size > 1) {
+      if (!(children contains path.head)) {
+    	children += path.head -> new MemoryMapGraphItemStore[T]()
+      }
+      children(path.head).put(path.tail, value)
+    }
+    else {
+      leafs += path.head -> value
+    }
+  }
+
+  def put(values: T*): Unit = {
+    values foreach { v => v.paths foreach { p => put(p, v) } }
   }
 
   def apply(paths: GraphPath*): Set[T] = {
-    (for (p <- paths ) yield items(p)) (collection.breakOut)
+    (paths map { p =>
+      if (p.size > 1)
+        children(p.head)(p.tail).first
+      else
+        leafs(p.head)
+    } ) (collection.breakOut)
   }
 
   def get(paths: GraphPath*): Set[Option[T]] = {
-    (for (p <- paths ) yield items.get(p)) (collection.breakOut)
+    (paths map { p =>
+      if (p.size > 1)
+        children.get(p.head).map { _.get(p.tail).first.get }
+      else
+        leafs.get(p.head)
+    } ) (collection.breakOut)
   }
 
   def contains(paths: GraphPath*): Map[GraphPath, Boolean] = {
-    (paths map { p => (p, items contains p) }) (collection.breakOut)
+    (paths map { p => (p,
+      if (p.size > 1)
+        (children contains p.head) && (children(p.head).contains(p.tail)(p.head))
+      else
+        leafs contains p.head
+    ) } ) (collection.breakOut)
   }
 
   def delete(paths: GraphPath*) = {
-    items --= paths
+    (paths foreach { p =>
+      if (p.size > 1)
+        children(p.head).delete(p.tail)
+      else
+        leafs -= p.head
+    } )
   }
 
 }
