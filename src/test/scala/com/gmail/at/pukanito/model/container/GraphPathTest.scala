@@ -62,7 +62,9 @@ class GraphPathTest extends FunSpec with ShouldMatchers  {
       p1.toList match {
         case List() => fail("Error in extracting GraphItemKeys")
         case List(a) => fail("Error in extracting GraphItemKeys")
-        case a :: rest => a should equal (GraphItemKey("A" -> 1))
+        case a :: rest =>
+          a should equal (GraphItemKey("A" -> 1))
+          rest should equal (List(GraphItemKey("B" -> 2), GraphItemKey("C" -> 3)))
       }
       val p2 = GraphPath("A" -> 1)
       p2.toList match {
