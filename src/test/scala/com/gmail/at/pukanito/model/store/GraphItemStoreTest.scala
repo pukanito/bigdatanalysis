@@ -9,6 +9,20 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
 
   private class TestSimpleGraphItem(val k: String, val v: Int) extends GraphItem[TestSimpleGraphItem] {
     override def key = k
+
+    override def equals(other: Any): Boolean = {
+      other match {
+        case that: TestSimpleGraphItem =>
+          (that canEqual this) &&
+          that.key == this.key && that.v == this.v
+        case _ => false
+      }
+    }
+
+    override def hashCode: Int = key.hashCode() + 41 * (41 + v)
+
+    def canEqual(other: Any): Boolean = other.isInstanceOf[TestSimpleGraphItem]
+
   }
 
   describe("GraphItemStore") {
@@ -18,8 +32,8 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
       val t1 = new TestSimpleGraphItem("A", 1)
       val t2 = new TestSimpleGraphItem("B", 2)
       store.put(t1, t2)
-      store(t1.key).first should equal (t1)
-      store(t2.key).first should equal (t2)
+      store(t1.key).first should equal (new TestSimpleGraphItem("A", 1))
+      store(t2.key).first should equal (new TestSimpleGraphItem("B", 2))
       intercept[NoSuchElementException] { store(t1.key, t2.key, GraphPath("C")) }
       store.get(t1.key, GraphPath("C")) should equal (Set(Some(t1), None))
     }
@@ -43,7 +57,7 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
       store(t1.key).first should equal (t1)
       store(t2.key).first should equal (t2)
       store.put(t3)
-      store(t1.key).first should equal (t3)
+      store(t1.key).first should equal (new TestSimpleGraphItem("A", 3))
     }
 
     it("should be possible to delete items from the store") {
