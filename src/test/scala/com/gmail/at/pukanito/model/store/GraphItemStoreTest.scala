@@ -109,7 +109,7 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
 
     it("should be possible to delete an item by its path") (pending)
 
-    it("should be possible to delete an item and all its children by its path") (pending)
+    it("should be possible to delete an item and all its children (a graph) by its path") (pending)
 
     it("should be possible to retrieve an item by its path") (pending)
 

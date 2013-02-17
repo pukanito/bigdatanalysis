@@ -60,7 +60,7 @@ class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
     paths foreach { p =>
       p.toList match {
         case List() => throw new RuntimeException("Cannot delete from MemoryMapGraphItemStore without a path")
-        case List(key) => leafs -= key
+        case List(key) => leafs -= key; children -= key
         case headKey :: tail => children(headKey).delete(GraphPath(tail))
       }
     }
