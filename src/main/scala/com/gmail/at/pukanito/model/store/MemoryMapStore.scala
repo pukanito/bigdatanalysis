@@ -14,8 +14,10 @@ class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
     path.toList match {
       case List() => throw new RuntimeException("Cannot store in MemoryMapGraphItemStore without a path")
       case List(key) => leafs += key -> value
-      case head :: tail =>
-        children.getOrElse(head, new MemoryMapGraphItemStore[T]()).put(GraphPath(tail), value)
+      case headKey :: tail => (children.get(headKey) match {
+          case Some(m) => m
+          case None => val m = new MemoryMapGraphItemStore[T](); children += headKey -> m; m
+        }).put(GraphPath(tail), value)
     }
   }
 
@@ -28,7 +30,7 @@ class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
       p.toList match {
         case List() => throw new RuntimeException("Cannot get from MemoryMapGraphItemStore without a path")
         case List(key) => leafs(key)
-        case head :: tail => children(head)(GraphPath(tail)).first
+        case headKey :: tail => children(headKey)(GraphPath(tail)).first
       }
     } ) (collection.breakOut)
   }
@@ -38,7 +40,7 @@ class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
       p.toList match {
         case List() => throw new RuntimeException("Cannot get from MemoryMapGraphItemStore without a path")
         case List(key) => leafs.get(key)
-        case head :: tail => children.get(head).map { _.get(GraphPath(tail)).first.get }
+        case headKey :: tail => children.get(headKey).map { _.get(GraphPath(tail)).first.get }
       }
     } ) (collection.breakOut)
   }
@@ -48,19 +50,20 @@ class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
       p.toList match {
         case List() => throw new RuntimeException("Cannot contain in MemoryMapGraphItemStore without a path")
         case List(key) => leafs contains key
-        case head :: tail => (children contains head) && ((children(head) contains (GraphPath(tail)))(head))
+        case headKey :: tail => (children contains headKey) &&
+                                ((children(headKey) contains GraphPath(tail))(tail.head))
       }
     ) } ) (collection.breakOut)
   }
 
   def delete(paths: GraphPath*) = {
-    (paths foreach { p =>
+    paths foreach { p =>
       p.toList match {
         case List() => throw new RuntimeException("Cannot delete from MemoryMapGraphItemStore without a path")
         case List(key) => leafs -= key
-        case head :: tail => children(head).delete(GraphPath(tail))
+        case headKey :: tail => children(headKey).delete(GraphPath(tail))
       }
-    } )
+    }
   }
 
 }

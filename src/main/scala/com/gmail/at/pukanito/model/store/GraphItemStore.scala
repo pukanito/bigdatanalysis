@@ -32,6 +32,7 @@ trait GraphItemStore[T <: GraphItem[T]] {
    * Check existence of values.
    *
    * @param paths the path(s) of the item(s) to check.
+   * @throws RuntimeException when the graph path is empty.
    */
   def contains(paths: GraphPath*): Map[GraphPath, Boolean]
 
@@ -39,6 +40,7 @@ trait GraphItemStore[T <: GraphItem[T]] {
    * Delete values.
    *
    * @param paths the path(s) of the item(s) to delete.
+   * @throws RuntimeException when the graph path is empty.
    */
   def delete(paths: GraphPath*)
 

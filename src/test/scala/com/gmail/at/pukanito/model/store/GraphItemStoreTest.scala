@@ -23,6 +23,10 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
 
     def canEqual(other: Any): Boolean = other.isInstanceOf[TestSimpleGraphItem]
 
+    override def toString: String = {
+      "TestSimpleGraphItem(" + key + "," + v + ")"
+    }
+
   }
 
   describe("GraphItemStore") {
@@ -73,13 +77,37 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
         Map(GraphPath(t1.key) -> false, GraphPath(t2.key) -> false, GraphPath(t3.key) -> true))
     }
 
-    it("should be possible to create an item by its path") (pending)
+    it("should be possible to create and check an item by its path") {
+      val store = new MemoryMapGraphItemStore[TestSimpleGraphItem]
+      val t1 = new TestSimpleGraphItem("A", 1)
+      val t2 = new TestSimpleGraphItem("B", 2)
+      store.put(t1)
+      store.contains(t1.key) should equal (Map(GraphPath(t1.key) -> true))
+      t1 += t2
+      store.put(t2)
+      store.contains(t1.key) should equal (Map(GraphPath(t1.key) -> true))
+      store.contains(t2.key) should equal (Map(GraphPath(t2.key) -> false))
+      val p = GraphPath(t1.key, t2.key)
+      store.contains(p) should equal (Map(p -> true))
+    }
 
-    it("should be possible to modify an item by its path") (pending)
+    it("should be possible to modify an item by its path") {
+      val store = new MemoryMapGraphItemStore[TestSimpleGraphItem]
+      val t1 = new TestSimpleGraphItem("A", 1)
+      val t2 = new TestSimpleGraphItem("B", 2)
+      val t1a = new TestSimpleGraphItem("A", 1)
+      val t2a = new TestSimpleGraphItem("B", 3)
+      store.put(t1)
+      t1 += t2
+      store.put(t2)
+      t1a += t2a
+      store.put(t2a)
+      val p = GraphPath(t1.key, t2.key)
+      store.contains(p) should equal (Map(p -> true))
+      store(p).first should equal (t2a)
+    }
 
     it("should be possible to delete an item by its path") (pending)
-
-    it("should be possible to check an item by its path") (pending)
 
     it("should be possible to delete an item and all its children by its path") (pending)
 
@@ -91,9 +119,15 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
 
     it("should throw an exception when modifying an item without path") (pending)
 
-    it("should throw an exception when deleting an item without path") (pending)
+    it("should throw an exception when deleting an item without path") {
+      val store = new MemoryMapGraphItemStore[TestSimpleGraphItem]
+      intercept[RuntimeException] { store.delete(GraphPath()) }
+    }
 
-    it("should throw an exception when checking an item without path") (pending)
+    it("should throw an exception when checking an item without path") {
+      val store = new MemoryMapGraphItemStore[TestSimpleGraphItem]
+      intercept[RuntimeException] { store.contains(GraphPath()) }
+    }
 
     it("should be possible to create a graph by its path") (pending)
 
