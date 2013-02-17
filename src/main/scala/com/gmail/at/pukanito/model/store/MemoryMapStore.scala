@@ -15,10 +15,7 @@ class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
       case List() => throw new RuntimeException("Cannot store in MemoryMapGraphItemStore without a path")
       case List(key) => leafs += key -> value
       case head :: tail =>
-        if (!(children contains head)) {
-          children += head -> new MemoryMapGraphItemStore[T]()
-        }
-        children(head).put(GraphPath(tail:_*), value)
+        children.getOrElse(head, new MemoryMapGraphItemStore[T]()).put(GraphPath(tail:_*), value)
     }
   }
 
