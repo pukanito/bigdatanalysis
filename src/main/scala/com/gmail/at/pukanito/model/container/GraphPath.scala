@@ -20,7 +20,7 @@ class GraphPath (val path: GraphItemKey*){
   /**
    * @return the path except the first item.
    */
-  def tail = new GraphPath(path.tail: _*)
+  def tail = new GraphPath(path.tail:_*)
 
   /**
    * @return the path as a list of GraphItemKeys which can
@@ -35,7 +35,7 @@ class GraphPath (val path: GraphItemKey*){
    * @return a new path consisting of this path with p appended.
    */
   def +(p: GraphPath) = {
-    new GraphPath((this.path ++ p.path): _*)
+    new GraphPath((this.path ++ p.path):_*)
   }
 
   override def equals(other: Any): Boolean = {
@@ -73,13 +73,25 @@ object GraphPath {
   }
 
   /**
-   * Helper to create a GraphPath from key maps.
+   * Helper to create a GraphPath from keys.
    *
    * @param keys maps containing the keys of each level in the path to be created.
    * @return a GraphPath with the specified keys.
    */
   def apply(keys: GraphItemKey*): GraphPath = {
-    new GraphPath(keys: _*)
+    new GraphPath(keys:_*)
   }
+
+  /**
+   * Convenience helper to create a GraphPath from a list of keys. Helpful after extraction
+   * of part of a path to create a new path without ':_*'.
+   *
+   * @param keys list of maps containing the keys of each level in the path to be created.
+   * @return a GraphPath with the specified keys.
+   */
+  def apply(keys: List[GraphItemKey]): GraphPath = {
+    new GraphPath(keys:_*)
+  }
+
 
 }
