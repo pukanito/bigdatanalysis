@@ -23,6 +23,12 @@ class GraphPath (val path: GraphItemKey*){
   def tail = new GraphPath(path.tail: _*)
 
   /**
+   * @return the path as a list of GraphItemKeys which can
+   *   be handy for pattern matching.
+   */
+  def toList = path.toList
+
+  /**
    * Append another path to this path.
    *
    * @param p the other path to append.

@@ -52,9 +52,24 @@ class GraphPathTest extends FunSpec with ShouldMatchers  {
       p1.hashCode should equal (p2a.hashCode)
     }
 
-    it("Should create a special GraphPath when using implicit conversion from String to GraphItemKey") {
+    it("should create a special GraphPath when using implicit conversion from String to GraphItemKey") {
       import GraphItemKey.string2GraphItemKey
       GraphPath("A", "B") should equal (GraphPath(string2GraphItemKey("A"), string2GraphItemKey("B")))
+    }
+
+    it("should be possible to extract a GraphPath to GraphItemKeys in a match expression") {
+      val p1 = GraphPath("A" -> 1, "B" -> 2, "C" -> 3)
+      p1.toList match {
+        case List() => fail("Error in extracting GraphItemKeys")
+        case List(a) => fail("Error in extracting GraphItemKeys")
+        case a :: rest => a should equal (GraphItemKey("A" -> 1))
+      }
+      val p2 = GraphPath("A" -> 1)
+      p2.toList match {
+        case List() => fail("Error in extracting GraphItemKeys")
+        case List(a) => a should equal (GraphItemKey("A" -> 1))
+        case a :: rest => fail("Error in extracting GraphItemKeys")
+      }
     }
 
   }
