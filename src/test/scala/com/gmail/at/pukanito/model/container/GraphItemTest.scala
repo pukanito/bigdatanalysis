@@ -13,7 +13,7 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
     override def key = "A" -> k
   }
 
-  private class TestSimpleGraphItem(
+  private class TestSimpleGraphItem (
     val k: String
   ) extends GraphItem[TestSimpleGraphItem] {
     override def key = k
