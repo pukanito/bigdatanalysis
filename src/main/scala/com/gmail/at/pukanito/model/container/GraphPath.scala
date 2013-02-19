@@ -60,17 +60,6 @@ object GraphPath {
     new GraphPath(keys:_*)
   }
 
-  /**
-   * Convenience helper to create a GraphPath from a list of keys. Helpful after extraction
-   * of part of a path to create a new path without ':_*'.
-   *
-   * @param keys list of maps containing the keys of each level in the path to be created.
-   * @return a GraphPath with the specified keys.
-   */
-  def apply(keys: List[GraphItemKey]): GraphPath = {
-    new GraphPath(keys:_*)
-  }
-
   def unapplySeq(x: Seq[GraphItemKey]): Option[Seq[GraphItemKey]] = Some(x)
 
   def fromSeq(buf: Seq[GraphItemKey]): GraphPath = {
