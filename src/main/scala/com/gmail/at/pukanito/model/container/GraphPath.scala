@@ -1,8 +1,8 @@
 package com.gmail.at.pukanito.model.container
 
-import collection._
-import mutable.Builder
-import mutable.ArrayBuffer
+import collection.SeqLike
+import collection.mutable.Builder
+import collection.mutable.ArrayBuffer
 
 /**
  * Representation of a relative or absolute path through GraphItems.
