@@ -1,32 +1,30 @@
 package com.gmail.at.pukanito.model.container
 
+import collection._
+import mutable.Builder
+import mutable.ArrayBuffer
+
 /**
  * Representation of a relative or absolute path through GraphItems.
  *
  * @param path the keys representing the path.
  */
-class GraphPath (val path: GraphItemKey*){
+class GraphPath (
+  path: GraphItemKey*
+) extends Seq[GraphItemKey] with SeqLike[GraphItemKey, GraphPath] {
 
-  /**
-   * @return the depth of the path.
-   */
-  def size = path.size
+  import GraphPath._
 
-  /**
-   * @return the first item of the path.
-   */
-  def head = path.head
+  private val graphPathElements = Seq[GraphItemKey](path:_*)
 
-  /**
-   * @return the path except the first item.
-   */
-  def tail = new GraphPath(path.tail:_*)
+  def apply(idx: Int): GraphItemKey = graphPathElements(idx)
 
-  /**
-   * @return the path as a list of GraphItemKeys which can
-   *   be handy for pattern matching.
-   */
-  def toList = path.toList
+  def iterator: Iterator[GraphItemKey] = graphPathElements.iterator
+
+  def length: Int = graphPathElements.length
+
+  override protected[this] def newBuilder: Builder[GraphItemKey, GraphPath] =
+    GraphPath.newBuilder
 
   /**
    * Append another path to this path.
@@ -35,26 +33,8 @@ class GraphPath (val path: GraphItemKey*){
    * @return a new path consisting of this path with p appended.
    */
   def +(p: GraphPath) = {
-    new GraphPath((this.path ++ p.path):_*)
+    new GraphPath((this.graphPathElements ++ p.graphPathElements):_*)
   }
-
-  override def equals(other: Any): Boolean = {
-    other match {
-      case that: GraphPath =>
-        (that canEqual this) &&
-        that.path == this.path
-      case _ => false
-    }
-  }
-
-  override def hashCode: Int = path.hashCode
-
-  def canEqual(other: Any): Boolean = other.isInstanceOf[GraphPath]
-
-  override def toString: String = {
-    path.mkString("GraphPath(", ",", ")")
-  }
-
 }
 
 /**
@@ -93,5 +73,10 @@ object GraphPath {
     new GraphPath(keys:_*)
   }
 
+  def fromSeq(buf: Seq[GraphItemKey]): GraphPath = {
+    new GraphPath(buf:_*)
+  }
 
+  def newBuilder: Builder[GraphItemKey, GraphPath] =
+    new ArrayBuffer mapResult fromSeq
 }
