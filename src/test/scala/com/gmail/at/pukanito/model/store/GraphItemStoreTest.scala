@@ -7,7 +7,7 @@ import com.gmail.at.pukanito.model.container.{GraphItem,GraphPath}
 
 class GraphItemStoreTest extends FunSpec with ShouldMatchers {
 
-  private class TestSimpleGraphItem(val k: String, val v: Int) extends GraphItem[TestSimpleGraphItem] {
+  private class TestSimpleGraphItem(val k: String, var v: Int) extends GraphItem[TestSimpleGraphItem] {
     override def key = k
 
     override def equals(other: Any): Boolean = {
@@ -95,13 +95,12 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
       val store = new MemoryMapGraphItemStore[TestSimpleGraphItem]
       val t1 = new TestSimpleGraphItem("A", 1)
       val t2 = new TestSimpleGraphItem("B", 2)
-      val t1a = new TestSimpleGraphItem("A", 1)
       val t2a = new TestSimpleGraphItem("B", 3)
       store.put(t1)
       t1 += t2
       store.put(t2)
-      t1a += t2a
-      store.put(t2a)
+      t2.v = 3
+      store.put(t2)
       val p = GraphPath(t1.key, t2.key)
       store.contains(p) should equal (Map(p -> true))
       store(p).first should equal (t2a)
