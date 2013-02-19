@@ -71,6 +71,8 @@ object GraphPath {
     new GraphPath(keys:_*)
   }
 
+  def unapplySeq(x: Seq[GraphItemKey]): Option[Seq[GraphItemKey]] = Some(x)
+
   def fromSeq(buf: Seq[GraphItemKey]): GraphPath = {
     new GraphPath(buf:_*)
   }
