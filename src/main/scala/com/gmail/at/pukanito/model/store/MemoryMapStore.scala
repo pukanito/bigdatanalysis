@@ -10,7 +10,7 @@ class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
   private var leafs: Map[GraphItemKey, T] = Map.empty
   private var children: Map[GraphItemKey, MemoryMapGraphItemStore[T]] = Map.empty
 
-  def put(path: GraphPath, value: T): Unit = {
+  private def put(path: GraphPath, value: T): Unit = {
     path.toList match {
       case List() => throw new RuntimeException("Cannot store in MemoryMapGraphItemStore without a path")
       case List(key) => leafs += key -> value
