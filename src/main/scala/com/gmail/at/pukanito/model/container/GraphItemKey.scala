@@ -11,7 +11,7 @@ class GraphItemKey private (
   elems: (String, Any)*
 ) extends Map[String, Any] with MapLike[String, Any, GraphItemKey] {
 
-  val graphItemKeyElements = Map[String, Any](elems:_*)
+  private val graphItemKeyElements = Map[String, Any](elems:_*)
 
   override def get(key: String): Option[Any] =
     if (key.isEmpty) None
