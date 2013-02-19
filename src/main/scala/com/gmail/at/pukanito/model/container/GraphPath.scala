@@ -13,8 +13,6 @@ class GraphPath (
   path: GraphItemKey*
 ) extends Seq[GraphItemKey] with SeqLike[GraphItemKey, GraphPath] {
 
-  import GraphPath._
-
   private val graphPathElements = Seq[GraphItemKey](path:_*)
 
   def apply(idx: Int): GraphItemKey = graphPathElements(idx)
