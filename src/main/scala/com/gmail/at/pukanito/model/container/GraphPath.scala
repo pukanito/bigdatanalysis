@@ -9,7 +9,7 @@ import collection.mutable.ArrayBuffer
  *
  * @param path the keys representing the path.
  */
-class GraphPath (
+class GraphPath private (
   path: GraphItemKey*
 ) extends Seq[GraphItemKey] with SeqLike[GraphItemKey, GraphPath] {
 
