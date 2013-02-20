@@ -106,13 +106,15 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
       store(p).first should equal (t2a)
     }
 
-    it("should be possible to delete an item by its path") (pending)
-
     it("should be possible to delete an item and all its children (a graph) by its path") (pending)
 
-    it("should be possible to retrieve an item by its path") (pending)
+    it("should be possible to retrieve a graph by its path") (pending)
 
-    it("should be possible to retrieve all items with a specific sub path") (pending)
+    it("should be possible to retrieve all graphs with a specific sub path") (pending)
+
+    it("should be possible to create a graph by its path") (pending)
+
+    it("should be possible to modify a graph by its path") (pending)
 
     it("should throw an exception when creating an item without path") (pending)
 
@@ -127,12 +129,6 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
       val store = new MemoryMapGraphItemStore[TestSimpleGraphItem]
       intercept[RuntimeException] { store.contains(GraphPath()) }
     }
-
-    it("should be possible to create a graph by its path") (pending)
-
-    it("should be possible to modify a graph by its path") (pending)
-
-    it("should be possible to retrieve a graph by its path") (pending)
 
   }
 
