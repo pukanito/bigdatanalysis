@@ -14,7 +14,7 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
       other match {
         case that: TestSimpleGraphItem =>
           (that canEqual this) &&
-          that.key == this.key && that.v == this.v
+          that.k == this.k && that.v == this.v
         case _ => false
       }
     }
@@ -81,14 +81,19 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
       val store = new MemoryMapGraphItemStore[TestSimpleGraphItem]
       val t1 = new TestSimpleGraphItem("A", 1)
       val t2 = new TestSimpleGraphItem("B", 2)
+      val t3 = new TestSimpleGraphItem("C", 3)
       store.put(t1)
       store.contains(t1.key) should equal (Map(GraphPath(t1.key) -> true))
       t1 += t2
       store.put(t2)
       store.contains(t1.key) should equal (Map(GraphPath(t1.key) -> true))
       store.contains(t2.key) should equal (Map(GraphPath(t2.key) -> false))
-      val p = GraphPath(t1.key, t2.key)
-      store.contains(p) should equal (Map(p -> true))
+      val p2 = GraphPath(t1.key, t2.key)
+      store.contains(p2) should equal (Map(p2 -> true))
+      t2 += t3
+      store.put(t3)
+      val p3 = GraphPath(t1.key, t2.key, t3.key)
+      store.contains(p3) should equal (Map(p3 -> true))
     }
 
     it("should be possible to modify an item by its path") {
@@ -108,7 +113,29 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
 
     it("should be possible to delete an item and all its children (a graph) by its path") (pending)
 
-    it("should be possible to retrieve a graph by its path") (pending)
+    it("should be possible to retrieve a graph by its path") {
+      val store = new MemoryMapGraphItemStore[TestSimpleGraphItem]
+      val t1 = new TestSimpleGraphItem("A", 1)
+      val t2a = new TestSimpleGraphItem("Ba", 2)
+      val t2b = new TestSimpleGraphItem("Bb", 2)
+      val t3 = new TestSimpleGraphItem("C", 3)
+      store.put(t1)
+      t1 += t2a
+      store.put(t2a)
+      t1 += t2b
+      store.put(t2b)
+      t2a += t3
+      store.put(t3)
+      val r1 = new TestSimpleGraphItem("A", 1)
+      val r2a = new TestSimpleGraphItem("Ba", 2)
+      val r2b = new TestSimpleGraphItem("Bb", 2)
+      val r3 = new TestSimpleGraphItem("C", 3)
+      r1 += r2a
+      r1 += r2b
+      r2a += r3
+      store(t1.key).first should equal (r1)
+      (pending) // Improve equals of TestSimpleGraphItem
+    }
 
     it("should be possible to retrieve all graphs with a specific sub path") (pending)
 

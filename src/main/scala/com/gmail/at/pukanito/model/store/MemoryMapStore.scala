@@ -51,7 +51,7 @@ class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
         case GraphPath() => throw new RuntimeException("Cannot contain in MemoryMapGraphItemStore without a path")
         case GraphPath(key) => leafs contains key
         case GraphPath(headKey, tail @ _*) => (children contains headKey) &&
-                                              ((children(headKey) contains GraphPath(tail:_*))(tail.head))
+                                              ((children(headKey) contains GraphPath(tail:_*))(GraphPath(tail:_*)))
       }
     ) } ) (collection.breakOut)
   }
