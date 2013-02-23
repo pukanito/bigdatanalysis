@@ -123,11 +123,17 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
       val t3 = new TestSimpleGraphItem("C", 30)
       store.put(t1)
       t1 += t2a
+      store(t1.key).first should not equal (t1)
       store.put(t2a)
+      store(t1.key).first should equal (t1)
       t1 += t2b
+      store(t1.key).first should not equal (t1)
       store.put(t2b)
+      store(t1.key).first should equal (t1)
       t2a += t3
+      store(t1.key).first should not equal (t1)
       store.put(t3)
+      store(t1.key).first should equal (t1)
       val r1 = new TestSimpleGraphItem("A", 10)
       val r2a = new TestSimpleGraphItem("Ba", 20)
       val r2b = new TestSimpleGraphItem("Bb", 20)
