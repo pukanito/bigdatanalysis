@@ -7,10 +7,23 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
 
   private class TestGraphItem(
     val k: Int,
-    initialChildren: Set[TestGraphItem] = Set[TestGraphItem](),
-    initialParents: Set[TestGraphItem] = Set[TestGraphItem]()
+    initialChildren: List[TestGraphItem] = List[TestGraphItem](),
+    initialParents: List[TestGraphItem] = List[TestGraphItem]()
   ) extends GraphItem[TestGraphItem](initialChildren, initialParents) {
     override def key = "A" -> k
+
+//    override def equals(other: Any): Boolean = {
+//      other match {
+//        case that: TestGraphItem =>
+//          (that canEqual this) && that.key == this.key && that.children == this.children
+//        case _ => false
+//      }
+//    }
+//
+//    override def hashCode: Int = key.hashCode
+//
+//    def canEqual(other: Any): Boolean = other.isInstanceOf[TestGraphItem]
+
   }
 
   private class TestSimpleGraphItem (
@@ -55,6 +68,21 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
       t2.path should have size (2)
     }
 
+    it("should be possible to compare different graphs with each other") {
+//      val t1 = new TestGraphItem(1)
+//      val t2 = new TestGraphItem(2)
+//      t1 += t2
+//      val s1 = new TestGraphItem(1)
+//      val s2 = new TestGraphItem(2)
+//      s1 += s2
+//      s1 should equal (t1)
+//      val r1 = new TestGraphItem(1)
+//      val r2 = new TestGraphItem(3)
+//      r1 += r2
+//      r1 should not equal (t1)
+      (pending)
+    }
+
     it("should throw an exception when a cycle is detected when adding a child that is also parent") {
       val t1 = new TestGraphItem(1)
       def testRecursively(depth: Int, item: TestGraphItem): Unit = {
@@ -81,9 +109,9 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
 
     it("should throw an exception when a cycle is detected in specific use cases") {
       val t4 = new TestGraphItem(1)
-      val t3 = new TestGraphItem(2, Set(t4))
+      val t3 = new TestGraphItem(2, List(t4))
       val t2 = new TestGraphItem(3)
-      val t1 = new TestGraphItem(4, Set(t2))
+      val t1 = new TestGraphItem(4, List(t2))
       intercept[GraphCycleException] { t1 += t1 }
       intercept[GraphCycleException] { t2 += t1 }
       intercept[GraphCycleException] { t2 += t2 }
@@ -99,14 +127,17 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
     it("should throw an exception when an item is created with duplicate key in initial children") {
       val t1 = new TestGraphItem(1)
       val t2 = new TestGraphItem(1)
-      intercept[DuplicateGraphItemException] { new TestGraphItem(1, Set(t1, t2)) }
+//      t1 should equal (t2)
+//      t1.key should equal (t2.key)
+      intercept[DuplicateGraphItemException] { new TestGraphItem(1, List(t1, t2)) }
+      (pending)
     }
 
     it("should throw an exception when an item is created in a parent that already has a child with the same key") {
       val t1 = new TestGraphItem(1)
       val t2 = new TestGraphItem(2)
       t1 += t2
-      intercept[DuplicateGraphItemException] { new TestGraphItem(2, Set(), Set(t1)) }
+      intercept[DuplicateGraphItemException] { new TestGraphItem(2, Nil, List(t1)) }
     }
 
     it("should be possible to uniquely identify a graph item by its path (root / childkey / childkey / ...)") {

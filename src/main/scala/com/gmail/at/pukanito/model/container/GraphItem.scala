@@ -32,8 +32,8 @@ class DuplicateGraphItemException(value: GraphItem[_])
  *  @param initialParents a list of the initial parents of this graph item.
  */
 abstract class GraphItem[T <: GraphItem[T]](
-  initialChildren: Set[T] = Set[T](),
-  initialParents: Set[T] = Set[T]()
+  initialChildren: List[T] = List[T](),
+  initialParents: List[T] = List[T]()
 ) {
   this: T =>
 
@@ -42,7 +42,7 @@ abstract class GraphItem[T <: GraphItem[T]](
 
   // Before adding initial children and parents, check for cycles and duplicates.
   testCycleExistsInParents(initialParents, this)
-  initialChildren foreach (testCycleExistsInParents(Set(this), _))
+  initialChildren foreach (testCycleExistsInParents(List(this), _))
   initialChildren foreach (testCycleExistsInParents(initialParents, _))
   initialChildren foreach (
     (x) => initialChildren foreach (
@@ -62,11 +62,11 @@ abstract class GraphItem[T <: GraphItem[T]](
    * @param items the items to check (also check items' parents).
    * @param childItem the child item to check against.
    */
-  private def testCycleExistsInParents(items: Set[T], childItem: T): Boolean = {
+  private def testCycleExistsInParents(items: List[T], childItem: T): Boolean = {
     if (items.isEmpty)
       false
     else
-      items.exists( x => (x eq childItem) || testCycleExistsInParents(x.parents, childItem) )
+      items.exists( x => (x eq childItem) || testCycleExistsInParents(x.parents.toList, childItem) )
   }
 
   /**
@@ -122,7 +122,7 @@ abstract class GraphItem[T <: GraphItem[T]](
    * @throws DuplicateGraphItemException when an item with the same key already exists.
    */
   def +=(childItem: T) = {
-    if (testCycleExistsInParents(Set(this), childItem)) throw new GraphCycleException(childItem)
+    if (testCycleExistsInParents(List(this), childItem)) throw new GraphCycleException(childItem)
     if (childrenMap contains childItem.key) throw new DuplicateGraphItemException(childItem)
     addWithoutException(childItem)
   }

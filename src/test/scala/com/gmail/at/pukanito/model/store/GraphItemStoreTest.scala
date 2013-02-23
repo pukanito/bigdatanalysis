@@ -13,13 +13,13 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
     override def equals(other: Any): Boolean = {
       other match {
         case that: TestSimpleGraphItem =>
-          (that canEqual this) &&
+          (that canEqual this) && // super.equals(that) &&
           that.k == this.k && that.v == this.v
         case _ => false
       }
     }
 
-    override def hashCode: Int = key.hashCode() + 41 * (41 + v)
+    override def hashCode: Int = 41 * (key.hashCode + (41 + v)) //+super.hashCode
 
     def canEqual(other: Any): Boolean = other.isInstanceOf[TestSimpleGraphItem]
 

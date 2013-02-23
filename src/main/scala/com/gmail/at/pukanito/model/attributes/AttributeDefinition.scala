@@ -17,8 +17,8 @@ import com.gmail.at.pukanito.model.container.{GraphItem,GraphItemKey}
 class AttributeDefinition (
   val attributeId: AttributeIdentifier,
   val attributeValueKeyIds: List[AttributeIdentifier] = List(),
-  initialChildren: Set[AttributeDefinition] = Set[AttributeDefinition](),
-  initialParents: Set[AttributeDefinition] = Set[AttributeDefinition]()
+  initialChildren: List[AttributeDefinition] = List[AttributeDefinition](),
+  initialParents: List[AttributeDefinition] = List[AttributeDefinition]()
 ) extends GraphItem[AttributeDefinition](initialChildren, initialParents) {
 
   /**
