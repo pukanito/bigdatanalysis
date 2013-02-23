@@ -10,6 +10,8 @@ class AttributeValueTest extends FunSpec with ShouldMatchers {
   ) extends AttributeValue(attributeDefinition) {
 
     def value: Any = 0
+
+    def copy: AttributeTestValue = new AttributeTestValue(attributeDefinition)
   }
 
   describe("AttributeValue") {

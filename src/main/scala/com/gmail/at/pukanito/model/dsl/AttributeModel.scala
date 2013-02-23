@@ -157,7 +157,7 @@ trait AttributeModel {
       // Create copies of attributes first.
       that.definedAttributes foreach { case (thatAttrId, thatAttrDef) =>
         if (definedAttributes contains thatAttrId) throw new DuplicateAttributeDefinitionException(thatAttrDef)
-        definedAttributes += thatAttrId -> new AttributeDefinition(thatAttrId, thatAttrDef.attributeValueKeyIds)
+        definedAttributes += thatAttrId -> thatAttrDef.copy
       }
       // Then add parent-child relationships of all added attributes.
       that.definedAttributes foreach { case (thatAttrId, thatAttrDef) =>

@@ -12,17 +12,19 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
   ) extends GraphItem[TestGraphItem](initialChildren, initialParents) {
     override def key = "A" -> k
 
-//    override def equals(other: Any): Boolean = {
-//      other match {
-//        case that: TestGraphItem =>
-//          (that canEqual this) && that.key == this.key && that.children == this.children
-//        case _ => false
-//      }
-//    }
-//
-//    override def hashCode: Int = key.hashCode
-//
-//    def canEqual(other: Any): Boolean = other.isInstanceOf[TestGraphItem]
+    def copy: TestGraphItem = new TestGraphItem(k)
+
+    override def equals(other: Any): Boolean = {
+      other match {
+        case that: TestGraphItem =>
+          (that canEqual this) && that.key == this.key && that.children == this.children
+        case _ => false
+      }
+    }
+
+    override def hashCode: Int = key.hashCode
+
+    def canEqual(other: Any): Boolean = other.isInstanceOf[TestGraphItem]
 
   }
 
@@ -30,6 +32,8 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
     val k: String
   ) extends GraphItem[TestSimpleGraphItem] {
     override def key = k
+
+    def copy: TestSimpleGraphItem = new TestSimpleGraphItem(k)
   }
 
   describe("GraphItem") {
@@ -69,18 +73,45 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
     }
 
     it("should be possible to compare different graphs with each other") {
-//      val t1 = new TestGraphItem(1)
-//      val t2 = new TestGraphItem(2)
-//      t1 += t2
-//      val s1 = new TestGraphItem(1)
-//      val s2 = new TestGraphItem(2)
-//      s1 += s2
-//      s1 should equal (t1)
-//      val r1 = new TestGraphItem(1)
-//      val r2 = new TestGraphItem(3)
-//      r1 += r2
-//      r1 should not equal (t1)
-      (pending)
+      val t1 = new TestGraphItem(1)
+      val t2 = new TestGraphItem(2)
+      t1 += t2
+      val s1 = new TestGraphItem(1)
+      val s2 = new TestGraphItem(2)
+      s1 += s2
+      s1 should equal (t1)
+      val r1 = new TestGraphItem(1)
+      val r2 = new TestGraphItem(3)
+      r1 += r2
+      r1 should not equal (t1)
+    }
+
+    it("should be possible to take a copy of a single graph item") {
+      val t1 = new TestGraphItem(1)
+      val t2 = t1.copy
+      t1 should equal (t2)
+      t2 should equal (t1)
+      t1 should not be theSameInstanceAs (t2)
+    }
+
+    it("should be possible to take a copy of a graph or subgraph") {
+      val t1 = new TestGraphItem(1)
+      val t2 = new TestGraphItem(2)
+      val t3 = new TestGraphItem(3)
+      t1 += t2
+      t2 += t3
+      t1 += t3
+      val s1 = new TestGraphItem(1)
+      val s2 = new TestGraphItem(2)
+      val s3 = new TestGraphItem(3)
+      s1 += s2
+      s2 += s3
+      s1 += s3
+      t1 should equal (s1)
+      t1.copy should not equal (s1)
+      t2 should equal (s2)
+      t2.copyGraph should equal (s2)
+      t3.copyGraph should equal (s3)
     }
 
     it("should throw an exception when a cycle is detected when adding a child that is also parent") {
@@ -127,10 +158,9 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
     it("should throw an exception when an item is created with duplicate key in initial children") {
       val t1 = new TestGraphItem(1)
       val t2 = new TestGraphItem(1)
-//      t1 should equal (t2)
-//      t1.key should equal (t2.key)
+      t1 should equal (t2)
+      t1.key should equal (t2.key)
       intercept[DuplicateGraphItemException] { new TestGraphItem(1, List(t1, t2)) }
-      (pending)
     }
 
     it("should throw an exception when an item is created in a parent that already has a child with the same key") {

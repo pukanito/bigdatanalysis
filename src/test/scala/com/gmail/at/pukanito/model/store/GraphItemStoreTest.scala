@@ -10,10 +10,12 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
   private class TestSimpleGraphItem(val k: String, var v: Int) extends GraphItem[TestSimpleGraphItem] {
     override def key = k
 
+    def copy: TestSimpleGraphItem = new TestSimpleGraphItem(k, v)
+
     override def equals(other: Any): Boolean = {
       other match {
         case that: TestSimpleGraphItem =>
-          (that canEqual this) && // super.equals(that) &&
+          (that canEqual this) && this.children == that.children &&
           that.k == this.k && that.v == this.v
         case _ => false
       }
@@ -134,7 +136,7 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
       r1 += r2b
       r2a += r3
       store(t1.key).first should equal (r1)
-      (pending) // Improve equals of TestSimpleGraphItem
+      (pending)
     }
 
     it("should be possible to retrieve all graphs with a specific sub path") (pending)

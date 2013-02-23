@@ -69,6 +69,14 @@ abstract class GraphItem[T <: GraphItem[T]](
       items.exists( x => (x eq childItem) || testCycleExistsInParents(x.parents.toList, childItem) )
   }
 
+  def copy: T
+
+  def copyGraph: T = {
+    val item = this.copy
+    childrenMap.values foreach { item += _.copyGraph }
+    item
+  }
+
   /**
    * Add a child item without checking for cycles or duplicate keys.
    *
