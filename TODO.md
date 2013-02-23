@@ -1,5 +1,5 @@
 # TODO
 
 
-* GraphItemStore should use path instead of key for storing/retrieving/deleting items
+* Possibility to inject different GraphItemStores into GraphItemStoreTest
 
