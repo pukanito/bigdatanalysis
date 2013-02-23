@@ -26,15 +26,15 @@ class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
   }
 
   /**
-   * Get copies of all item's children (unless it equals None) and add them to item itself.
+   * Get a copy of the subgraph starting at item.
    *
-   * @return the item itself.
+   * @return a copy of the item and children.
    */
   private def getChildren(item: Option[T]): Option[T] = {
     item foreach { (i) =>
       children.get(i.key) foreach { (m) =>
-        m.leafs foreach { case (leafKey, leafItem) =>
-          i += getChildren(Some(leafItem.copy)).get
+        m.leafs foreach { case (_, leafItem) =>
+          i += m.getChildren(Some(leafItem.copy)).get
         }
       }
     }
