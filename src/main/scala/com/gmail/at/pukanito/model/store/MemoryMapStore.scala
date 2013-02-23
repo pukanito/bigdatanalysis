@@ -13,7 +13,7 @@ class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
   private def put(path: GraphPath, value: T): Unit = {
     path match {
       case GraphPath() => throw new RuntimeException("Cannot store in MemoryMapGraphItemStore without a path")
-      case GraphPath(key) => leafs += key -> value
+      case GraphPath(key) => leafs += key -> value.copy
       case GraphPath(headKey, tail @ _*) => (children.get(headKey) match {
           case Some(m) => m
           case None => val m = new MemoryMapGraphItemStore[T](); children += headKey -> m; m
@@ -25,11 +25,27 @@ class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
     values foreach { v => v.paths foreach { p => put(p, v) } }
   }
 
+  /**
+   * Get copies of all item's children (unless it equals None) and add them to item itself.
+   *
+   * @return the item itself.
+   */
+  private def getChildren(item: Option[T]): Option[T] = {
+    item foreach { (i) =>
+      children.get(i.key) foreach { (m) =>
+        m.leafs foreach { case (leafKey, leafItem) =>
+          i += getChildren(Some(leafItem.copy)).get
+        }
+      }
+    }
+    item
+  }
+
   def apply(paths: GraphPath*): Set[T] = {
     (paths map { p =>
       p match {
         case GraphPath() => throw new RuntimeException("Cannot get from MemoryMapGraphItemStore without a path")
-        case GraphPath(key) => leafs(key)
+        case GraphPath(key) => getChildren(Some(leafs(key).copy)).get
         case GraphPath(headKey, tail @ _*) => children(headKey)(GraphPath(tail:_*)).first
       }
     } ) (collection.breakOut)
@@ -39,7 +55,7 @@ class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
     (paths map { p =>
       p match {
         case GraphPath() => throw new RuntimeException("Cannot get from MemoryMapGraphItemStore without a path")
-        case GraphPath(key) => leafs.get(key)
+        case GraphPath(key) => getChildren(leafs.get(key) map {_.copy})
         case GraphPath(headKey, tail @ _*) => children.get(headKey).map { _.get(GraphPath(tail:_*)).first.get }
       }
     } ) (collection.breakOut)
