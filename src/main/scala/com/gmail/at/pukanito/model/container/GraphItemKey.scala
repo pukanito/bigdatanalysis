@@ -3,7 +3,9 @@ package com.gmail.at.pukanito.model.container
 import collection._
 
 /**
- * Representation of the keys in a GraphPath.
+ * Represents the (compound) key of a [[com.gmail.at.pukanito.model.container.GraphItem]].
+ *
+ * The key is implemented as a wrapper around Map[String, Any].
  *
  * @param elems the keys representing a level of a path.
  */
@@ -35,14 +37,28 @@ class GraphItemKey private (
 }
 
 /**
- * Helpers for GraphItemKey
+ * Helpers for creating GraphItemKeys.
+ *
+ * When creating graph item keys with a simple string value key:
+ * {{{
+ * import com.gmail.at.pukanito.model.container.GraphItemKey._
+ * val key = GraphItemKey("stringvalue")
+ * }}}
+ * This will create a key that internally looks like: "!id!" -> "stringvalue".
+ *
+ * When creating graph item keys with compound keys:
+ * {{{
+ * import com.gmail.at.pukanito.model.container.GraphItemKey._
+ * val key = GraphItemKey("id1" -> val1, "id2" -> val2, ...)
+ * }}}
  */
 object GraphItemKey extends {
 
+  // When using non-compound keys a standard String can be used in the map.
   private def simpleGraphItemId = "!id!"
 
   /**
-   * Helper to convert String to a GraphItemKey (for implicit conversion).
+   * Helps to convert String to a GraphItemKey (for implicit conversion).
    *
    * @param key string to use as simple key.
    * @return a GraphItemKey

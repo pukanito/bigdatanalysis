@@ -4,8 +4,8 @@ package com.gmail.at.pukanito.model.container
  * Exception thrown when an item is added to a GraphItem and the item is the same object
  * as the GraphItem or one of its (in)direct parents.
  *
- * @constructor Create a graph cycle exception.
- * @param value The duplicate graph item.
+ * @constructor Creates a graph cycle exception.
+ * @param value The item that was added and already exists as a (in)direct parent.
  */
 class GraphCycleException(value: GraphItem[_])
   extends RuntimeException("Cycle in graph with: " + value) {}
@@ -13,27 +13,51 @@ class GraphCycleException(value: GraphItem[_])
 /**
  * Exception thrown when an item is added to a GraphItem with an already existing key.
  *
- * @constructor Create a duplicate item exception.
- * @param value The item that failed to added.
+ * @constructor Creates a duplicate item exception.
+ * @param value The item that was added and has an already existing key.
  */
 class DuplicateGraphItemException(value: GraphItem[_])
   extends RuntimeException("Duplicate graph item: " + value) {}
 
 /**
- * Trait for making items graph item compatible.
+ * Makes objects graph item compatible.
  *
  * GraphItem can have:
  *  - compound key
  *  - multiple children
  *  - multiple parents
  *
- *  @param T the type that can be contained with this graph item.
+ * A graph item is an object that can have parent-child relations with other objects
+ * of the same type. Child objects are identified by a (compound) key. A child object
+ * can appear multiple times in the same graph as long as no cycles are introduced and
+ * it can only appear once within a certain parent object.
+ *
+ * To make a class a GraphItem:
+ *
+ * {{{
+ * class MyClass(<optional parameters>) extends GraphItem[MyClass] {
+ *   ...
+ * }
+ * }}}
+ *
+ * or, when using initial children and/or parents (with default values):
+ *
+ * {{{
+ * class MyClass(<optional parameters>,
+ *   initialChildren: List[MyClass] = Nil,
+ *   initialParents: List[MyClass] = Nil
+ * ) extends GraphItem[MyClass](initialChildren, initialParents) {
+ *   ...
+ * }
+ * }}}
+ *
+ *  @param T the type that can be contained within this graph item.
  *  @param initialChildren a list of the initial children of this graph item.
  *  @param initialParents a list of the initial parents of this graph item.
  */
 abstract class GraphItem[T <: GraphItem[T]](
-  initialChildren: List[T] = List[T](),
-  initialParents: List[T] = List[T]()
+  initialChildren: List[T] = Nil,
+  initialParents: List[T] = Nil
 ) {
   this: T =>
 
@@ -54,7 +78,7 @@ abstract class GraphItem[T <: GraphItem[T]](
   initialChildren foreach (addWithoutException(_))
 
   /**
-   * Check if child item is equal to one of the items or one of items' parents. This also
+   * Returns {{true}} if child item is equal to one of the items or one of items' parents. This also
    * checks if one of the children of the child item is equal to one of the items or
    * one of items' parents because if this is the case than the child item itself will
    * also be one of the parents.
@@ -69,8 +93,19 @@ abstract class GraphItem[T <: GraphItem[T]](
       items.exists( x => (x eq childItem) || testCycleExistsInParents(x.parents.toList, childItem) )
   }
 
+  /**
+   * Returns the key of a graph item. Should be immutable!
+   */
+  def key: GraphItemKey
+
+  /**
+   * Returns a copy of this object.
+   */
   def copy: T
 
+  /**
+   * Returns a copy of this object and all its children.
+   */
   def copyGraph: T = {
     val item = this.copy
     childrenMap.values foreach { item += _.copyGraph }
@@ -78,7 +113,7 @@ abstract class GraphItem[T <: GraphItem[T]](
   }
 
   /**
-   * Add a child item without checking for cycles or duplicate keys.
+   * Adds a child item without checking for cycles or duplicate keys.
    *
    * @param childItem The child to add.
    */
@@ -88,12 +123,7 @@ abstract class GraphItem[T <: GraphItem[T]](
   }
 
   /**
-   * @return the key of a graph item. Should be immutable!
-   */
-  def key: GraphItemKey
-
-  /**
-   * @return the path(s) of the graph item.
+   * Returns the path(s) of the graph item.
    */
   def paths: Set[GraphPath] = {
     if (parents.size == 0)
@@ -103,7 +133,7 @@ abstract class GraphItem[T <: GraphItem[T]](
   }
 
   /**
-   * @return a path of the graph item.
+   * Returns a path of the graph item. If multiple paths exist one of them is returned.
    */
   def path: GraphPath = {
     if (parents.size == 0)
@@ -113,17 +143,17 @@ abstract class GraphItem[T <: GraphItem[T]](
   }
 
   /**
-   * @return set of parent graph items of this graph item, empty when this is a root item.
+   * Returns the set of parent graph items of this graph item, empty when this is a root item.
    */
   def parents: Set[T] = parentValues
 
   /**
-   * @return map of child graph items of this graph item.
+   * Returns the map of child graph items of this graph item.
    */
   def children: Map[GraphItemKey, T] = childrenMap
 
   /**
-   * Add a new child to this graph item.
+   * Adds a new child to this graph item.
    *
    * @param childItem The child to add.
    * @throws GraphCycleException when a cycle is detected when the value would be added.
@@ -136,7 +166,7 @@ abstract class GraphItem[T <: GraphItem[T]](
   }
 
   /**
-   * Get a specific item in the graph.
+   * Gets a specific item in the graph.
    *
    * @param path path to the child item.
    * @return a child item according to the specified path.
