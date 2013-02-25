@@ -51,9 +51,12 @@ class DuplicateGraphItemException(value: GraphItem[_])
  * }
  * }}}
  *
- *  @param T the type that can be contained within this graph item.
- *  @param initialChildren a list of the initial children of this graph item.
- *  @param initialParents a list of the initial parents of this graph item.
+ * @constructor Creates a graph item with specified children and/or parents.
+ * @param T the type that can be contained within this graph item.
+ * @param initialChildren a list of the initial children of this graph item.
+ * @param initialParents a list of the initial parents of this graph item.
+ * @throws GraphCycleException when a cycle is detected when the item would be created.
+ * @throws DuplicateGraphItemException when duplicate item would be detected.
  */
 abstract class GraphItem[T <: GraphItem[T]](
   initialChildren: List[T] = Nil,
@@ -78,13 +81,13 @@ abstract class GraphItem[T <: GraphItem[T]](
   initialChildren foreach (addWithoutException(_))
 
   /**
-   * Returns {{true}} if child item is equal to one of the items or one of items' parents. This also
-   * checks if one of the children of the child item is equal to one of the items or
-   * one of items' parents because if this is the case than the child item itself will
-   * also be one of the parents.
+   * Returns true if child item is equal (object equality) to one of the items or one
+   * of items' parents. This also checks if one of the children of the child item is object
+   * equal to one of the items or one of items' parents because if this is the case than
+   * the child item itself will also be one of the parents.
    *
    * @param items the items to check (also check items' parents).
-   * @param childItem the child item to check against.
+   * @param childItem the item that may not be object equal to one of the items or its parents.
    */
   private def testCycleExistsInParents(items: List[T], childItem: T): Boolean = {
     if (items.isEmpty)
@@ -166,10 +169,9 @@ abstract class GraphItem[T <: GraphItem[T]](
   }
 
   /**
-   * Gets a specific item in the graph.
+   * Returns the item at the end of the specified graph path.
    *
-   * @param path path to the child item.
-   * @return a child item according to the specified path.
+   * @param path path to the item.
    * @throws NoSuchElementException if an item in the path does not exist.
    */
   def apply(path: GraphPath): T = {
