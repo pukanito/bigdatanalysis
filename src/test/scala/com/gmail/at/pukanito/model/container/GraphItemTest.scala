@@ -5,9 +5,7 @@ import org.scalatest.matchers.ShouldMatchers
 
 class GraphItemTest extends FunSpec with ShouldMatchers {
 
-  private class TestGraphItem(
-    val k: Int
-  ) extends GraphItem[TestGraphItem] {
+  private class TestGraphItem(val k: Int) extends GraphItem[TestGraphItem] {
     override def key = "A" -> k
 
     def copy: TestGraphItem = new TestGraphItem(k)
@@ -26,9 +24,7 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
 
   }
 
-  private class TestSimpleGraphItem (
-    val k: String
-  ) extends GraphItem[TestSimpleGraphItem] {
+  private class TestSimpleGraphItem (val k: String) extends GraphItem[TestSimpleGraphItem] {
     override def key = k
 
     def copy: TestSimpleGraphItem = new TestSimpleGraphItem(k)
