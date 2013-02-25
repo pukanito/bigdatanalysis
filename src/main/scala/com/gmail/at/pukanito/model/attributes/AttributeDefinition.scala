@@ -28,6 +28,6 @@ class AttributeDefinition (
    */
   override def key = attributeId.toString
 
-  def copy: AttributeDefinition = new AttributeDefinition(attributeId, attributeValueKeyIds)
+  override def copy: AttributeDefinition = new AttributeDefinition(attributeId, attributeValueKeyIds)
 
 }

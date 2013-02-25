@@ -8,7 +8,7 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
   private class TestGraphItem(val k: Int) extends GraphItem[TestGraphItem] {
     override def key = "A" -> k
 
-    def copy: TestGraphItem = new TestGraphItem(k)
+    override def copy: TestGraphItem = new TestGraphItem(k)
 
     override def equals(other: Any): Boolean = {
       other match {
@@ -27,7 +27,7 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
   private class TestSimpleGraphItem (val k: String) extends GraphItem[TestSimpleGraphItem] {
     override def key = k
 
-    def copy: TestSimpleGraphItem = new TestSimpleGraphItem(k)
+    override def copy: TestSimpleGraphItem = new TestSimpleGraphItem(k)
   }
 
   describe("GraphItem") {
