@@ -40,17 +40,6 @@ class DuplicateGraphItemException(value: GraphItem[_])
  * }
  * }}}
  *
- * or, when using initial children and/or parents (with default values):
- *
- * {{{
- * class MyClass(<optional parameters>,
- *   initialChildren: List[MyClass] = Nil,
- *   initialParents: List[MyClass] = Nil
- * ) extends GraphItem[MyClass](initialChildren, initialParents) {
- *   ...
- * }
- * }}}
- *
  * @param T the type that can be contained within this graph item.
  */
 trait GraphItem[T <: GraphItem[T]] {
