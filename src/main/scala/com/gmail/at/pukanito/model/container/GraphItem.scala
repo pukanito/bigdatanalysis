@@ -51,34 +51,23 @@ class DuplicateGraphItemException(value: GraphItem[_])
  * }
  * }}}
  *
- * @constructor Creates a graph item with specified children and/or parents.
  * @param T the type that can be contained within this graph item.
- * @param initialChildren a list of the initial children of this graph item.
- * @param initialParents a list of the initial parents of this graph item.
- * @throws GraphCycleException when a cycle is detected when the item would be created.
- * @throws DuplicateGraphItemException when duplicate item would be detected.
  */
-abstract class GraphItem[T <: GraphItem[T]](
-  initialChildren: List[T] = Nil,
-  initialParents: List[T] = Nil
-) {
+trait GraphItem[T <: GraphItem[T]] {
   this: T =>
 
   private var parentValues: Set[T] = Set[T]()
   private[this] var childrenMap: Map[GraphItemKey, T] = Map[GraphItemKey, T]()
 
-  // Before adding initial children and parents, check for cycles and duplicates.
-  testCycleExistsInParents(initialParents, this)
-  initialChildren foreach (testCycleExistsInParents(List(this), _))
-  initialChildren foreach (testCycleExistsInParents(initialParents, _))
-  initialChildren foreach (
-    (x) => initialChildren foreach (
-      (y) => if (!(x eq y) && (x.key == y.key)) throw new DuplicateGraphItemException(x)))
-  initialParents foreach ((x) => if (x.children contains this.key) throw new DuplicateGraphItemException(x))
+  /**
+   * Returns the key of a graph item. Should be immutable!
+   */
+  def key: GraphItemKey
 
-  // No cycles or duplicates found, go ahead and add.
-  initialParents foreach (_.addWithoutException(this))
-  initialChildren foreach (addWithoutException(_))
+  /**
+   * Returns a copy of this object.
+   */
+  def copy: T
 
   /**
    * Returns true if child item is equal (object equality) to one of the items or one
@@ -97,32 +86,12 @@ abstract class GraphItem[T <: GraphItem[T]](
   }
 
   /**
-   * Returns the key of a graph item. Should be immutable!
-   */
-  def key: GraphItemKey
-
-  /**
-   * Returns a copy of this object.
-   */
-  def copy: T
-
-  /**
    * Returns a copy of this object and all its children.
    */
   def copyGraph: T = {
     val item = this.copy
     childrenMap.values foreach { item += _.copyGraph }
     item
-  }
-
-  /**
-   * Adds a child item without checking for cycles or duplicate keys.
-   *
-   * @param childItem The child to add.
-   */
-  private def addWithoutException(childItem: T) = {
-    childrenMap += (childItem.key -> childItem)
-    childItem.parentValues += this
   }
 
   /**
@@ -165,7 +134,8 @@ abstract class GraphItem[T <: GraphItem[T]](
   def +=(childItem: T) = {
     if (testCycleExistsInParents(List(this), childItem)) throw new GraphCycleException(childItem)
     if (childrenMap contains childItem.key) throw new DuplicateGraphItemException(childItem)
-    addWithoutException(childItem)
+    childrenMap += (childItem.key -> childItem)
+    childItem.parentValues += this
   }
 
   /**

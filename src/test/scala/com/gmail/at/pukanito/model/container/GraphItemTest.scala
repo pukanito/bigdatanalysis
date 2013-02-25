@@ -6,10 +6,8 @@ import org.scalatest.matchers.ShouldMatchers
 class GraphItemTest extends FunSpec with ShouldMatchers {
 
   private class TestGraphItem(
-    val k: Int,
-    initialChildren: List[TestGraphItem] = Nil,
-    initialParents: List[TestGraphItem] = Nil
-  ) extends GraphItem[TestGraphItem](initialChildren, initialParents) {
+    val k: Int
+  ) extends GraphItem[TestGraphItem] {
     override def key = "A" -> k
 
     def copy: TestGraphItem = new TestGraphItem(k)
@@ -140,9 +138,11 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
 
     it("should throw an exception when a cycle is detected in specific use cases") {
       val t4 = new TestGraphItem(1)
-      val t3 = new TestGraphItem(2, List(t4))
+      val t3 = new TestGraphItem(2)
+      t3 += t4
       val t2 = new TestGraphItem(3)
-      val t1 = new TestGraphItem(4, List(t2))
+      val t1 = new TestGraphItem(4)
+      t1 += t2
       intercept[GraphCycleException] { t1 += t1 }
       intercept[GraphCycleException] { t2 += t1 }
       intercept[GraphCycleException] { t2 += t2 }
@@ -153,21 +153,6 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
       t1 += t4
       t2 += t3
       t2 += t4
-    }
-
-    it("should throw an exception when an item is created with duplicate key in initial children") {
-      val t1 = new TestGraphItem(1)
-      val t2 = new TestGraphItem(1)
-      t1 should equal (t2)
-      t1.key should equal (t2.key)
-      intercept[DuplicateGraphItemException] { new TestGraphItem(1, List(t1, t2)) }
-    }
-
-    it("should throw an exception when an item is created in a parent that already has a child with the same key") {
-      val t1 = new TestGraphItem(1)
-      val t2 = new TestGraphItem(2)
-      t1 += t2
-      intercept[DuplicateGraphItemException] { new TestGraphItem(2, Nil, List(t1)) }
     }
 
     it("should be possible to uniquely identify a graph item by its path (root / childkey / childkey / ...)") {

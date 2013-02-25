@@ -96,8 +96,11 @@ trait AttributeModel {
           initialParents foreach (definedAttributes(_) += attr)
           attr
         case None =>
-          val attr = new AttributeDefinition(id, attributeValueKeyIds.toList, (initialChildren ++ attributeValueKeyIds).map(definedAttributes(_)).toList, initialParents.map(definedAttributes(_)).toList)
+          val attr = new AttributeDefinition(id, attributeValueKeyIds.toList)
           definedAttributes += attr.attributeId -> attr
+          attributeValueKeyIds foreach (attr += definedAttributes(_))
+          initialChildren foreach (attr += definedAttributes(_))
+          initialParents foreach (definedAttributes(_) += attr)
           attr
       }
     }

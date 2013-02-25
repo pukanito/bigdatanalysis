@@ -20,10 +20,8 @@ import com.gmail.at.pukanito.model.container.{GraphItem,GraphItemKey}
  */
 class AttributeDefinition (
   val attributeId: AttributeIdentifier,
-  val attributeValueKeyIds: List[AttributeIdentifier] = List(),
-  initialChildren: List[AttributeDefinition] = Nil,
-  initialParents: List[AttributeDefinition] = Nil
-) extends GraphItem[AttributeDefinition](initialChildren, initialParents) {
+  val attributeValueKeyIds: List[AttributeIdentifier] = Nil
+) extends GraphItem[AttributeDefinition] {
 
   /**
    * The default key of an attribute definition: its attribute id.
