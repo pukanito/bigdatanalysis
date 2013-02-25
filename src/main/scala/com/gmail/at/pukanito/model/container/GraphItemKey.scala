@@ -5,7 +5,7 @@ import collection._
 /**
  * Represents the (compound) key of a [[com.gmail.at.pukanito.model.container.GraphItem]].
  *
- * The key is implemented as a wrapper around Map[String, Any].
+ * The key is implemented as a wrapper around Map[String, Any]
  *
  * @param elems the keys representing a level of a path.
  */
@@ -39,17 +39,15 @@ class GraphItemKey private (
 /**
  * Helpers for creating GraphItemKeys.
  *
- * When creating graph item keys with a simple string value key:
+ * Creating graph item keys with a simple string value key
+ * will create a key that internally looks like: "!id!" -> "stringvalue":
  * {{{
- * import com.gmail.at.pukanito.model.container.GraphItemKey._
  * val key = GraphItemKey("stringvalue")
  * }}}
- * This will create a key that internally looks like: "!id!" -> "stringvalue".
  *
- * When creating graph item keys with compound keys:
+ * Creating graph item keys with compound keys:
  * {{{
- * import com.gmail.at.pukanito.model.container.GraphItemKey._
- * val key = GraphItemKey("id1" -> val1, "id2" -> val2, ...)
+ * val key = GraphItemKey("id1" -> val1 [ , "id2" -> val2, ... ] )
  * }}}
  */
 object GraphItemKey extends {
