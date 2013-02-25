@@ -32,7 +32,7 @@ class DuplicateGraphItemException(value: GraphItem[_])
  * can appear multiple times in the same graph as long as no cycles are introduced and
  * it can only appear once within a certain parent object.
  *
- * To make a class a GraphItem:
+ * To make a class a GraphItem compatible:
  *
  * {{{
  * class MyClass(<optional parameters>) extends GraphItem[MyClass] {
