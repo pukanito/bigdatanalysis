@@ -40,7 +40,7 @@ class GraphItemKeyTest extends FunSpec with ShouldMatchers {
       val i = k.iterator
       i.hasNext should equal (true)
       i.next should equal ("A" -> 1)
-    i.hasNext should equal (true)
+      i.hasNext should equal (true)
       i.next should equal ("B" -> 2)
       i.hasNext should equal (false)
     }

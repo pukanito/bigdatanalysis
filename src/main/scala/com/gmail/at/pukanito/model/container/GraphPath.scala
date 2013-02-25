@@ -25,7 +25,7 @@ class GraphPath private (
     GraphPath.newBuilder
 
   /**
-   * Append another path to this path.
+   * Appends another path to this path.
    *
    * @param p the other path to append.
    * @return a new path consisting of this path with p appended.
@@ -37,6 +37,19 @@ class GraphPath private (
 
 /**
  * Types and helper methods for GraphPath.
+ *
+ * Creating a graph path from simple keys:
+ * {{{
+ * val path = GraphPath("key1" -> val1 [ , "key2" -> val2, ... ] )
+ * }}}
+ *
+ * instead of:
+ *
+ * {{{
+ * val path = GraphPath(GraphItemKey("key1" -> val1) [ , GraphItemKey("key2" -> val2), ... ] )
+ * }}}
+ *
+ * With compound keys it is necessary to use GraphItemKey(...).
  */
 object GraphPath {
 
@@ -60,6 +73,9 @@ object GraphPath {
     new GraphPath(keys:_*)
   }
 
+  /**
+   * Helper for match ... case extraction.
+   */
   def unapplySeq(x: Seq[GraphItemKey]): Option[Seq[GraphItemKey]] = Some(x)
 
   def fromSeq(buf: Seq[GraphItemKey]): GraphPath = {
