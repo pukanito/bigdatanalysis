@@ -7,8 +7,8 @@ class GraphItemTest extends FunSpec with ShouldMatchers {
 
   private class TestGraphItem(
     val k: Int,
-    initialChildren: List[TestGraphItem] = List[TestGraphItem](),
-    initialParents: List[TestGraphItem] = List[TestGraphItem]()
+    initialChildren: List[TestGraphItem] = Nil,
+    initialParents: List[TestGraphItem] = Nil
   ) extends GraphItem[TestGraphItem](initialChildren, initialParents) {
     override def key = "A" -> k
 
