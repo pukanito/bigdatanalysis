@@ -3,14 +3,14 @@ package com.gmail.at.pukanito.model.attributes
 /**
  * An attribute identifier.
  *
- * Identifies an attribute definition or attribute value.
+ * Identifies an attribute definition. Also used in (compound) key of attribute values.
  *
- * @constructor Create an attribute identifier.
+ * @constructor Creates an attribute identifier.
  * @param attributeId The value to assign to the AttributeIdentifier.
  * @throws IllegalArgumentException when the attributeId is not a valid identifier.
  */
 class AttributeIdentifier(
-  val attributeId: String
+  private val attributeId: String
 ) {
   if (!attributeId.head.isUnicodeIdentifierStart ||
       !attributeId.tail.forall(_.isUnicodeIdentifierPart))
@@ -36,6 +36,9 @@ class AttributeIdentifier(
 
 }
 
+/**
+ * Helpers for creating attribute identifiers.
+ */
 object AttributeIdentifier {
   /**
    * For convenience, use String where AttributeIdentifier is needed.

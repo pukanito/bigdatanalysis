@@ -24,6 +24,13 @@ class AttributeIdentifierTest extends FunSpec with ShouldMatchers {
       new AttributeIdentifier(legalId) should not equal (new AttributeIdentifier(otherLegalId))
     }
 
+    it("should convert from String implicitely") {
+      def testConvert(id: AttributeIdentifier) {
+    	  new AttributeIdentifier("XXX") should equal (id)
+      }
+      testConvert("XXX")
+    }
+
   }
 
 }
