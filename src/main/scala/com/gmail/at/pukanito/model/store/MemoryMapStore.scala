@@ -10,7 +10,7 @@ class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
   private var leafs: Map[GraphItemKey, T] = Map.empty
   private var children: Map[GraphItemKey, MemoryMapGraphItemStore[T]] = Map.empty
 
-  private def getOrCreateStore(key: GraphItemKey): MemoryMapGraphItemStore[T] = {
+  private def getOrCreateChildrenStore(key: GraphItemKey): MemoryMapGraphItemStore[T] = {
     children.get(key) match {
       case Some(m) => m
       case None => val m = new MemoryMapGraphItemStore[T](); children += key -> m; m
@@ -19,7 +19,7 @@ class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
 
   private def putChildren(value: T): Unit = {
     value.children foreach { case (childKey, childValue) =>
-      val childMap = getOrCreateStore(value.key)
+      val childMap = getOrCreateChildrenStore(value.key)
       childMap.leafs += childKey -> childValue.copy;
       childMap.putChildren(childValue)
     }
@@ -29,7 +29,7 @@ class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
     path match {
       case GraphPath() => throw new RuntimeException("Cannot store in MemoryMapGraphItemStore without a path")
       case GraphPath(key) => leafs += key -> value.copy; putChildren(value)
-      case GraphPath(headKey, tail @ _*) => getOrCreateStore(headKey).put(GraphPath(tail:_*), value)
+      case GraphPath(headKey, tail @ _*) => getOrCreateChildrenStore(headKey).put(GraphPath(tail:_*), value)
     }
   }
 
