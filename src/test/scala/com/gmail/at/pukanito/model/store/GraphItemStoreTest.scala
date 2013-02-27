@@ -26,7 +26,7 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
     def canEqual(other: Any): Boolean = other.isInstanceOf[TestSimpleGraphItem]
 
     override def toString: String = {
-      "TestSimpleGraphItem(" + key + "," + v + ")"
+      "TestSimpleGraphItem(" + key + "," + v + "," + children.toString + ")"
     }
 
   }
@@ -113,7 +113,26 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
       store(p).first should equal (t2a)
     }
 
-    it("should be possible to delete an item and all its children (a graph) by its path") (pending)
+    it("should be possible to delete an item and all its children (a graph) by its path") {
+      val store = new MemoryMapGraphItemStore[TestSimpleGraphItem]
+      val t1 = new TestSimpleGraphItem("A", 10)
+      val t2a = new TestSimpleGraphItem("Ba", 20)
+      val t2b = new TestSimpleGraphItem("Bb", 20)
+      val t3 = new TestSimpleGraphItem("C", 30)
+      t1 += t2b
+      val r1 = t1.copyGraph
+      r1 should equal (t1)
+      t1 += t2a
+      t2a += t3
+//        val s1 = new TestSimpleGraphItem("A", 10)
+//        t1 should equal (s1)
+      store.put(t1)
+      store(t1.key).first should equal (t1)
+      store(t1.key).first should not equal (r1)
+      store.delete(t2a.path)
+      store(t1.key).first should equal (r1)
+      (pending)
+    }
 
     it("should be possible to retrieve a graph by its path") {
       val store = new MemoryMapGraphItemStore[TestSimpleGraphItem]
@@ -142,6 +161,7 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
       r1 += r2b
       r2a += r3
       store(t1.key).first should equal (r1)
+      store(GraphPath(t1.key, t2a.key)).first should equal (r2a)
     }
 
     it("should be possible to retrieve all graphs with a specific sub path") (pending)

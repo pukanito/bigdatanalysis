@@ -13,11 +13,11 @@ class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
   private def put(path: GraphPath, value: T): Unit = {
     path match {
       case GraphPath() => throw new RuntimeException("Cannot store in MemoryMapGraphItemStore without a path")
-      case GraphPath(key) => leafs += key -> value.copy
+      case GraphPath(key) => leafs += key -> value.copy; put(value.children.values.toSeq:_*)
       case GraphPath(headKey, tail @ _*) => (children.get(headKey) match {
           case Some(m) => m
           case None => val m = new MemoryMapGraphItemStore[T](); children += headKey -> m; m
-        }).put(GraphPath(tail:_*), value)
+      }).put(GraphPath(tail:_*), value)
     }
   }
 
