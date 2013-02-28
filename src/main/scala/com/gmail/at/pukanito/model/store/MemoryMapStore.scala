@@ -10,6 +10,13 @@ class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
   private var leafs: Map[GraphItemKey, T] = Map.empty
   private var children: Map[GraphItemKey, MemoryMapGraphItemStore[T]] = Map.empty
 
+  /**
+   * Returns the MemoryMapGraphItemStore[T] that belongs to children(key)
+   * 
+   * Returns an existing store or creates a new one and adds it to children.
+   * 
+   * @param key the key of the memory map graph item store to get or create.
+   */
   private def getOrCreateChildrenStore(key: GraphItemKey): MemoryMapGraphItemStore[T] = {
     children.getOrElse(key, { val m = new MemoryMapGraphItemStore[T](); children += key -> m; m })
   }
