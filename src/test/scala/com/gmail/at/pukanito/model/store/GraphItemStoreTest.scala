@@ -141,6 +141,7 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
       store(t1.key).first should not equal (r1)
       store.delete(t2a.path)
       store(t1.key).first should equal (r1)
+      store.get(GraphPath(t1.key, t2a.key, t3.key)).first should equal (None)
     }
 
     it("should be possible to retrieve a graph by its path") {
