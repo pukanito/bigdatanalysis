@@ -11,10 +11,7 @@ class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
   private var children: Map[GraphItemKey, MemoryMapGraphItemStore[T]] = Map.empty
 
   private def getOrCreateChildrenStore(key: GraphItemKey): MemoryMapGraphItemStore[T] = {
-    children.get(key) match {
-      case Some(m) => m
-      case None => val m = new MemoryMapGraphItemStore[T](); children += key -> m; m
-    }
+    children.getOrElse(key, { val m = new MemoryMapGraphItemStore[T](); children += key -> m; m })
   }
 
   private def putChildren(value: T): Unit = {
