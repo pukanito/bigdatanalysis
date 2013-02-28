@@ -12,9 +12,9 @@ class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
 
   /**
    * Returns the MemoryMapGraphItemStore[T] that belongs to children(key)
-   * 
+   *
    * Returns an existing store or creates a new one and adds it to children.
-   * 
+   *
    * @param key the key of the memory map graph item store to get or create.
    */
   private def getOrCreateChildrenStore(key: GraphItemKey): MemoryMapGraphItemStore[T] = {
@@ -72,7 +72,7 @@ class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
       p match {
         case GraphPath() => throw new RuntimeException("Cannot get from MemoryMapGraphItemStore without a path")
         case GraphPath(key) => getChildren(leafs.get(key) map {_.copy})
-        case GraphPath(headKey, tail @ _*) => children.get(headKey).map { _.get(GraphPath(tail:_*)).first.get }
+        case GraphPath(headKey, tail @ _*) => children.get(headKey).flatMap { _.get(GraphPath(tail:_*)).first }
       }
     } ) (collection.breakOut)
   }

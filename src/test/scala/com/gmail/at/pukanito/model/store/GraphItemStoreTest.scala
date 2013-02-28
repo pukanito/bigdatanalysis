@@ -186,8 +186,7 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
       store.put(t1)
       intercept[NoSuchElementException] { store(t1.key, t2c.key) }
       store.get(t2a.key).first should equal (None)
-//      store.get(GraphPath(t1.key, t2c.key)).first should equal (None)
-      (pending)
+      store.get(GraphPath(t1.key, t2c.key)).first should equal (None)
     }
 
     it("should be possible to retrieve all graphs with a specific sub path") (pending)
