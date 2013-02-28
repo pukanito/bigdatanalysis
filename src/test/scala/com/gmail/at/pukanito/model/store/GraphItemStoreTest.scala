@@ -98,6 +98,19 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
       store.contains(p3) should equal (Map(p3 -> true))
     }
 
+    it("should be possible to create and check an graph by its path") {
+      val store = new MemoryMapGraphItemStore[TestSimpleGraphItem]
+      val t1 = new TestSimpleGraphItem("A", 10)
+      val t2a = new TestSimpleGraphItem("Ba", 20)
+      val t2b = new TestSimpleGraphItem("Bb", 20)
+      val t3 = new TestSimpleGraphItem("C", 30)
+      t1 += t2b
+      t1 += t2a
+      t2a += t3
+      store.put(t1)
+      store(t1.key).first should equal (t1)
+    }
+
     it("should be possible to modify an item by its path") {
       val store = new MemoryMapGraphItemStore[TestSimpleGraphItem]
       val t1 = new TestSimpleGraphItem("A", 1)
@@ -124,14 +137,10 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
       r1 should equal (t1)
       t1 += t2a
       t2a += t3
-//        val s1 = new TestSimpleGraphItem("A", 10)
-//        t1 should equal (s1)
       store.put(t1)
-      store(t1.key).first should equal (t1)
       store(t1.key).first should not equal (r1)
       store.delete(t2a.path)
       store(t1.key).first should equal (r1)
-      (pending)
     }
 
     it("should be possible to retrieve a graph by its path") {
@@ -166,13 +175,41 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
 
     it("should be possible to retrieve all graphs with a specific sub path") (pending)
 
-    it("should be possible to create a graph by its path") (pending)
+    it("should be possible to create a graph by its path") {
+      val store = new MemoryMapGraphItemStore[TestSimpleGraphItem]
+      val t1 = new TestSimpleGraphItem("A", 10)
+      val t2a = new TestSimpleGraphItem("Ba", 20)
+      val t2b = new TestSimpleGraphItem("Bb", 20)
+      val t3 = new TestSimpleGraphItem("C", 30)
+      store.put(t1)
+      t1 += t2b
+      t1 += t2a
+      t2a += t3
+      store.put(t2a)
+      store.put(t2b)
+      store(t1.key).first should equal (t1)
+    }
 
-    it("should be possible to modify a graph by its path") (pending)
-
-    it("should throw an exception when creating an item without path") (pending)
-
-    it("should throw an exception when modifying an item without path") (pending)
+    it("should be possible to modify a graph by its path") {
+      val store = new MemoryMapGraphItemStore[TestSimpleGraphItem]
+      val t1 = new TestSimpleGraphItem("A", 10)
+      val t2a = new TestSimpleGraphItem("Ba", 20)
+      val t2b = new TestSimpleGraphItem("Bb", 20)
+      val t3 = new TestSimpleGraphItem("C", 30)
+      t1 += t2a
+      t1 += t2b
+      t2a += t3
+      store.put(t1)
+      val r1 = new TestSimpleGraphItem("A", 10)
+      val r2a = new TestSimpleGraphItem("Ba", 40)
+      val r2b = new TestSimpleGraphItem("Bb", 20)
+      val r3 = new TestSimpleGraphItem("C", 30)
+      r1 += r2a
+      store.put(r1)
+      r1 += r2b
+      r2a += r3
+      store(t1.key).first should equal (r1)
+    }
 
     it("should throw an exception when deleting an item without path") {
       val store = new MemoryMapGraphItemStore[TestSimpleGraphItem]
