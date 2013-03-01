@@ -37,7 +37,7 @@ class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
     }
   }
 
-  def put(values: T*): Unit = {
+  override def put(values: T*): Unit = {
     values foreach { v => v.paths foreach { p => put(p, v) } }
   }
 
@@ -57,7 +57,7 @@ class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
     item
   }
 
-  def apply(paths: GraphPath*): Set[T] = {
+  override def apply(paths: GraphPath*): Set[T] = {
     if (paths.isEmpty)
       apply((leafs map {case (key,_) => GraphPath(key) }).toSeq:_*)
     else (paths map { p =>
@@ -69,7 +69,7 @@ class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
     } ) (collection.breakOut)
   }
 
-  def get(paths: GraphPath*): Set[Option[T]] = {
+  override def get(paths: GraphPath*): Set[Option[T]] = {
     if (paths.isEmpty)
       get((leafs map {case (key,_) => GraphPath(key) }).toSeq:_*)
     else (paths map { p =>
@@ -81,7 +81,7 @@ class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
     } ) (collection.breakOut)
   }
 
-  def contains(paths: GraphPath*): Map[GraphPath, Boolean] = {
+  override def contains(paths: GraphPath*): Map[GraphPath, Boolean] = {
     (paths map { p => (p,
       p match {
         case GraphPath() => throw new RuntimeException("Cannot contain in MemoryMapGraphItemStore without a path")
@@ -92,7 +92,7 @@ class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
     ) } ) (collection.breakOut)
   }
 
-  def delete(paths: GraphPath*) = {
+  override def delete(paths: GraphPath*) = {
     paths foreach { p =>
       p match {
         case GraphPath() => throw new RuntimeException("Cannot delete from MemoryMapGraphItemStore without a path")
