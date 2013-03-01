@@ -192,7 +192,21 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
       store.get(GraphPath(t1.key, t2c.key)).first should equal (None)
     }
 
-    it("should be possible to retrieve all graphs with a specific sub path") (pending)
+    it("should be possible to retrieve all graphs with a specific sub path") {
+      val store = new MemoryMapGraphItemStore[TestSimpleGraphItem]
+      val t1 = new TestSimpleGraphItem("A", 10)
+      val t2a = new TestSimpleGraphItem("Ba", 20)
+      val t2b = new TestSimpleGraphItem("Bb", 20)
+      val t2c = new TestSimpleGraphItem("Bc", 30)
+      val t3 = new TestSimpleGraphItem("C", 30)
+      t1 += t2b
+      t1 += t2a
+      t1 += t2c
+      t2a += t3
+      store.put(t1)
+      // TODO: something to get children of t1 path.
+      (pending)
+    }
 
     it("should be possible to create a graph by its path") {
       val store = new MemoryMapGraphItemStore[TestSimpleGraphItem]
