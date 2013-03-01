@@ -58,7 +58,9 @@ class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
   }
 
   def apply(paths: GraphPath*): Set[T] = {
-    (paths map { p =>
+    if (paths.isEmpty)
+      apply((leafs map {case (key,_) => GraphPath(key) }).toSeq:_*)
+    else (paths map { p =>
       p match {
         case GraphPath() => throw new RuntimeException("Cannot get from MemoryMapGraphItemStore without a path")
         case GraphPath(key) => getChildren(Some(leafs(key).copy)).get
@@ -68,7 +70,9 @@ class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
   }
 
   def get(paths: GraphPath*): Set[Option[T]] = {
-    (paths map { p =>
+    if (paths.isEmpty)
+      get((leafs map {case (key,_) => GraphPath(key) }).toSeq:_*)
+    else (paths map { p =>
       p match {
         case GraphPath() => throw new RuntimeException("Cannot get from MemoryMapGraphItemStore without a path")
         case GraphPath(key) => getChildren(leafs.get(key) map {_.copy})
