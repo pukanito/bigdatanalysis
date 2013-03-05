@@ -13,6 +13,28 @@ class DuplicateAttributeDefinitionException(value: AttributeDefinition)
 
 /**
  * Trait for constructing attribute definitions with a special DSL.
+ *
+ * To create a model:
+ * {{{
+ * object someModel extends AttributeModel {
+ *   attribute("key1") { }
+ *   attribute("key2") { }
+ *   attribute("parent") { has keys("key1", "key2") }
+ *   attribute("child1") { has parents "parent" }
+ *   attribute("child2") {  has parents "parent" }
+ *   attribute("child3") {  has parents "parent" }
+ *   attribute("child1ofchild1") { has parents "child1" and "parent" }
+ *   attribute("child2ofchild1") { has parents "child1" }
+ *   attribute("child1ofchild3") { has parents "child3" }
+ * }
+ * }}}
+ *
+ * To access attribute definitions inside the model use the 'attributes' map:
+ * {{{
+ * val attr = someModel.attributes("parent")
+ * }}}
+ *
+ * It contains all AttributeDefinitions by AttributeIdentifier.
  */
 trait AttributeModel {
 
