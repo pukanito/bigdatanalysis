@@ -8,21 +8,22 @@ import com.gmail.at.pukanito.model.container.{GraphItem,GraphPath}
 trait GraphItemStore[T <: GraphItem[T]] {
 
   /**
-   * Store values.
+   * Stores values.
    *
    * @param value the value(s) to store.
    */
   def put(value: T*)
 
   /**
-   * Retrieve values.
+   * Returns graphs belonging to the specified paths.
    *
    * @param paths the path(s) of the item(s) to retrieve.
+   * @throws NoSuchElementException when an item does not exist.
    */
   def apply(paths: GraphPath*): Set[T]
 
   /**
-   * Retrieve values.
+   * Returns graph Options belonging to the specified paths.
    *
    * @param paths the path(s) of the item(s) to retrieve.
    */

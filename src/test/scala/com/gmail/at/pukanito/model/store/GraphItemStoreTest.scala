@@ -187,10 +187,30 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
       store.put(t1)
       intercept[NoSuchElementException] { store(t1.key, t2c.key) }
       store.get(t2a.key).first should equal (None)
+      store.get(GraphPath(t1.key, t2a.key)).first should not equal (None)
+      store.get(GraphPath(t1.key, t2b.key)).first should not equal (None)
       store.get(GraphPath(t1.key, t2c.key)).first should equal (None)
     }
 
-    it("should be possible to retrieve all graphs with a specific sub path") (pending)
+    it("should be possible to retrieve all graphs with a specific sub path, even from the root") {
+      val store = new MemoryMapGraphItemStore[TestSimpleGraphItem]
+      val t1 = new TestSimpleGraphItem("A", 10)
+      val t2a = new TestSimpleGraphItem("Ba", 20)
+      val t2b = new TestSimpleGraphItem("Bb", 20)
+      val t2c = new TestSimpleGraphItem("Bc", 30)
+      val t3 = new TestSimpleGraphItem("C", 30)
+      val t4 = new TestSimpleGraphItem("D", 40)
+      t1 += t2b
+      t1 += t2a
+      t1 += t2c
+      t2a += t3
+      store.put(t1)
+      store.put(t4)
+      store(t1.key).first.children.values.toSet should equal (Set(t2a, t2b, t2c))
+      store(t4.key).first should equal (t4)
+      store() should equal (Set(t1, t4))
+      store.get() should equal(Set(Option(t1), Option(t4)))
+    }
 
     it("should be possible to create a graph by its path") {
       val store = new MemoryMapGraphItemStore[TestSimpleGraphItem]
