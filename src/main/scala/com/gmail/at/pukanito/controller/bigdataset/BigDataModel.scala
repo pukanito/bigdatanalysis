@@ -6,10 +6,10 @@ import com.gmail.at.pukanito.model.container.GraphItemKey
 
 
 /**
- * Big data model is an attribute model that is stored in a store.
+ * Big data model is a number of attribute models stored in a store.
  *
  * A big data model makes it possible to manipulate stored attribute definitions (create,
- * read, update, delete, ...) via a view.
+ * read, update, delete, ...) via a view/API.
  */
 abstract class BigDataModel(
   // TODO: add view object
