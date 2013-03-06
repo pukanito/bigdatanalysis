@@ -29,12 +29,14 @@ class DuplicateAttributeDefinitionException(value: AttributeDefinition)
  * }
  * }}}
  *
- * To access attribute definitions inside the model use the 'attributes' map:
+ * To access attribute definitions inside the model use the 'attributes' map,
+ * it contains all AttributeDefinitions by AttributeIdentifier:
  * {{{
- * val attr = someModel.attributes("parent")
+ * val attributeDefinition = someModel.attributes("id")
  * }}}
  *
- * It contains all AttributeDefinitions by AttributeIdentifier.
+ * This will return the attribute definition of the specified attribute and from here
+ * parents and children will also be accessible.
  */
 trait AttributeModel {
 
@@ -48,7 +50,7 @@ trait AttributeModel {
   private val IntegerAttribute = new isOfType("Integer")
 
   /**
-   * @return a map of all defined attributes.
+   * Returns a map of all defined attributes.
    */
   def attributes = definedAttributes
 
@@ -58,6 +60,7 @@ trait AttributeModel {
    * Class which can handle 'and' word in 'has keys .. and .. and ..'
    *
    * @param h the hasWord instance which manages the keys.
+   * @returns this.
    */
   private class hasKey(val h: hasWord) {
     def and(id: AttributeIdentifier) = { h.attributeValueKeyIds += id; this }
@@ -67,6 +70,7 @@ trait AttributeModel {
    * Class which can handle 'and' word in 'has children .. and .. and ..'
    *
    * @param h the hasWord instance which manages the children.
+   * @returns this.
    */
   private class hasChildren(val h: hasWord) {
     def and(id: AttributeIdentifier) = { h.initialChildren += id; this }
@@ -76,6 +80,7 @@ trait AttributeModel {
    * Class which can handle 'and' word in 'has parents .. and .. and ..'
    *
    * @param h the hasWord instance which manages the parents.
+   * @returns this.
    */
   private class hasParents(val h: hasWord) {
     def and(id: AttributeIdentifier) = { h.initialParents += id; this }
@@ -109,6 +114,7 @@ trait AttributeModel {
      * Build the attribute definition from the collected properties or add properties to an already existing definition.
      *
      * @param id the id of the attribute to create.
+     * @returns the constructed attribute definition.
      */
     private[AttributeModel] def build(id: String): AttributeDefinition = {
       definedAttributes get id match {
@@ -131,6 +137,7 @@ trait AttributeModel {
      * Handler for the 'keys' word in 'has keys .. and .. and ..'
      *
      * @param ids the specified keys.
+     * @returns a hasKey instance.
      */
     def keys(ids: AttributeIdentifier*): hasKey = { attributeValueKeyIds ++= ids; new hasKey(this)  }
 
@@ -138,6 +145,7 @@ trait AttributeModel {
      * Handler for the 'parents' word in 'has parents .. and .. and ..'
      *
      * @param ids the specified parent ids.
+     * @returns a hasParents instance.
      */
     def parents(ids: AttributeIdentifier*): hasParents = { initialParents ++= ids; new hasParents(this) }
 
@@ -145,6 +153,7 @@ trait AttributeModel {
      * Handler for the 'children' word in 'has children .. and .. and ..'
      *
      * @param ids the specified children ids.
+     * @returns a hasChildren instance.
      */
     def children(ids: AttributeIdentifier*): hasChildren = { initialChildren ++= ids; new hasChildren(this) }
   }
@@ -160,6 +169,13 @@ trait AttributeModel {
    * @param t the type of the attribute definition.
    */
   private class attributeWord(val t: isOfType = IntegerAttribute) {
+
+    /**
+     * Handler for the 'attribute' word.
+     *
+     * @param id the id of the attribute to create.
+     * @returns the constructed attribute definition.
+     */
     def apply(id: String)(body: => Unit): AttributeDefinition = {
       has.clear
       body
