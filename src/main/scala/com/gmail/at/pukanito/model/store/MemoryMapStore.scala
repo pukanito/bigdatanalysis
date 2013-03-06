@@ -58,6 +58,7 @@ class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
   }
 
   override def apply(paths: GraphPath*): Set[T] = {
+    // When an empty path is supplied, get all the root leaves.
     if (paths.isEmpty)
       apply((leafs map {case (key,_) => GraphPath(key) }).toSeq:_*)
     else (paths map { p =>
@@ -70,6 +71,7 @@ class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
   }
 
   override def get(paths: GraphPath*): Set[Option[T]] = {
+    // When an empty path is supplied, get all the root leaves.
     if (paths.isEmpty)
       get((leafs map {case (key,_) => GraphPath(key) }).toSeq:_*)
     else (paths map { p =>
