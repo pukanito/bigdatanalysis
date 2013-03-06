@@ -9,10 +9,9 @@ import com.gmail.at.pukanito.model.container.GraphItemKey
  * Big data model is a number of attribute models stored in a store.
  *
  * A big data model makes it possible to manipulate stored attribute definitions (create,
- * read, update, delete, ...) via a view/API.
+ * read, update, delete, ...).
  */
 abstract class BigDataModel(
-  // TODO: add view object
   val graphItemStore: GraphItemStore[AttributeDefinition]
 ) {
   val rootAttributeDefinitions: Map[GraphItemKey, AttributeDefinition] = Map[GraphItemKey, AttributeDefinition]()
