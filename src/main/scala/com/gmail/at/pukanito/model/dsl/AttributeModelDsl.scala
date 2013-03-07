@@ -38,7 +38,7 @@ class DuplicateAttributeDefinitionException(value: AttributeDefinition)
  * This will return the attribute definition of the specified attribute and from here
  * parents and children will also be accessible.
  */
-trait AttributeModel {
+trait AttributeModelDsl {
 
   /**
    * Map of known attributes in this model.
@@ -93,22 +93,22 @@ trait AttributeModel {
     /**
      * Attribute property: specified key ids.
      */
-    private[AttributeModel] var attributeValueKeyIds: Set[AttributeIdentifier] = Set()
+    private[AttributeModelDsl] var attributeValueKeyIds: Set[AttributeIdentifier] = Set()
 
     /**
      * Attribute property: specified children ids.
      */
-    private[AttributeModel] var initialChildren: Set[AttributeIdentifier] = Set()
+    private[AttributeModelDsl] var initialChildren: Set[AttributeIdentifier] = Set()
 
     /**
      * Attribute property: specified parent ids.
      */
-    private[AttributeModel] var initialParents: Set[AttributeIdentifier] = Set()
+    private[AttributeModelDsl] var initialParents: Set[AttributeIdentifier] = Set()
 
     /**
      * Clear the builder.
      */
-    private[AttributeModel] def clear: Unit = { attributeValueKeyIds = Set(); initialChildren = Set(); initialParents = Set() }
+    private[AttributeModelDsl] def clear: Unit = { attributeValueKeyIds = Set(); initialChildren = Set(); initialParents = Set() }
 
     /**
      * Build the attribute definition from the collected properties or add properties to an already existing definition.
@@ -116,7 +116,7 @@ trait AttributeModel {
      * @param id the id of the attribute to create.
      * @returns the constructed attribute definition.
      */
-    private[AttributeModel] def build(id: String): AttributeDefinitionNode = {
+    private[AttributeModelDsl] def build(id: String): AttributeDefinitionNode = {
       definedAttributes get id match {
         case Some(attr) =>
           if (attributeValueKeyIds.size > 0) throw new RuntimeException("Cannot add attribute keys after first definition of attribute '" + attr.attributeId + "'")
@@ -161,7 +161,7 @@ trait AttributeModel {
   /**
    * Definition of the 'has' word so that it can be used in attribute definitions.
    */
-  protected[AttributeModel] val has = new hasWord
+  protected[AttributeModelDsl] val has = new hasWord
 
   /**
    * Class which implements the control structure for creating attribute definitions: the 'attribute' word.
@@ -186,7 +186,7 @@ trait AttributeModel {
   /**
    * Definition of the 'attribute' word so that it can be used in attribute models.
    */
-  protected[AttributeModel] val attribute = new attributeWord
+  protected[AttributeModelDsl] val attribute = new attributeWord
 
   /**
    * Class which implements including another attribute model using the 'include' word.
@@ -194,7 +194,7 @@ trait AttributeModel {
    * The included model will be a copy of the original because AttributeDefinitionNode is not immutable.
    */
   private class includeWord {
-    def apply(that: AttributeModel): Unit = {
+    def apply(that: AttributeModelDsl): Unit = {
       // Create copies of attributes first.
       that.definedAttributes foreach { case (thatAttrId, thatAttrDef) =>
         if (definedAttributes contains thatAttrId) throw new DuplicateAttributeDefinitionException(thatAttrDef)
@@ -209,6 +209,6 @@ trait AttributeModel {
   /**
    * Definition of the 'include' word so that it can be used in attribute models.
    */
-  protected[AttributeModel] val include = new includeWord
+  protected[AttributeModelDsl] val include = new includeWord
 
 }

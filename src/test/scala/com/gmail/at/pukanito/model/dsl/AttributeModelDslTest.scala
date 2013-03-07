@@ -3,12 +3,12 @@ package com.gmail.at.pukanito.model.dsl
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
-class AttributeModelTest extends FunSpec with ShouldMatchers {
+class AttributeModelDslTest extends FunSpec with ShouldMatchers {
 
-  describe("AttributeModel") {
+  describe("AttributeModelDsl") {
 
     it("should be possible to create a parent-child hierarchy of attribute definitions") {
-      object testmodel extends AttributeModel {
+      object testmodel extends AttributeModelDsl {
         attribute("key1") { }
         attribute("key2") { }
         attribute("parent") { has keys("key1", "key2") }
@@ -38,7 +38,7 @@ class AttributeModelTest extends FunSpec with ShouldMatchers {
     }
 
     it("should throw an exception when a non existing child is added on creation") {
-      object testmodel extends AttributeModel {
+      object testmodel extends AttributeModelDsl {
         intercept[NoSuchElementException] { attribute("test") { has children "child1" } }
       }
       // Due to lazy initialization of an object it has to be pushed a little bit.
@@ -46,14 +46,14 @@ class AttributeModelTest extends FunSpec with ShouldMatchers {
     }
 
     it("should throw an exception when a non existing parent is added on creation") {
-      object testmodel extends AttributeModel {
+      object testmodel extends AttributeModelDsl {
         intercept[NoSuchElementException] { attribute("test") { has parents "parent1" } }
       }
       testmodel.attributes
     }
 
     it("should throw an exception when a non existing child is added after creation") {
-      object testmodel extends AttributeModel {
+      object testmodel extends AttributeModelDsl {
         attribute("test") { }
         intercept[NoSuchElementException] { attribute("test") { has children "child1" } }
       }
@@ -61,7 +61,7 @@ class AttributeModelTest extends FunSpec with ShouldMatchers {
     }
 
     it("should throw an exception when a non existing parent is added after creation") {
-            object testmodel extends AttributeModel {
+            object testmodel extends AttributeModelDsl {
         attribute("test") { }
         intercept[NoSuchElementException] { attribute("test") { has children "child1" } }
       }
@@ -69,7 +69,7 @@ class AttributeModelTest extends FunSpec with ShouldMatchers {
     }
 
     it("should be possible to add parents and or children after creation") {
-      object testmodel extends AttributeModel {
+      object testmodel extends AttributeModelDsl {
         attribute("key1") { }
         attribute("child1") { }
         attribute("test") { has keys "key1" }
@@ -79,7 +79,7 @@ class AttributeModelTest extends FunSpec with ShouldMatchers {
     }
 
     it("should throw an exception when keys are added after creation") {
-      object testmodel extends AttributeModel {
+      object testmodel extends AttributeModelDsl {
         attribute("key1") { }
         attribute("key2") { }
         attribute("test") { has keys "key1" }
@@ -89,10 +89,10 @@ class AttributeModelTest extends FunSpec with ShouldMatchers {
     }
 
     it("should not throw an exception when an attribute with the same identifier is defined in different models") {
-      object testmodel1 extends AttributeModel {
+      object testmodel1 extends AttributeModelDsl {
         attribute("test") { }
       }
-      object testmodel2 extends AttributeModel {
+      object testmodel2 extends AttributeModelDsl {
         attribute("test") { }
       }
       testmodel1.attributes
@@ -100,11 +100,11 @@ class AttributeModelTest extends FunSpec with ShouldMatchers {
     }
 
     it("should be possible to import a copy of another model") {
-      object testmodel1 extends AttributeModel {
+      object testmodel1 extends AttributeModelDsl {
         attribute("test1") { }
         attribute("test3") { has parents "test1" }
       }
-      object testmodel2 extends AttributeModel {
+      object testmodel2 extends AttributeModelDsl {
         include(testmodel1)
         attribute("test2") { has parents "test1" }
       }
@@ -116,10 +116,10 @@ class AttributeModelTest extends FunSpec with ShouldMatchers {
     }
 
     it("should throw an exception when an included model contains an attribute with an already existing id") {
-      object testmodel1 extends AttributeModel {
+      object testmodel1 extends AttributeModelDsl {
         attribute("test1") { }
       }
-      object testmodel2 extends AttributeModel {
+      object testmodel2 extends AttributeModelDsl {
         attribute("test1") { }
         intercept[DuplicateAttributeDefinitionException] { include(testmodel1) }
       }
@@ -127,7 +127,7 @@ class AttributeModelTest extends FunSpec with ShouldMatchers {
     }
 
     it("should be possible to add the same attribute to different parents") {
-      object testmodel extends AttributeModel {
+      object testmodel extends AttributeModelDsl {
         attribute("child1") { }
         attribute("child2") { }
         attribute("test") { has children "child1" and "child2" }

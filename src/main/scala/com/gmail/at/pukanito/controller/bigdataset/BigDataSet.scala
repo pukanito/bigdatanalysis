@@ -1,6 +1,6 @@
 package com.gmail.at.pukanito.controller.bigdataset
 
-import com.gmail.at.pukanito.model.dsl.AttributeModel
+import com.gmail.at.pukanito.model.dsl.AttributeModelDsl
 import com.gmail.at.pukanito.model.attributes.AttributeValue
 import com.gmail.at.pukanito.model.store.GraphItemStore
 
@@ -11,7 +11,7 @@ import com.gmail.at.pukanito.model.store.GraphItemStore
  */
 abstract class BigDataSet(
   val store: GraphItemStore[AttributeValue],
-  val model: Option[AttributeModel]
+  val model: Option[AttributeModelDsl]
 ) {
 
 }
