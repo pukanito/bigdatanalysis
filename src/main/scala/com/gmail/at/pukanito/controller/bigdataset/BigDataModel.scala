@@ -1,6 +1,6 @@
 package com.gmail.at.pukanito.controller.bigdataset
 
-import com.gmail.at.pukanito.model.dsl.AttributeModelItem
+import com.gmail.at.pukanito.model.attributes.AttributeDefinitionNode
 import com.gmail.at.pukanito.model.store.GraphItemStore
 import com.gmail.at.pukanito.model.container.GraphItemKey
 
@@ -12,13 +12,13 @@ import com.gmail.at.pukanito.model.container.GraphItemKey
  * read, update, delete, ...).
  */
 abstract class BigDataModel(
-  val graphItemStore: GraphItemStore[AttributeModelItem]
+  val graphItemStore: GraphItemStore[AttributeDefinitionNode]
 ) {
-  val rootAttributeDefinitions: Map[GraphItemKey, AttributeModelItem] = Map[GraphItemKey, AttributeModelItem]()
+  val rootAttributeDefinitions: Map[GraphItemKey, AttributeDefinitionNode] = Map[GraphItemKey, AttributeDefinitionNode]()
 
-  def add(attributeDefinition: AttributeModelItem)
+  def add(attributeDefinitionNode: AttributeDefinitionNode)
 
-  def update(attributeDefinition: AttributeModelItem)
+  def update(attributeDefinitionNode: AttributeDefinitionNode)
 
   def delete
 

@@ -1,6 +1,6 @@
 package com.gmail.at.pukanito.model.dsl
 
-import com.gmail.at.pukanito.model.attributes.{AttributeIdentifier,AttributeDefinition}
+import com.gmail.at.pukanito.model.attributes.{AttributeIdentifier,AttributeDefinition, AttributeDefinitionNode}
 
 /**
  * Exception thrown when an attribute definition is added to a model with an already existing id.
@@ -43,7 +43,7 @@ trait AttributeModel {
   /**
    * Map of known attributes in this model.
    */
-  private var definedAttributes: Map[AttributeIdentifier, AttributeModelItem] = Map()
+  private var definedAttributes: Map[AttributeIdentifier, AttributeDefinitionNode] = Map()
 
   private class isOfType(val id: String) {}
 
@@ -116,7 +116,7 @@ trait AttributeModel {
      * @param id the id of the attribute to create.
      * @returns the constructed attribute definition.
      */
-    private[AttributeModel] def build(id: String): AttributeDefinition = {
+    private[AttributeModel] def build(id: String): AttributeDefinitionNode = {
       definedAttributes get id match {
         case Some(attr) =>
           if (attributeValueKeyIds.size > 0) throw new RuntimeException("Cannot add attribute keys after first definition of attribute '" + attr.attributeId + "'")
@@ -124,7 +124,7 @@ trait AttributeModel {
           initialParents foreach (definedAttributes(_) += attr)
           attr
         case None =>
-          val attr = new AttributeModelItem(id, attributeValueKeyIds.toList)
+          val attr = new AttributeDefinitionNode(id, attributeValueKeyIds.toList)
           definedAttributes += attr.attributeId -> attr
           attributeValueKeyIds foreach (attr += definedAttributes(_))
           initialChildren foreach (attr += definedAttributes(_))
@@ -176,7 +176,7 @@ trait AttributeModel {
      * @param id the id of the attribute to create.
      * @returns the constructed attribute definition.
      */
-    def apply(id: String)(body: => Unit): AttributeDefinition = {
+    def apply(id: String)(body: => Unit): AttributeDefinitionNode = {
       has.clear
       body
       has.build(id)
@@ -191,7 +191,7 @@ trait AttributeModel {
   /**
    * Class which implements including another attribute model using the 'include' word.
    *
-   * The included model will be a copy of the original because AttributeDefinition is not immutable.
+   * The included model will be a copy of the original because AttributeDefinitionNode is not immutable.
    */
   private class includeWord {
     def apply(that: AttributeModel): Unit = {
