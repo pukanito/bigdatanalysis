@@ -133,20 +133,19 @@ trait AttributeModel {
      * @returns the constructed attribute definition node.
      */
     private[AttributeModel] def build(id: String): AttributeDefinitionNode = {
-      definedAttributes get id match {
+      val attr = definedAttributes get id match {
         case Some(attr) =>
           if (attributeValueKeyIds.size > 0) throw new RuntimeException("Cannot add attribute keys after first definition of attribute '" + attr.attributeId + "'")
-          initialChildren foreach (attr += definedAttributes(_))
-          initialParents foreach (definedAttributes(_) += attr)
           attr
         case None =>
           val attr = new AttributeDefinitionNode(id, attributeValueKeyIds.toList)
           definedAttributes += attr.attributeId -> attr
           attributeValueKeyIds foreach (attr += definedAttributes(_))
-          initialChildren foreach (attr += definedAttributes(_))
-          initialParents foreach (definedAttributes(_) += attr)
           attr
       }
+      initialChildren foreach (attr += definedAttributes(_))
+      initialParents foreach (definedAttributes(_) += attr)
+      attr
     }
 
     /**
