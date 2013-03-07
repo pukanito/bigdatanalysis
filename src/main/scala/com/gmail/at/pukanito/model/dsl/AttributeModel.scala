@@ -12,7 +12,7 @@ class DuplicateAttributeDefinitionException(value: AttributeDefinition)
   extends RuntimeException("Duplicate attribute definition: " + value.attributeId) {}
 
 /**
- * Trait for constructing attribute definitions with a special DSL.
+ * Trait for constructing attribute definition nodes with a special DSL.
  *
  * To create a model:
  * {{{
@@ -29,13 +29,29 @@ class DuplicateAttributeDefinitionException(value: AttributeDefinition)
  * }
  * }}}
  *
- * To access attribute definitions inside the model use the 'attributes' map,
- * it contains all AttributeDefinitions by AttributeIdentifier:
+ * or
+ *
  * {{{
- * val attributeDefinition = someModel.attributes("id")
+ * val someModel = new AttributeModel {
+ *   attribute("key1") { }
+ *   attribute("key2") { }
+ *   attribute("parent") { has keys("key1", "key2") }
+ *   attribute("child1") { has parents "parent" }
+ *   attribute("child2") {  has parents "parent" }
+ *   attribute("child3") {  has parents "parent" }
+ *   attribute("child1ofchild1") { has parents "child1" and "parent" }
+ *   attribute("child2ofchild1") { has parents "child1" }
+ *   attribute("child1ofchild3") { has parents "child3" }
+ * }
  * }}}
  *
- * This will return the attribute definition of the specified attribute and from here
+ * To access attribute definitions inside the model use the 'attributes' map,
+ * it contains all AttributeDefinitionNodes by AttributeIdentifier:
+ * {{{
+ * val attributeDefinitionNode = someModel.attributes("id")
+ * }}}
+ *
+ * This will return the attribute definition node of the specified attribute and from there
  * parents and children will also be accessible.
  */
 trait AttributeModel {
