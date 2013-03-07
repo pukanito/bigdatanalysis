@@ -57,7 +57,7 @@ class DuplicateAttributeDefinitionException(value: AttributeDefinition)
 trait AttributeModel {
 
   /**
-   * Map of known attributes in this model.
+   * Map of known attribute nodes in this model.
    */
   private var definedAttributes: Map[AttributeIdentifier, AttributeDefinitionNode] = Map()
 
@@ -66,7 +66,7 @@ trait AttributeModel {
   private val IntegerAttribute = new isOfType("Integer")
 
   /**
-   * Returns a map of all defined attributes.
+   * Returns a map of all defined attribute nodes.
    */
   def attributes = definedAttributes
 
@@ -103,7 +103,7 @@ trait AttributeModel {
   }
 
   /**
-   * Builder class for an attribute definition.
+   * Builder class for an attribute definition node.
    */
   private class hasWord {
     /**
@@ -127,10 +127,10 @@ trait AttributeModel {
     private[AttributeModel] def clear: Unit = { attributeValueKeyIds = Set(); initialChildren = Set(); initialParents = Set() }
 
     /**
-     * Build the attribute definition from the collected properties or add properties to an already existing definition.
+     * Build the attribute definition node from the collected properties or add properties to an already existing definition.
      *
      * @param id the id of the attribute to create.
-     * @returns the constructed attribute definition.
+     * @returns the constructed attribute definition node.
      */
     private[AttributeModel] def build(id: String): AttributeDefinitionNode = {
       definedAttributes get id match {
@@ -175,12 +175,12 @@ trait AttributeModel {
   }
 
   /**
-   * Definition of the 'has' word so that it can be used in attribute definitions.
+   * Definition of the 'has' word so that it can be used in attribute definition nodes.
    */
   protected[AttributeModel] val has = new hasWord
 
   /**
-   * Class which implements the control structure for creating attribute definitions: the 'attribute' word.
+   * Class which implements the control structure for creating attribute definition nodes: the 'attribute' word.
    *
    * @param t the type of the attribute definition.
    */
