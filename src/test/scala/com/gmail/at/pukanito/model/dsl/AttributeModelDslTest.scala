@@ -136,6 +136,15 @@ class AttributeModelDslTest extends FunSpec with ShouldMatchers {
       testmodel.attributes
     }
 
+    it("should be possible to create a model and store it in a val") {
+      val model = new AttributeModelDsl {
+        attribute("child1") { }
+        intercept[NoSuchElementException] { attribute("test") { has parents "parent1" } }
+      }
+      model.attributes("child1")
+      intercept[NoSuchElementException] { model.attributes("parent1") }
+    }
+
   }
 
 }
