@@ -14,8 +14,7 @@ import com.gmail.at.pukanito.model.container.{GraphItem,GraphItemKey}
  *          that is associated with this attribute definition.
  */
 class AttributeDefinition (
-  val attributeId: AttributeIdentifier,
-  val attributeValueKeyIds: List[AttributeIdentifier] = Nil
+  val attributeId: AttributeIdentifier
 ) {
 
 }

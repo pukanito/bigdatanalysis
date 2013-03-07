@@ -7,8 +7,8 @@ import com.gmail.at.pukanito.model.container.GraphItem
  */
 class AttributeDefinitionNode (
   attributeId: AttributeIdentifier,
-  attributeValueKeyIds: List[AttributeIdentifier] = Nil
-) extends AttributeDefinition(attributeId, attributeValueKeyIds) with GraphItem[AttributeDefinitionNode] {
+  val attributeValueKeyIds: List[AttributeIdentifier] = Nil
+) extends AttributeDefinition(attributeId) with GraphItem[AttributeDefinitionNode] {
 
   /**
    * The key of an attribute definition: its attribute id.
