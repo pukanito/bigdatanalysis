@@ -5,8 +5,7 @@ import com.gmail.at.pukanito.model.container.{GraphItem,GraphItemKey}
 /**
  * The base class for all attribute definitions.
  *
- * An attribute definition defines a data structure that consists of data values
- * that are related to each other in a parent child hierarchy.
+ * An attribute definition describes a data structure that can be used to store a value.
  *
  * @constructor Create a base attribute definition with a specific attribute id.
  * @param attributeId The attribute identifier to assign to the AttributeDefinition. Every
@@ -17,13 +16,6 @@ import com.gmail.at.pukanito.model.container.{GraphItem,GraphItemKey}
 class AttributeDefinition (
   val attributeId: AttributeIdentifier,
   val attributeValueKeyIds: List[AttributeIdentifier] = Nil
-) extends GraphItem[AttributeDefinition] {
-
-  /**
-   * The key of an attribute definition: its attribute id.
-   */
-  override def key = attributeId.toString
-
-  override def copy: AttributeDefinition = new AttributeDefinition(attributeId, attributeValueKeyIds)
+) {
 
 }

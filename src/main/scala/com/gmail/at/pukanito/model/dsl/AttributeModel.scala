@@ -43,7 +43,7 @@ trait AttributeModel {
   /**
    * Map of known attributes in this model.
    */
-  private var definedAttributes: Map[AttributeIdentifier, AttributeDefinition] = Map()
+  private var definedAttributes: Map[AttributeIdentifier, AttributeModelItem] = Map()
 
   private class isOfType(val id: String) {}
 
@@ -124,7 +124,7 @@ trait AttributeModel {
           initialParents foreach (definedAttributes(_) += attr)
           attr
         case None =>
-          val attr = new AttributeDefinition(id, attributeValueKeyIds.toList)
+          val attr = new AttributeModelItem(id, attributeValueKeyIds.toList)
           definedAttributes += attr.attributeId -> attr
           attributeValueKeyIds foreach (attr += definedAttributes(_))
           initialChildren foreach (attr += definedAttributes(_))
