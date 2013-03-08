@@ -12,7 +12,8 @@ class DuplicateAttributeDefinitionException(value: AttributeDefinition)
   extends RuntimeException("Duplicate attribute definition: " + value.attributeId) {}
 
 /**
- * Trait for constructing attribute definition nodes with a special DSL.
+ * Trait for constructing an attribute definition nodes hierarchy with a special DSL.
+ * The attribute definition nodes hierarchy is the attribute model.
  *
  * To create a model:
  * {{{
@@ -69,6 +70,16 @@ trait AttributeModel {
    * Returns a map of all defined attribute nodes.
    */
   def attributes = definedAttributes
+
+  /**
+   * Get the ids of the root attributes (i.e. attributes without parents)
+   */
+  def rootAttributes: Set[AttributeIdentifier] = {
+    (for (
+      (id, definition) <- definedAttributes
+       if definition.parents.isEmpty
+    ) yield id) (collection.breakOut)
+  }
 
   /** The DSL fields and methods **/
 
