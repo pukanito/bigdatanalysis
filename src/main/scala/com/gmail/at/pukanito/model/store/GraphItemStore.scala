@@ -16,6 +16,7 @@ trait GraphItemStore[T <: GraphItem[T]] {
 
   /**
    * Returns graphs belonging to the specified paths.
+   * Specifying an empty path returns all graphs from the root.
    *
    * @param paths the path(s) of the item(s) to retrieve.
    * @throws NoSuchElementException when an item does not exist.
@@ -24,6 +25,7 @@ trait GraphItemStore[T <: GraphItem[T]] {
 
   /**
    * Returns graph Options belonging to the specified paths.
+   * Specifying an empty path returns all graphs from the root.
    *
    * @param paths the path(s) of the item(s) to retrieve.
    */
