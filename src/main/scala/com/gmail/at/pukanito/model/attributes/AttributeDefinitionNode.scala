@@ -3,7 +3,7 @@ package com.gmail.at.pukanito.model.attributes
 import com.gmail.at.pukanito.model.container.GraphItem
 
 /**
- * Items that can be put in an attribute model.
+ * Attribute definitions that can be put in an attribute model.
  */
 class AttributeDefinitionNode (
   attributeId: AttributeIdentifier,
