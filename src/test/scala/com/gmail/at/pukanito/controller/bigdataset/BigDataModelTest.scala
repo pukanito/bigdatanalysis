@@ -21,6 +21,8 @@ class BigDataModelTest extends FunSpec with ShouldMatchers {
 
     it("should be possible to import another big data model") (pending)
 
+    it("should be possible to add listeners to specific events") (pending)
+
   }
 
 }
