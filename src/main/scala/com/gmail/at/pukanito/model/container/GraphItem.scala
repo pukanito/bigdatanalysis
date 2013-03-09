@@ -17,7 +17,7 @@ class GraphCycleException(value: GraphItem[_])
  * @param value The item that was added and has an already existing key.
  */
 class DuplicateGraphItemException(value: GraphItem[_])
-  extends RuntimeException("Duplicate graph item: " + value) {}
+  extends RuntimeException(s"Duplicate graph item: $value") {}
 
 /**
  * Makes objects graph item compatible.

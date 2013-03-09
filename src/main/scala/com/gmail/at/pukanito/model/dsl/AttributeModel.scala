@@ -9,7 +9,7 @@ import com.gmail.at.pukanito.model.attributes.{AttributeIdentifier,AttributeDefi
  * @param value The item that failed to added.
  */
 class DuplicateAttributeDefinitionException(value: AttributeDefinition)
-  extends RuntimeException("Duplicate attribute definition: " + value.attributeId) {}
+  extends RuntimeException(s"Duplicate attribute definition: ${value.attributeId}") {}
 
 /**
  * Trait for constructing an attribute definition nodes hierarchy with a special DSL.
@@ -146,7 +146,7 @@ trait AttributeModel {
     private[AttributeModel] def build(id: String): AttributeDefinitionNode = {
       val attr = definedAttributes get id match {
         case Some(attr) =>
-          if (attributeValueKeyIds.size > 0) throw new RuntimeException("Cannot add attribute keys after first definition of attribute '" + attr.attributeId + "'")
+          if (attributeValueKeyIds.size > 0) throw new RuntimeException(s"Cannot add attribute keys after first definition of attribute '${attr.attributeId}'")
           attr
         case None =>
           val attr = new AttributeDefinitionNode(id, attributeValueKeyIds.toList)
