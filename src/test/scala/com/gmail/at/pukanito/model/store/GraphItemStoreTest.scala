@@ -38,8 +38,8 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
       val t1 = new TestSimpleGraphItem("A", 1)
       val t2 = new TestSimpleGraphItem("B", 2)
       store.put(t1, t2)
-      store(t1.key).first should equal (new TestSimpleGraphItem("A", 1))
-      store(t2.key).first should equal (new TestSimpleGraphItem("B", 2))
+      store(t1.key).head should equal (new TestSimpleGraphItem("A", 1))
+      store(t2.key).head should equal (new TestSimpleGraphItem("B", 2))
       intercept[NoSuchElementException] { store(t1.key, t2.key, GraphPath("C")) }
       store.get(t1.key, GraphPath("C")) should equal (Set(Some(t1), None))
     }
@@ -60,10 +60,10 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
       val t2 = new TestSimpleGraphItem("B", 2)
       val t3 = new TestSimpleGraphItem("A", 3)
       store.put(t1, t2)
-      store(t1.key).first should equal (t1)
-      store(t2.key).first should equal (t2)
+      store(t1.key).head should equal (t1)
+      store(t2.key).head should equal (t2)
       store.put(t3)
-      store(t1.key).first should equal (new TestSimpleGraphItem("A", 3))
+      store(t1.key).head should equal (new TestSimpleGraphItem("A", 3))
     }
 
     it("should be possible to delete items from the store") {
@@ -108,7 +108,7 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
       t1 += t2a
       t2a += t3
       store.put(t1)
-      store(t1.key).first should equal (t1)
+      store(t1.key).head should equal (t1)
     }
 
     it("should be possible to modify an item by its path") {
@@ -123,7 +123,7 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
       store.put(t2)
       val p = GraphPath(t1.key, t2.key)
       store.contains(p) should equal (Map(p -> true))
-      store(p).first should equal (t2a)
+      store(p).head should equal (t2a)
     }
 
     it("should be possible to delete an item and all its children (a graph) by its path") {
@@ -138,10 +138,10 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
       t1 += t2a
       t2a += t3
       store.put(t1)
-      store(t1.key).first should not equal (r1)
+      store(t1.key).head should not equal (r1)
       store.delete(t2a.path)
-      store(t1.key).first should equal (r1)
-      store.get(GraphPath(t1.key, t2a.key, t3.key)).first should equal (None)
+      store(t1.key).head should equal (r1)
+      store.get(GraphPath(t1.key, t2a.key, t3.key)).head should equal (None)
     }
 
     it("should be possible to retrieve a graph by its path") {
@@ -152,17 +152,17 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
       val t3 = new TestSimpleGraphItem("C", 30)
       store.put(t1)
       t1 += t2a
-      store(t1.key).first should not equal (t1)
+      store(t1.key).head should not equal (t1)
       store.put(t2a)
-      store(t1.key).first should equal (t1)
+      store(t1.key).head should equal (t1)
       t1 += t2b
-      store(t1.key).first should not equal (t1)
+      store(t1.key).head should not equal (t1)
       store.put(t2b)
-      store(t1.key).first should equal (t1)
+      store(t1.key).head should equal (t1)
       t2a += t3
-      store(t1.key).first should not equal (t1)
+      store(t1.key).head should not equal (t1)
       store.put(t3)
-      store(t1.key).first should equal (t1)
+      store(t1.key).head should equal (t1)
       val r1 = new TestSimpleGraphItem("A", 10)
       val r2a = new TestSimpleGraphItem("Ba", 20)
       val r2b = new TestSimpleGraphItem("Bb", 20)
@@ -170,8 +170,8 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
       r1 += r2a
       r1 += r2b
       r2a += r3
-      store(t1.key).first should equal (r1)
-      store(GraphPath(t1.key, t2a.key)).first should equal (r2a)
+      store(t1.key).head should equal (r1)
+      store(GraphPath(t1.key, t2a.key)).head should equal (r2a)
     }
 
     it("should throw an exception or return None when a non existing path is retreived") {
@@ -186,10 +186,10 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
       t2a += t3
       store.put(t1)
       intercept[NoSuchElementException] { store(t1.key, t2c.key) }
-      store.get(t2a.key).first should equal (None)
-      store.get(GraphPath(t1.key, t2a.key)).first should not equal (None)
-      store.get(GraphPath(t1.key, t2b.key)).first should not equal (None)
-      store.get(GraphPath(t1.key, t2c.key)).first should equal (None)
+      store.get(t2a.key).head should equal (None)
+      store.get(GraphPath(t1.key, t2a.key)).head should not equal (None)
+      store.get(GraphPath(t1.key, t2b.key)).head should not equal (None)
+      store.get(GraphPath(t1.key, t2c.key)).head should equal (None)
     }
 
     it("should be possible to retrieve all graphs with a specific sub path, even from the root") {
@@ -206,8 +206,8 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
       t2a += t3
       store.put(t1)
       store.put(t4)
-      store(t1.key).first.children.values.toSet should equal (Set(t2a, t2b, t2c))
-      store(t4.key).first should equal (t4)
+      store(t1.key).head.children.values.toSet should equal (Set(t2a, t2b, t2c))
+      store(t4.key).head should equal (t4)
       store() should equal (Set(t1, t4))
       store.get() should equal(Set(Option(t1), Option(t4)))
     }
@@ -224,7 +224,7 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
       t2a += t3
       store.put(t2a)
       store.put(t2b)
-      store(t1.key).first should equal (t1)
+      store(t1.key).head should equal (t1)
     }
 
     it("should be possible to modify a graph by its path") {
@@ -245,7 +245,7 @@ class GraphItemStoreTest extends FunSpec with ShouldMatchers {
       store.put(r1)
       r1 += r2b
       r2a += r3
-      store(t1.key).first should equal (r1)
+      store(t1.key).head should equal (r1)
     }
 
     it("should throw an exception when deleting an item without path") {

@@ -65,7 +65,7 @@ class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
       p match {
         case GraphPath() => throw new RuntimeException("Cannot get from MemoryMapGraphItemStore without a path")
         case GraphPath(key) => getChildren(Some(leafs(key).copy)).get
-        case GraphPath(headKey, tail @ _*) => children(headKey)(GraphPath(tail:_*)).first
+        case GraphPath(headKey, tail @ _*) => children(headKey)(GraphPath(tail:_*)).head
       }
     } ) (collection.breakOut)
   }
@@ -78,7 +78,7 @@ class MemoryMapGraphItemStore[T <: GraphItem[T]] extends GraphItemStore[T] {
       p match {
         case GraphPath() => throw new RuntimeException("Cannot get from MemoryMapGraphItemStore without a path")
         case GraphPath(key) => getChildren(leafs.get(key) map {_.copy})
-        case GraphPath(headKey, tail @ _*) => children.get(headKey).flatMap { _.get(GraphPath(tail:_*)).first }
+        case GraphPath(headKey, tail @ _*) => children.get(headKey).flatMap { _.get(GraphPath(tail:_*)).head }
       }
     } ) (collection.breakOut)
   }

@@ -100,7 +100,7 @@ trait GraphItem[T <: GraphItem[T]] {
     if (parents.size == 0)
       GraphPath(key)
     else
-      parents.first.path + GraphPath(key)
+      parents.head.path + GraphPath(key)
   }
 
   /**
