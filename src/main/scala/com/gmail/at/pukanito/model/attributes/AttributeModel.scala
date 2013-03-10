@@ -1,6 +1,4 @@
-package com.gmail.at.pukanito.model.dsl
-
-import com.gmail.at.pukanito.model.attributes.{AttributeIdentifier,AttributeDefinition, AttributeDefinitionNode}
+package com.gmail.at.pukanito.model.attributes
 
 /**
  * Exception thrown when an attribute definition is added to a model with an already existing id.

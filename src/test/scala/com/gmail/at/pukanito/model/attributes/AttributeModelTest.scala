@@ -1,8 +1,7 @@
-package com.gmail.at.pukanito.model.dsl
+package com.gmail.at.pukanito.model.attributes
 
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
-import com.gmail.at.pukanito.model.attributes.AttributeIdentifier
 
 class AttributeModelDslTest extends FunSpec with ShouldMatchers {
 

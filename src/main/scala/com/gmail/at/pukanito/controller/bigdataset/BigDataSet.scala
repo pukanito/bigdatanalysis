@@ -1,6 +1,6 @@
 package com.gmail.at.pukanito.controller.bigdataset
 
-import com.gmail.at.pukanito.model.dsl.AttributeModel
+import com.gmail.at.pukanito.model.attributes.AttributeModel
 import com.gmail.at.pukanito.model.attributes.AttributeValue
 import com.gmail.at.pukanito.model.store.GraphItemStore
 
