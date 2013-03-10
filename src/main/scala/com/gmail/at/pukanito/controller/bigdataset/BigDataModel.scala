@@ -3,27 +3,36 @@ package com.gmail.at.pukanito.controller.bigdataset
 import com.gmail.at.pukanito.model.attributes.AttributeDefinitionNode
 import com.gmail.at.pukanito.model.store.GraphItemStore
 import com.gmail.at.pukanito.model.container.GraphItemKey
+import com.gmail.at.pukanito.model.attributes.AttributeModel
+import com.gmail.at.pukanito.model.container.GraphPath
 
 
 /**
- * Big data model is an attribute model stored in a graph item store.
+ * Big data model is an attribute definition nodes hierarchy stored in a 
+ * graph item store. Listeners can be attached to specific events:
+ * 
+ * - create
+ * - read
+ * - update
+ * - delete
+ * - load
+ * - store
+ * - include
  */
-abstract class BigDataModel(
+class BigDataModel (
   val graphItemStore: GraphItemStore[AttributeDefinitionNode]
-) {
-  val rootAttributeDefinitions: Map[GraphItemKey, AttributeDefinitionNode] = Map[GraphItemKey, AttributeDefinitionNode]()
+) extends AttributeModel {
+  def create(attributeDefinitionNode: AttributeDefinitionNode): BigDataModel
 
-  def add(attributeDefinitionNode: AttributeDefinitionNode)
+  def read(graphPath: GraphPath): AttributeDefinitionNode
 
-  def update(attributeDefinitionNode: AttributeDefinitionNode)
+  def update(attributeDefinitionNode: AttributeDefinitionNode): BigDataModel
 
-  def delete
+  def delete(graphPath: GraphPath): BigDataModel
 
-  def read
+  def load: BigDataModel
 
-  def load
+  def store: BigDataModel
 
-  def store
-
-  def include
+  def include: BigDataModel
 }
