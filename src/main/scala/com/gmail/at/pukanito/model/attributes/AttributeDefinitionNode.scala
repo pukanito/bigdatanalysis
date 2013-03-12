@@ -4,6 +4,10 @@ import com.gmail.at.pukanito.model.container.GraphItem
 
 /**
  * Attribute definitions that can be put in an attribute model.
+ *
+ * @constructor Create an attribute definition node with a specific attribute id and define the key.
+ * @param attributeId The attribute identifier to assign to the AttributeDefinitionNode.
+ * @param attributeValueKeyIds The key attributes of the node to identify attribute values.
  */
 class AttributeDefinitionNode (
   attributeId: AttributeIdentifier,
