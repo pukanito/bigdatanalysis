@@ -2,7 +2,7 @@ package com.gmail.at.pukanito.controller.bigdataset
 
 import com.gmail.at.pukanito.model.attributes.AttributeModel
 import com.gmail.at.pukanito.model.attributes.AttributeValue
-import com.gmail.at.pukanito.model.store.GraphItemStore
+import com.gmail.at.pukanito.model.repository.GraphItemRepository
 
 /**
  * Big data set is a set of values in an attribute model that is stored in a store.
@@ -10,7 +10,7 @@ import com.gmail.at.pukanito.model.store.GraphItemStore
  * A big data set makes it possible to manipulate stored data (create, read, update, delete, ...).
  */
 abstract class BigDataSet(
-  val store: GraphItemStore[AttributeValue],
+  val repository: GraphItemRepository[AttributeValue],
   val model: Option[AttributeModel]
 ) {
 

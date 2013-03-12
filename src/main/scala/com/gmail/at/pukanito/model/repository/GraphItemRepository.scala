@@ -1,11 +1,11 @@
-package com.gmail.at.pukanito.model.store
+package com.gmail.at.pukanito.model.repository
 
 import com.gmail.at.pukanito.model.container.{GraphItem,GraphPath}
 
 /**
  * Trait for storing graph items.
  */
-trait GraphItemStore[T <: GraphItem[T]] {
+trait GraphItemRepository[T <: GraphItem[T]] {
 
   /**
    * Stores values.
