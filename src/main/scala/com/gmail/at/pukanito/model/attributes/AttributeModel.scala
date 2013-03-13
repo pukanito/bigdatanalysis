@@ -70,13 +70,13 @@ trait AttributeModel {
   def attributes = definedAttributes
 
   /**
-   * Get the ids of the root attributes (i.e. attributes without parents)
+   * Get the definitions of the root attributes (i.e. attributes without parents)
    */
-  def rootAttributes: Set[AttributeIdentifier] = {
+  def rootAttributes: Set[AttributeDefinitionNode] = {
     (for (
-      (id, definition) <- definedAttributes
+      (_, definition) <- definedAttributes
        if definition.parents.isEmpty
-    ) yield id) (collection.breakOut)
+    ) yield definition) (collection.breakOut)
   }
 
   /** The DSL fields and methods **/

@@ -5,7 +5,7 @@ import org.scalatest.matchers.ShouldMatchers
 
 class AttributeModelDslTest extends FunSpec with ShouldMatchers {
 
-  describe("AttributeModelDsl") {
+  describe("AttributeModel") {
 
     it("should be possible to create a parent-child hierarchy of attribute definitions") {
       object testmodel extends AttributeModel {
@@ -35,7 +35,7 @@ class AttributeModelDslTest extends FunSpec with ShouldMatchers {
       testmodel.attributes("child2ofchild1").children should have size (0)
       testmodel.attributes("child1ofchild3").parents should have size (1)
       testmodel.attributes("child1ofchild3").children should have size (0)
-      testmodel.rootAttributes should equal (Set(new AttributeIdentifier("parent")))
+      testmodel.rootAttributes should equal (Set(testmodel.attributes("parent")))
     }
 
     it("should throw an exception when a non existing child is added on creation") {
@@ -77,7 +77,7 @@ class AttributeModelDslTest extends FunSpec with ShouldMatchers {
         attribute("test") { has children "child1" }
       }
       testmodel.attributes
-      testmodel.rootAttributes should equal (Set(new AttributeIdentifier("test")))
+      testmodel.rootAttributes should equal (Set(testmodel.attributes("test")))
     }
 
     it("should throw an exception when keys are added after creation") {
@@ -136,7 +136,7 @@ class AttributeModelDslTest extends FunSpec with ShouldMatchers {
         attribute("childofchildren") { has parents "child1" and "child2" }
       }
       testmodel.attributes
-      testmodel.rootAttributes should equal (Set(new AttributeIdentifier("test")))
+      testmodel.rootAttributes should equal (Set(testmodel.attributes("test")))
     }
 
     it("should be possible to create a model and store it in a val") {

@@ -19,18 +19,10 @@ import com.gmail.at.pukanito.model.container.GraphPath
  * - store
  * - include
  */
-abstract class BigDataModel (
+class BigDataModel (
   val graphItemRepository: GraphItemRepository[AttributeDefinitionNode]
 ) extends AttributeModel {
-  def create(attributeDefinitionNode: AttributeDefinitionNode): BigDataModel
+  def load = graphItemRepository.get()
 
-  def read(graphPath: GraphPath): AttributeDefinitionNode
-
-  def update(attributeDefinitionNode: AttributeDefinitionNode): BigDataModel
-
-  def delete(graphPath: GraphPath): BigDataModel
-
-  def load: BigDataModel
-
-  def store: BigDataModel
+  def store = graphItemRepository.put(rootAttributes.toSeq:_*)
 }
