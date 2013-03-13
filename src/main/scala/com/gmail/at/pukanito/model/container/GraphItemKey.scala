@@ -1,6 +1,8 @@
 package com.gmail.at.pukanito.model.container
 
-import collection._
+import scala.collection.Iterator
+import scala.collection.Map
+import scala.collection.MapLike
 
 /**
  * Represents the (compound) key of a [[com.gmail.at.pukanito.model.container.GraphItem]].
@@ -51,6 +53,8 @@ class GraphItemKey private (
  * }}}
  */
 object GraphItemKey extends {
+
+  import scala.language.implicitConversions
 
   // When using non-compound keys a standard String can be used in the map.
   private def simpleGraphItemId = "!id!"

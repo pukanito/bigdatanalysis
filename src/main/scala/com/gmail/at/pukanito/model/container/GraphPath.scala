@@ -1,8 +1,8 @@
 package com.gmail.at.pukanito.model.container
 
-import collection.SeqLike
-import collection.mutable.Builder
-import collection.mutable.ArrayBuffer
+import scala.collection.SeqLike
+import scala.collection.mutable.ArrayBuffer
+import scala.collection.mutable.Builder
 
 /**
  * Representation of a relative or absolute path through GraphItems.
@@ -52,6 +52,8 @@ class GraphPath private (
  * With compound keys it is necessary to use GraphItemKey(...).
  */
 object GraphPath {
+
+  import scala.language.implicitConversions
 
   /**
    * Helper to convert a GraphItemKey to a GraphPath (for implicit conversion).

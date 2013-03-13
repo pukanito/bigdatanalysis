@@ -40,6 +40,9 @@ class AttributeIdentifier(
  * Helpers for creating attribute identifiers.
  */
 object AttributeIdentifier {
+
+  import scala.language.implicitConversions
+
   /**
    * For convenience, use String where AttributeIdentifier is needed.
    */
