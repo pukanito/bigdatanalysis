@@ -11,13 +11,8 @@ import com.gmail.at.pukanito.model.container.GraphPath
  * Big data model is an attribute definition nodes hierarchy stored in a
  * graph item repository. Listeners can be attached to specific events:
  *
- * - create
- * - read
- * - update
- * - delete
  * - load
  * - store
- * - include
  */
 class BigDataModel (
   val graphItemRepository: GraphItemRepository[AttributeDefinitionNode]
