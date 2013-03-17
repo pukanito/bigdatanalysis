@@ -11,8 +11,8 @@ class Configuration (
   private val conf = ConfigFactory.load
 
   def whichPath(path: String, spec: String = ""): Option[String] = {
-    ((if (!environment.isEmpty) List(environment+"."+path) else List()) ++  List(path)).map(
-        (p) => (if (!spec.isEmpty) List(p+"."+spec) else List()) ++  List(p)
+    ((if (!spec.isEmpty) List(spec+"."+path) else List()) ++  List(path)).map(
+        (p) => (if (!environment.isEmpty) List(environment+"."+p) else List()) ++  List(p)
     ).flatten.find(conf.hasPath(_))
   }
 
