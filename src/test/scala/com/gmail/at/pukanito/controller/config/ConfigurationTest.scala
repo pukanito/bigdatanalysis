@@ -8,25 +8,25 @@ class ConfigurationTest extends FunSpec with ShouldMatchers {
   describe("Configuration") {
 
     it("should find the highest prioritized path") {
-      new Configuration() whichPath("foo") should equal (None)
-      new Configuration() whichPath("test.foo") should equal (Some("test.foo"))
-      new Configuration() whichPath("foo.bar") should equal (None)
-      new Configuration() whichPath("test.foo.bar") should equal (Some("test.foo.bar"))
+      new Configuration() whichPath("test") should equal (Some("test"))
+      new Configuration() whichPath("test.test") should equal (Some("test.test"))
+      new Configuration() whichPath("test.bar") should equal (Some("test.bar"))
+      new Configuration() whichPath("test.test.bar") should equal (Some("test.test.bar"))
 
-      new Configuration("test") whichPath("foo") should equal (Some("test.foo"))
-      new Configuration("test") whichPath("test.foo") should equal (Some("test.foo"))
-      new Configuration("test") whichPath("foo.bar") should equal (Some("test.foo.bar"))
-      new Configuration("test") whichPath("test.foo.bar") should equal (Some("test.foo.bar"))
+      new Configuration("test") whichPath("test") should equal (Some("test.test"))
+      new Configuration("test") whichPath("test.test") should equal (Some("test.test"))
+      new Configuration("test") whichPath("test.bar") should equal (Some("test.test.bar"))
+      new Configuration("test") whichPath("test.test.bar") should equal (Some("test.test.bar"))
 
-      new Configuration("") whichPath("foo", "test") should equal (Some("test.foo"))
-      new Configuration("") whichPath("test.foo", "test") should equal (Some("test.foo"))
-      new Configuration("") whichPath("foo.bar", "test") should equal (Some("test.foo.bar"))
-      new Configuration("") whichPath("test.foo.bar", "test") should equal (Some("test.foo.bar"))
+      new Configuration("") whichPath("test", "test") should equal (Some("test.test"))
+      new Configuration("") whichPath("test.test", "test") should equal (Some("test.test"))
+      new Configuration("") whichPath("test.bar", "test") should equal (Some("test.test.bar"))
+      new Configuration("") whichPath("test.test.bar", "test") should equal (Some("test.test.bar"))
 
-      new Configuration("test") whichPath("bar", "foo") should equal (Some("test.foo.bar"))
-      new Configuration("test") whichPath("test.foo", "bar") should equal (Some("test.foo"))
-      new Configuration("test") whichPath("foo.bar", "bar") should equal (Some("test.foo.bar"))
-      new Configuration("test") whichPath("test.foo.bar", "bar") should equal (Some("test.foo.bar"))
+      new Configuration("test") whichPath("bar", "test") should equal (Some("test.test.bar"))
+      new Configuration("test") whichPath("test.test", "bar") should equal (Some("test.test"))
+      new Configuration("test") whichPath("test.bar", "bar") should equal (Some("test.test.bar"))
+      new Configuration("test") whichPath("test.test.bar", "bar") should equal (Some("test.test.bar"))
     }
 
     it("should be possible to retrieve default and specific values") {
