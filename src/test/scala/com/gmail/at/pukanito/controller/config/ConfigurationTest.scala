@@ -16,20 +16,14 @@ class ConfigurationTest extends FunSpec with ShouldMatchers {
       new Configuration("test") whichPath("test.foo") should equal (Some("test.foo"))
       new Configuration("test") whichPath("foo.bar") should equal (Some("test.foo.bar"))
       new Configuration("test") whichPath("test.foo.bar") should equal (Some("test.foo.bar"))
-      new Configuration("", "bar") whichPath("foo") should equal (None)
-      new Configuration("", "bar") whichPath("test.foo") should equal (Some("test.foo.bar"))
-      new Configuration("", "bar") whichPath("foo.bar") should equal (None)
-      new Configuration("", "bar") whichPath("test.foo.bar") should equal (Some("test.foo.bar"))
-      new Configuration("test", "bar") whichPath("foo") should equal (Some("test.foo.bar"))
-      new Configuration("test", "bar") whichPath("test.foo") should equal (Some("test.foo.bar"))
-      new Configuration("test", "bar") whichPath("foo.bar") should equal (Some("test.foo.bar"))
-      new Configuration("test", "bar") whichPath("test.foo.bar") should equal (Some("test.foo.bar"))
     }
 
-    it("should be possible to retrieve default values") { (pending)
+    it("should be possible to retrieve default and specific values") {
+      new Configuration("test") getString("default.val1") should equal ("VAL1")
+      new Configuration("test") getString("default.val1", "spec1") should equal ("VAL1SPEC1")
+      new Configuration("test") getString("default.val1", "spec2") should equal ("VAL1SPEC2")
+      new Configuration("test") getString("default.val1", "spec3") should equal ("VAL1")
     }
-
-    it("should be possible to retrieve specific values") (pending)
 
   }
 
