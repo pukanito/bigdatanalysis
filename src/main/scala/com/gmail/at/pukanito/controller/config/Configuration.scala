@@ -17,8 +17,8 @@ class Configuration (
   private val conf = ConfigFactory.load
 
   /**
-   * Check all possible paths which can be created from 'environment', 'spec' and 'path'
-   * and return the highest prioritized one or None.
+   * Returns the highest prioritized path that can be created from 'environment',
+   * 'spec' and 'path' or None.
    *
    * Priority of path is:
    * 1. environment.spec.path
@@ -32,11 +32,20 @@ class Configuration (
     ).flatten.find(conf.hasPath(_))
   }
 
+  /**
+   * Returns true when a path has a configuration value defined.
+   */
   def hasPath(path: String, spec: String = ""): Boolean = {
-    !whichPath(path, spec).isEmpty
+    ! whichPath(path, spec).isEmpty
   }
 
+  /**
+   * Returns the string value of a path.
+   */
   def getString(path: String, spec: String = ""): String = {
-    conf.getString(whichPath(path, spec).get)
+    whichPath(path, spec) match {
+      case Some(p) => conf.getString(p)
+      case None => ""
+    }
   }
 }

@@ -26,10 +26,12 @@ class ConfigurationTest extends FunSpec with ShouldMatchers {
       new Configuration("") whichPath("test.foo.bar", "test") should equal (Some("test.foo.bar"))
 
       new Configuration("test") whichPath("bar", "foo") should equal (Some("test.foo.bar"))
+      new Configuration("test2") whichPath("bar", "foo") should equal (Some("foo.bar"))
       new Configuration("test") whichPath("foo", "bar") should equal (Some("test.foo"))
       new Configuration("test") whichPath("bar", "spec") should equal (Some("spec.bar"))
       new Configuration("test") whichPath("bar", "spec2") should equal (Some("test.bar"))
       new Configuration("test") whichPath("test.foo.bar", "spec") should equal (Some("test.foo.bar"))
+      new Configuration("test2") whichPath("foo", "spec2") should equal (Some("foo"))
     }
 
     it("should be possible to retrieve default and specific values") {
@@ -42,6 +44,11 @@ class ConfigurationTest extends FunSpec with ShouldMatchers {
     it("should distinguish test and runtime configuration") {
       new Configuration("configuration") getString("description") should equal ("Application configuration")
       new Configuration("configuration") getString("description", "test") should equal ("Testing configuration")
+    }
+
+    it("should be possible to determine whether a path has a configured value") {
+      new Configuration("test")hasPath("bar", "foo") should equal (true)
+      new Configuration("test2")hasPath("bar", "foo2") should equal (false)
     }
 
   }
