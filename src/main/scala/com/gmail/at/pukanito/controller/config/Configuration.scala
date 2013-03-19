@@ -82,5 +82,4 @@ class Configuration (
       case None => ""
     }
   }
-
 }
