@@ -39,7 +39,7 @@ class Configuration (
 
   /**
    * Returns the highest prioritized path that can be created from 'environment',
-   * 'spec' and 'path' or None.
+   * 'spec' and 'path' and has a configuration value defined, or None.
    *
    * @param path Base path to the configuration value.
    * @param spec Optional specialized value for the configuration value.
