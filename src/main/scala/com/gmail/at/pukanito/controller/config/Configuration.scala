@@ -38,6 +38,15 @@ class Configuration (
   private val conf = ConfigFactory.load
 
   /**
+   * Returns a list consisting of:
+   * - prefix.path (if prefix is not empty string)
+   * - path
+   */
+  private def explodePathWithPrefix(path: String, prefix: String): List[String] = {
+    (if (prefix.isEmpty) List() else List(prefix + "." + path)) ++  List(path)
+  }
+
+  /**
    * Returns the highest prioritized path that can be created from 'environment',
    * 'spec' and 'path' and has a configuration value defined, or None.
    *
@@ -45,9 +54,9 @@ class Configuration (
    * @param spec Optional specialized value for the configuration value.
    */
   def whichPath(path: String, spec: String = ""): Option[String] = {
-    ((if (!spec.isEmpty) List(spec+"."+path) else List()) ++  List(path)).map(
-        (p) => (if (!environment.isEmpty) List(environment+"."+p) else List()) ++  List(p)
-    ).flatten.find(conf.hasPath(_))
+    explodePathWithPrefix(path, spec).map((p) =>
+      explodePathWithPrefix(p, environment))
+    .flatten.find(conf.hasPath(_))
   }
 
   /**
