@@ -1,6 +1,7 @@
 package com.gmail.at.pukanito.controller.config
 
 import com.typesafe.config._
+import com.gmail.at.pukanito.model.repository.GraphItemRepository
 
 /**
  * Wrapper for https://github.com/typesafehub/config.
@@ -81,4 +82,5 @@ class Configuration (
       case None => ""
     }
   }
+
 }

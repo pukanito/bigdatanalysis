@@ -2,8 +2,8 @@ package com.gmail.at.pukanito.model.repository
 
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
-
 import com.gmail.at.pukanito.model.container.{GraphItem,GraphPath}
+import com.gmail.at.pukanito.controller.config.Configuration
 
 class GraphItemRepositoryTest extends FunSpec with ShouldMatchers {
 
@@ -31,9 +31,14 @@ class GraphItemRepositoryTest extends FunSpec with ShouldMatchers {
 
   }
 
-private object TestRepository {
-  def getNewRepository = new MemoryMapGraphItemRepository[TestSimpleGraphItem]
-}
+  private object TestRepository {
+    def getNewRepository: GraphItemRepository[TestSimpleGraphItem] = {
+      new Configuration("configuration") getString("repository", "test") match {
+        case "M" => new MemoryMapGraphItemRepository[TestSimpleGraphItem]
+        // Will throw match error exception in other cases.
+      }
+    }
+  }
 
   describe("GraphItemRepository") {
 

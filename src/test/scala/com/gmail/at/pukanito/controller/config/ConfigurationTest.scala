@@ -42,7 +42,7 @@ class ConfigurationTest extends FunSpec with ShouldMatchers {
     }
 
     it("should distinguish test and runtime configuration") {
-      new Configuration("configuration") getString("description") should equal ("Application configuration")
+      new Configuration("configuration") getString("description") should equal ("Default configuration")
       new Configuration("configuration") getString("description", "test") should equal ("Testing configuration")
     }
 
