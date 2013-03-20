@@ -6,29 +6,65 @@ import com.gmail.at.pukanito.model.repository.GraphItemRepository
 /**
  * Wrapper for https://github.com/typesafehub/config.
  *
- * Get configuration items for a specific environment and specification, or a default if a
- * specific platform and/or specification is not defined.
+ * Get configuration items for a specific environment and specification, or fall back
+ * to a lower prioritized configuration value if the specific one is not defined.
  *
  * With environment and specification given the path priorization order will be:
  *
- *  1.  environment.specification.path
- *  2.  specification.path
- *  3.  environment.path
- *  4.  path
+   - environment.specification.path
+   - specification.path
+   - environment.path
+   - path
  *
  * With only environment:
  *
- *  1.  environment.path
- *  2.  path
+   - environment.path
+   - path
  *
  * With only specification:
  *
- *  1. specification.path
- *  2. path
+   - specification.path
+   - path
  *
  * Without environment or specification:
  *
- *  1. path
+   - path
+ *
+ * The configuration value that is defined at the highest prioritized
+ * path priorization will be returned.
+ *
+ * This allows for creating a default configuration, environment specific
+ * configuration settings (for example development, test, production) and
+ * settings depending on another specification (for example platform):
+ *
+ * {{{
+ * configuration {
+ *   setting1 = A
+ *   setting2 = X
+ * }
+ *
+ * test.configuration {
+ *   setting1 = B
+ * }
+ *
+ * test.platform.configuration {
+ *   setting1 = C
+ * }
+ *
+ * }}}
+ *
+ * Retrieving path 'configuration.setting1' would result in A.
+ *
+ * Retrieving path 'configuration.setting1' for environment 'test'
+ * would result in B.
+ *
+ * Retrieving path 'configuration.setting1' for environment 'test'
+ * and specification 'platform' would result in C.
+ *
+ * Retrieving path 'configuration.setting2' for environment 'test'
+ * and specification 'platform' would result in X. It is not defined
+ * for the environment and specification so falls back to a lower
+ * prioritized path.
  *
  * @constructor Open a configuration for a specific environment.
  * @param environment The name of the environment.
