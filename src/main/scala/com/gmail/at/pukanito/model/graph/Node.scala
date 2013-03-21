@@ -46,7 +46,7 @@ trait Node[T <: Node[T]] {
   this: T =>
 
   private var parentNodes: Set[T] = Set[T]()
-  private[this] var childNodesMap: Map[NodeKey, T] = Map[NodeKey, T]()
+  private[this] var childNodes: Map[NodeKey, T] = Map[NodeKey, T]()
 
   /**
    * Returns the key of a node. Should be immutable!
@@ -79,7 +79,7 @@ trait Node[T <: Node[T]] {
    */
   def copyGraph: T = {
     val item = this.copy
-    childNodesMap.values foreach { item += _.copyGraph }
+    childNodes.values foreach { item += _.copyGraph }
     item
   }
 
@@ -111,7 +111,7 @@ trait Node[T <: Node[T]] {
   /**
    * Returns the map of child nodes of this node.
    */
-  def children: Map[NodeKey, T] = childNodesMap
+  def children: Map[NodeKey, T] = childNodes
 
   /**
    * Adds a new child node to this node.
@@ -122,8 +122,8 @@ trait Node[T <: Node[T]] {
    */
   def +=(childNode: T) = {
     if (testCycleExistsInParents(List(this), childNode)) throw new GraphCycleException(childNode)
-    if (childNodesMap contains childNode.key) throw new DuplicateChildNodeException(childNode)
-    childNodesMap += (childNode.key -> childNode)
+    if (childNodes contains childNode.key) throw new DuplicateChildNodeException(childNode)
+    childNodes += (childNode.key -> childNode)
     childNode.parentNodes += this
   }
 
