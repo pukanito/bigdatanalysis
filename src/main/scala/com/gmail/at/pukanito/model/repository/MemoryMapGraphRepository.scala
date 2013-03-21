@@ -1,14 +1,14 @@
 package com.gmail.at.pukanito.model.repository
 
-import com.gmail.at.pukanito.model.graph.{Node,Path,NodeKey}
+import com.gmail.at.pukanito.model.graph
 
 /**
  * Simple in memory storage for graphs.
  */
-class MemoryMapGraphRepository[T <: Node[T]] extends GraphRepository[T] {
+class MemoryMapGraphRepository[T <: graph.Node[T]] extends GraphRepository[T] {
 
-  private var leafs: Map[NodeKey, T] = Map.empty
-  private var children: Map[NodeKey, MemoryMapGraphRepository[T]] = Map.empty
+  private var leafs: Map[graph.NodeKey, T] = Map.empty
+  private var children: Map[graph.NodeKey, MemoryMapGraphRepository[T]] = Map.empty
 
   /**
    * Returns the MemoryMapGraphRepository[T] that belongs to children(key).
@@ -17,7 +17,7 @@ class MemoryMapGraphRepository[T <: Node[T]] extends GraphRepository[T] {
    *
    * @param key the key of the memory map graph item repository to get or create.
    */
-  private def getOrCreateChildrenRepository(key: NodeKey): MemoryMapGraphRepository[T] = {
+  private def getOrCreateChildrenRepository(key: graph.NodeKey): MemoryMapGraphRepository[T] = {
     children.getOrElse(key, { val m = new MemoryMapGraphRepository[T](); children += key -> m; m })
   }
 
@@ -29,11 +29,11 @@ class MemoryMapGraphRepository[T <: Node[T]] extends GraphRepository[T] {
     }
   }
 
-  private def put(path: Path, value: T): Unit = {
+  private def put(path: graph.Path, value: T): Unit = {
     path match {
-      case Path() => throw new RuntimeException("Cannot store in MemoryMapGraphRepository without a path")
-      case Path(key) => leafs += key -> value.copy; putChildren(value)
-      case Path(headKey, tail @ _*) => getOrCreateChildrenRepository(headKey).put(Path(tail:_*), value)
+      case graph.Path() => throw new RuntimeException("Cannot store in MemoryMapGraphRepository without a path")
+      case graph.Path(key) => leafs += key -> value.copy; putChildren(value)
+      case graph.Path(headKey, tail @ _*) => getOrCreateChildrenRepository(headKey).put(graph.Path(tail:_*), value)
     }
   }
 
@@ -57,49 +57,49 @@ class MemoryMapGraphRepository[T <: Node[T]] extends GraphRepository[T] {
     item
   }
 
-  override def apply(paths: Path*): Set[T] = {
+  override def apply(paths: graph.Path*): Set[T] = {
     // When an empty path is supplied, get all the root leaves.
     if (paths.isEmpty)
-      apply((leafs map {case (key,_) => Path(key) }).toSeq:_*)
+      apply((leafs map {case (key,_) => graph.Path(key) }).toSeq:_*)
     else (paths map { p =>
       p match {
-        case Path() => throw new RuntimeException("Cannot get from MemoryMapGraphRepository without a path")
-        case Path(key) => getChildren(Some(leafs(key).copy)).get
-        case Path(headKey, tail @ _*) => children(headKey)(Path(tail:_*)).head
+        case graph.Path() => throw new RuntimeException("Cannot get from MemoryMapGraphRepository without a path")
+        case graph.Path(key) => getChildren(Some(leafs(key).copy)).get
+        case graph.Path(headKey, tail @ _*) => children(headKey)(graph.Path(tail:_*)).head
       }
     } ) (collection.breakOut)
   }
 
-  override def get(paths: Path*): Set[Option[T]] = {
+  override def get(paths: graph.Path*): Set[Option[T]] = {
     // When an empty path is supplied, get all the root leaves.
     if (paths.isEmpty)
-      get((leafs map {case (key,_) => Path(key) }).toSeq:_*)
+      get((leafs map {case (key,_) => graph.Path(key) }).toSeq:_*)
     else (paths map { p =>
       p match {
-        case Path() => throw new RuntimeException("Cannot get from MemoryMapGraphRepository without a path")
-        case Path(key) => getChildren(leafs.get(key) map {_.copy})
-        case Path(headKey, tail @ _*) => children.get(headKey).flatMap { _.get(Path(tail:_*)).head }
+        case graph.Path() => throw new RuntimeException("Cannot get from MemoryMapGraphRepository without a path")
+        case graph.Path(key) => getChildren(leafs.get(key) map {_.copy})
+        case graph.Path(headKey, tail @ _*) => children.get(headKey).flatMap { _.get(graph.Path(tail:_*)).head }
       }
     } ) (collection.breakOut)
   }
 
-  override def contains(paths: Path*): Map[Path, Boolean] = {
+  override def contains(paths: graph.Path*): Map[graph.Path, Boolean] = {
     (paths map { p => (p,
       p match {
-        case Path() => throw new RuntimeException("Cannot contain in MemoryMapGraphRepository without a path")
-        case Path(key) => leafs contains key
-        case Path(headKey, tail @ _*) => (children contains headKey) &&
-                                              ((children(headKey) contains Path(tail:_*))(Path(tail:_*)))
+        case graph.Path() => throw new RuntimeException("Cannot contain in MemoryMapGraphRepository without a path")
+        case graph.Path(key) => leafs contains key
+        case graph.Path(headKey, tail @ _*) => (children contains headKey) &&
+                                               ((children(headKey) contains graph.Path(tail:_*))(graph.Path(tail:_*)))
       }
     ) } ) (collection.breakOut)
   }
 
-  override def delete(paths: Path*) = {
+  override def delete(paths: graph.Path*) = {
     paths foreach { p =>
       p match {
-        case Path() => throw new RuntimeException("Cannot delete from MemoryMapGraphRepository without a path")
-        case Path(key) => leafs -= key; children -= key
-        case Path(headKey, tail @ _*) => children(headKey).delete(Path(tail:_*))
+        case graph.Path() => throw new RuntimeException("Cannot delete from MemoryMapGraphRepository without a path")
+        case graph.Path(key) => leafs -= key; children -= key
+        case graph.Path(headKey, tail @ _*) => children(headKey).delete(graph.Path(tail:_*))
       }
     }
   }

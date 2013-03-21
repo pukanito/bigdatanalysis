@@ -1,6 +1,6 @@
 package com.gmail.at.pukanito.model.attributes
 
-import com.gmail.at.pukanito.model.graph.Node
+import com.gmail.at.pukanito.model.graph
 
 /**
  * The base class for all attribute value types.
@@ -13,7 +13,7 @@ import com.gmail.at.pukanito.model.graph.Node
  */
 abstract class AttributeValue(
   val attributeDefinition: AttributeDefinition
-) extends Node[AttributeValue] {
+) extends graph.Node[AttributeValue] {
 
   /**
    * The default key of an attribute definition: its attribute id.
