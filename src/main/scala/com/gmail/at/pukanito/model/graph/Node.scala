@@ -59,19 +59,19 @@ trait Node[T <: Node[T]] {
   def copy: T
 
   /**
-   * Returns true if child item is equal (object equality) to one of the items or one
-   * of items' parents. This also checks if one of the children of the child item is object
-   * equal to one of the items or one of items' parents because if this is the case than
-   * the child item itself will also be one of the parents.
+   * Returns true if child node is equal (object equality) to one of the nodes or one
+   * of nodes' parents. This also checks if one of the children of the child node is object
+   * equal to one of the nodes or one of nodes' parents because if this is the case than
+   * the child node itself will also be one of the parents.
    *
-   * @param items the items to check (also check items' parents).
-   * @param childItem the item that may not be object equal to one of the items or its parents.
+   * @param nodes the nodes to check (also check nodes' parents).
+   * @param childNode the node that may not be object equal to one of the nodes or its parents.
    */
-  private def testCycleExistsInParents(items: List[T], childItem: T): Boolean = {
-    if (items.isEmpty)
+  private def testCycleExistsInParents(nodes: List[T], childNode: T): Boolean = {
+    if (nodes.isEmpty)
       false
     else
-      items.exists( x => (x eq childItem) || testCycleExistsInParents(x.parents.toList, childItem) )
+      nodes.exists( x => (x eq childNode) || testCycleExistsInParents(x.parents.toList, childNode) )
   }
 
   /**
@@ -120,11 +120,11 @@ trait Node[T <: Node[T]] {
    * @throws GraphCycleException when a cycle is detected when the value would be added.
    * @throws DuplicateGraphItemException when an item with the same key already exists.
    */
-  def +=(child: T) = {
-    if (testCycleExistsInParents(List(this), child)) throw new GraphCycleException(child)
-    if (childrenMap contains child.key) throw new DuplicateChildNodeException(child)
-    childrenMap += (child.key -> child)
-    child.parentValues += this
+  def +=(childNode: T) = {
+    if (testCycleExistsInParents(List(this), childNode)) throw new GraphCycleException(childNode)
+    if (childrenMap contains childNode.key) throw new DuplicateChildNodeException(childNode)
+    childrenMap += (childNode.key -> childNode)
+    childNode.parentValues += this
   }
 
   /**

@@ -13,13 +13,13 @@ class Path private (
   path: NodeKey*
 ) extends Seq[NodeKey] with SeqLike[NodeKey, Path] {
 
-  private val graphPathElements = Seq[NodeKey](path:_*)
+  private val pathElements = Seq[NodeKey](path:_*)
 
-  def apply(idx: Int): NodeKey = graphPathElements(idx)
+  def apply(idx: Int): NodeKey = pathElements(idx)
 
-  def iterator: Iterator[NodeKey] = graphPathElements.iterator
+  def iterator: Iterator[NodeKey] = pathElements.iterator
 
-  def length: Int = graphPathElements.length
+  def length: Int = pathElements.length
 
   override protected[this] def newBuilder: Builder[NodeKey, Path] =
     Path.newBuilder
@@ -31,7 +31,7 @@ class Path private (
    * @return a new path consisting of this path with p appended.
    */
   def +(p: Path) = {
-    new Path((this.graphPathElements ++ p.graphPathElements):_*)
+    new Path((this.pathElements ++ p.pathElements):_*)
   }
 }
 
@@ -61,7 +61,7 @@ object Path {
    * @param key graph item key to convert.
    * @return a Path
    */
-  implicit def graphItemKey2GraphPath(key: NodeKey): Path = {
+  implicit def nodeKey2Path(key: NodeKey): Path = {
     Path(key)
   }
 

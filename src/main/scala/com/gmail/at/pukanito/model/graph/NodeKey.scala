@@ -5,7 +5,7 @@ import scala.collection.Map
 import scala.collection.MapLike
 
 /**
- * Represents the (compound) key of a [[com.gmail.at.pukanito.model.graph.GraphItem]].
+ * Represents the (compound) key of a [[com.gmail.at.pukanito.model.graph.Node]].
  *
  * The key is implemented as a wrapper around Map[String, Any]
  *
@@ -15,22 +15,22 @@ class NodeKey private (
   elems: (String, Any)*
 ) extends Map[String, Any] with MapLike[String, Any, NodeKey] {
 
-  private val graphItemKeyElements = Map[String, Any](elems:_*)
+  private val nodeKeyElements = Map[String, Any](elems:_*)
 
   override def get(key: String): Option[Any] =
     if (key.isEmpty) None
-    else graphItemKeyElements get key
+    else nodeKeyElements get key
 
   override def +[B1 >: Any](kv: (String, B1)): NodeKey = {
-    new NodeKey((graphItemKeyElements + kv).toSeq:_*)
+    new NodeKey((nodeKeyElements + kv).toSeq:_*)
   }
 
   override def -(key: String): NodeKey = {
-    new NodeKey((graphItemKeyElements - key).toSeq:_*)
+    new NodeKey((nodeKeyElements - key).toSeq:_*)
   }
 
   override def iterator: Iterator[(String, Any)] = {
-    graphItemKeyElements.iterator
+    nodeKeyElements.iterator
   }
 
   override def stringPrefix: String = "NodeKey"
@@ -39,15 +39,15 @@ class NodeKey private (
 }
 
 /**
- * Helpers for creating GraphItemKeys.
+ * Helpers for creating NodeKeys.
  *
- * Creating graph item keys with a simple string value key
+ * Creating node keys with a simple string value key
  * will create a key that internally looks like: "!id!" -> "stringvalue":
  * {{{
  * val key = NodeKey("stringvalue")
  * }}}
  *
- * Creating graph item keys with compound keys:
+ * Creating node keys with compound keys:
  * {{{
  * val key = NodeKey("id1" -> val1 [ , "id2" -> val2, ... ] )
  * }}}
