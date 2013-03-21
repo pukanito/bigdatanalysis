@@ -267,6 +267,10 @@ class GraphRepositoryTest extends FunSpec with ShouldMatchers {
       intercept[RuntimeException] { repository.contains(graph.Path()) }
     }
 
+    it("should be possible to get the keys of the root items") (pending)
+
+    it("should be possible to get the keys of all items at a given path") (pending)
+
   }
 
 }
