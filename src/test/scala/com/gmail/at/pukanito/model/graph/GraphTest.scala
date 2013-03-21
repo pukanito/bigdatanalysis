@@ -9,6 +9,8 @@ class GraphTest extends FunSpec with ShouldMatchers {
 
     it("should be possible to add root nodes to a graph") (pending)
 
+    it("should be possible for a node to be at different locations in a graph without being duplicated") (pending)
+
     it("should not be possible for a node to be in two different graphs") (pending)
 
   }

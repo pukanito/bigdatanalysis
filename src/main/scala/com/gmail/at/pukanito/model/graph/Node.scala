@@ -47,6 +47,7 @@ trait Node[T <: Node[T]] {
 
   private var parentNodes: Set[T] = Set[T]()
   private[this] var childNodes: Map[NodeKey, T] = Map[NodeKey, T]()
+  private var container: Option[Graph] = None
 
   /**
    * Returns the key of a node. Should be immutable!
