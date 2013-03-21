@@ -1,11 +1,11 @@
 package com.gmail.at.pukanito.model.repository
 
-import com.gmail.at.pukanito.model.container.{GraphItem,GraphPath}
+import com.gmail.at.pukanito.model.graph.{Node,Path}
 
 /**
- * Trait for storing graph items.
+ * Trait for storing graphs.
  */
-trait GraphItemRepository[T <: GraphItem[T]] {
+trait GraphRepository[T <: Node[T]] {
 
   /**
    * Stores values.
@@ -21,7 +21,7 @@ trait GraphItemRepository[T <: GraphItem[T]] {
    * @param paths the path(s) of the item(s) to retrieve.
    * @throws NoSuchElementException when an item does not exist.
    */
-  def apply(paths: GraphPath*): Set[T]
+  def apply(paths: Path*): Set[T]
 
   /**
    * Returns graph Options belonging to the specified paths.
@@ -29,7 +29,7 @@ trait GraphItemRepository[T <: GraphItem[T]] {
    *
    * @param paths the path(s) of the item(s) to retrieve.
    */
-  def get(paths: GraphPath*): Set[Option[T]]
+  def get(paths: Path*): Set[Option[T]]
 
   /**
    * Check existence of values.
@@ -37,7 +37,7 @@ trait GraphItemRepository[T <: GraphItem[T]] {
    * @param paths the path(s) of the item(s) to check.
    * @throws RuntimeException when the graph path is empty.
    */
-  def contains(paths: GraphPath*): Map[GraphPath, Boolean]
+  def contains(paths: Path*): Map[Path, Boolean]
 
   /**
    * Delete values.
@@ -45,6 +45,6 @@ trait GraphItemRepository[T <: GraphItem[T]] {
    * @param paths the path(s) of the item(s) to delete.
    * @throws RuntimeException when the graph path is empty.
    */
-  def delete(paths: GraphPath*)
+  def delete(paths: Path*)
 
 }

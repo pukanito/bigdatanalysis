@@ -1,7 +1,5 @@
 package com.gmail.at.pukanito.model.attributes
 
-import com.gmail.at.pukanito.model.container.{GraphItem,GraphItemKey}
-
 /**
  * An attribute definition describes a data structure that can be used to store a value.
  *

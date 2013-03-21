@@ -2,12 +2,12 @@ package com.gmail.at.pukanito.model.repository
 
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
-import com.gmail.at.pukanito.model.container.{GraphItem,GraphPath}
+import com.gmail.at.pukanito.model.graph.{Node,Path}
 import com.gmail.at.pukanito.controller.config.Configuration
 
 class GraphItemRepositoryTest extends FunSpec with ShouldMatchers {
 
-  private class TestSimpleGraphItem(val k: String, var v: Int) extends GraphItem[TestSimpleGraphItem] {
+  private class TestSimpleGraphItem(val k: String, var v: Int) extends Node[TestSimpleGraphItem] {
     override def key = k
 
     def copy: TestSimpleGraphItem = new TestSimpleGraphItem(k, v)
@@ -32,9 +32,9 @@ class GraphItemRepositoryTest extends FunSpec with ShouldMatchers {
   }
 
   private object TestRepository {
-    def getNewRepository: GraphItemRepository[TestSimpleGraphItem] = {
+    def getNewRepository: GraphRepository[TestSimpleGraphItem] = {
       new Configuration("configuration") getString("repository", "test") match {
-        case "M" => new MemoryMapGraphItemRepository[TestSimpleGraphItem]
+        case "M" => new MemoryMapGraphRepository[TestSimpleGraphItem]
         // Will throw match error exception in other cases.
       }
     }
@@ -49,8 +49,8 @@ class GraphItemRepositoryTest extends FunSpec with ShouldMatchers {
       repository.put(t1, t2)
       repository(t1.key).head should equal (new TestSimpleGraphItem("A", 1))
       repository(t2.key).head should equal (new TestSimpleGraphItem("B", 2))
-      intercept[NoSuchElementException] { repository(t1.key, t2.key, GraphPath("C")) }
-      repository.get(t1.key, GraphPath("C")) should equal (Set(Some(t1), None))
+      intercept[NoSuchElementException] { repository(t1.key, t2.key, Path("C")) }
+      repository.get(t1.key, Path("C")) should equal (Set(Some(t1), None))
     }
 
     it("should be possible to check if items exist in the repository") {
@@ -60,7 +60,7 @@ class GraphItemRepositoryTest extends FunSpec with ShouldMatchers {
       val t3 = new TestSimpleGraphItem("C", 3)
       repository.put(t1, t2)
       repository.contains(t1.key, t3.key) should equal (
-        Map(GraphPath(t1.key) -> true, GraphPath(t3.key) -> false))
+        Map(Path(t1.key) -> true, Path(t3.key) -> false))
     }
 
     it("should be possible to replace items in the repository") {
@@ -82,10 +82,10 @@ class GraphItemRepositoryTest extends FunSpec with ShouldMatchers {
       val t3 = new TestSimpleGraphItem("C", 3)
       repository.put(t1, t2, t3)
       repository.contains(t1.key, t2.key, t3.key) should equal (
-        Map(GraphPath(t1.key) -> true, GraphPath(t2.key) -> true, GraphPath(t3.key) -> true))
+        Map(Path(t1.key) -> true, Path(t2.key) -> true, Path(t3.key) -> true))
       repository.delete(t2.key, t1.key)
       repository.contains(t1.key, t2.key, t3.key) should equal (
-        Map(GraphPath(t1.key) -> false, GraphPath(t2.key) -> false, GraphPath(t3.key) -> true))
+        Map(Path(t1.key) -> false, Path(t2.key) -> false, Path(t3.key) -> true))
     }
 
     it("should be possible to create and check an item by its path") {
@@ -94,16 +94,16 @@ class GraphItemRepositoryTest extends FunSpec with ShouldMatchers {
       val t2 = new TestSimpleGraphItem("B", 2)
       val t3 = new TestSimpleGraphItem("C", 3)
       repository.put(t1)
-      repository.contains(t1.key) should equal (Map(GraphPath(t1.key) -> true))
+      repository.contains(t1.key) should equal (Map(Path(t1.key) -> true))
       t1 += t2
       repository.put(t2)
-      repository.contains(t1.key) should equal (Map(GraphPath(t1.key) -> true))
-      repository.contains(t2.key) should equal (Map(GraphPath(t2.key) -> false))
-      val p2 = GraphPath(t1.key, t2.key)
+      repository.contains(t1.key) should equal (Map(Path(t1.key) -> true))
+      repository.contains(t2.key) should equal (Map(Path(t2.key) -> false))
+      val p2 = Path(t1.key, t2.key)
       repository.contains(p2) should equal (Map(p2 -> true))
       t2 += t3
       repository.put(t3)
-      val p3 = GraphPath(t1.key, t2.key, t3.key)
+      val p3 = Path(t1.key, t2.key, t3.key)
       repository.contains(p3) should equal (Map(p3 -> true))
     }
 
@@ -130,7 +130,7 @@ class GraphItemRepositoryTest extends FunSpec with ShouldMatchers {
       repository.put(t2)
       t2.v = 3
       repository.put(t2)
-      val p = GraphPath(t1.key, t2.key)
+      val p = Path(t1.key, t2.key)
       repository.contains(p) should equal (Map(p -> true))
       repository(p).head should equal (t2a)
     }
@@ -150,7 +150,7 @@ class GraphItemRepositoryTest extends FunSpec with ShouldMatchers {
       repository(t1.key).head should not equal (r1)
       repository.delete(t2a.path)
       repository(t1.key).head should equal (r1)
-      repository.get(GraphPath(t1.key, t2a.key, t3.key)).head should equal (None)
+      repository.get(Path(t1.key, t2a.key, t3.key)).head should equal (None)
     }
 
     it("should be possible to retrieve a graph by its path") {
@@ -180,7 +180,7 @@ class GraphItemRepositoryTest extends FunSpec with ShouldMatchers {
       r1 += r2b
       r2a += r3
       repository(t1.key).head should equal (r1)
-      repository(GraphPath(t1.key, t2a.key)).head should equal (r2a)
+      repository(Path(t1.key, t2a.key)).head should equal (r2a)
     }
 
     it("should throw an exception or return None when a non existing path is retreived") {
@@ -196,9 +196,9 @@ class GraphItemRepositoryTest extends FunSpec with ShouldMatchers {
       repository.put(t1)
       intercept[NoSuchElementException] { repository(t1.key, t2c.key) }
       repository.get(t2a.key).head should equal (None)
-      repository.get(GraphPath(t1.key, t2a.key)).head should not equal (None)
-      repository.get(GraphPath(t1.key, t2b.key)).head should not equal (None)
-      repository.get(GraphPath(t1.key, t2c.key)).head should equal (None)
+      repository.get(Path(t1.key, t2a.key)).head should not equal (None)
+      repository.get(Path(t1.key, t2b.key)).head should not equal (None)
+      repository.get(Path(t1.key, t2c.key)).head should equal (None)
     }
 
     it("should be possible to retrieve all graphs with a specific sub path, even from the root") {
@@ -259,12 +259,12 @@ class GraphItemRepositoryTest extends FunSpec with ShouldMatchers {
 
     it("should throw an exception when deleting an item without path") {
       val repository = TestRepository.getNewRepository
-      intercept[RuntimeException] { repository.delete(GraphPath()) }
+      intercept[RuntimeException] { repository.delete(Path()) }
     }
 
     it("should throw an exception when checking an item without path") {
       val repository = TestRepository.getNewRepository
-      intercept[RuntimeException] { repository.contains(GraphPath()) }
+      intercept[RuntimeException] { repository.contains(Path()) }
     }
 
   }

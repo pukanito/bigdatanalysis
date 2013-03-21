@@ -1,23 +1,20 @@
 package com.gmail.at.pukanito.controller.bigdataset
 
-import com.gmail.at.pukanito.model.attributes.AttributeDefinitionNode
-import com.gmail.at.pukanito.model.repository.GraphItemRepository
-import com.gmail.at.pukanito.model.container.GraphItemKey
-import com.gmail.at.pukanito.model.attributes.AttributeModel
-import com.gmail.at.pukanito.model.container.GraphPath
+import com.gmail.at.pukanito.model.attributes.{AttributeDefinitionNode,AttributeModel}
+import com.gmail.at.pukanito.model.repository.GraphRepository
 
 
 /**
- * Big data model is an attribute definition nodes hierarchy stored in a
- * graph item repository. Listeners can be attached to specific events:
+ * Big data model is an attribute definition graph stored in a
+ * graph repository. Listeners can be attached to specific events:
  *
  * - load
  * - store
  */
 class BigDataModel (
-  val graphItemRepository: GraphItemRepository[AttributeDefinitionNode]
+  val graphRepository: GraphRepository[AttributeDefinitionNode]
 ) extends AttributeModel {
-  def load = graphItemRepository.get()
+  def load = graphRepository.get()
 
-  def store = graphItemRepository.put(rootAttributes.toSeq:_*)
+  def store = graphRepository.put(rootAttributes.toSeq:_*)
 }
