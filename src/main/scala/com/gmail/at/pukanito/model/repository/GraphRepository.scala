@@ -8,23 +8,23 @@ import com.gmail.at.pukanito.model.graph.{Node,Path}
 trait GraphRepository[T <: Node[T]] {
 
   /**
-   * Stores values.
+   * Stores nodes (including their children).
    *
-   * @param value the value(s) to store.
+   * @param node the value(s) to store.
    */
-  def put(value: T*)
+  def put(node: T*)
 
   /**
-   * Returns graphs belonging to the specified paths.
-   * Specifying an empty path returns all graphs from the root.
+   * Returns nodes (including their children) belonging to the specified paths.
+   * Specifying an empty path returns all nodes from the root.
    *
    * @param paths the path(s) of the item(s) to retrieve.
-   * @throws NoSuchElementException when an item does not exist.
+   * @throws NoSuchElementException when an item does not exist on a specified path.
    */
   def apply(paths: Path*): Set[T]
 
   /**
-   * Returns graph Options belonging to the specified paths.
+   * Returns node Options belonging to the specified paths.
    * Specifying an empty path returns all graphs from the root.
    *
    * @param paths the path(s) of the item(s) to retrieve.

@@ -1,6 +1,6 @@
 package com.gmail.at.pukanito.model.attributes
 
-import com.gmail.at.pukanito.model.graph.Node
+import com.gmail.at.pukanito.model.graph
 
 /**
  * Attribute definitions that can be put in an attribute model.
@@ -12,7 +12,7 @@ import com.gmail.at.pukanito.model.graph.Node
 class AttributeDefinitionNode (
   attributeId: AttributeIdentifier,
   val attributeValueKeyIds: List[AttributeIdentifier] = Nil
-) extends AttributeDefinition(attributeId) with Node[AttributeDefinitionNode] {
+) extends AttributeDefinition(attributeId) with graph.Node[AttributeDefinitionNode] {
 
   /**
    * The key of an attribute definition: its attribute id.

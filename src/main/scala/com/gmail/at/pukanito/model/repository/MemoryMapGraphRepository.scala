@@ -3,7 +3,7 @@ package com.gmail.at.pukanito.model.repository
 import com.gmail.at.pukanito.model.graph.{Node,Path,NodeKey}
 
 /**
- * Simple in memory storage.
+ * Simple in memory storage for graphs.
  */
 class MemoryMapGraphRepository[T <: Node[T]] extends GraphRepository[T] {
 
@@ -11,7 +11,7 @@ class MemoryMapGraphRepository[T <: Node[T]] extends GraphRepository[T] {
   private var children: Map[NodeKey, MemoryMapGraphRepository[T]] = Map.empty
 
   /**
-   * Returns the MemoryMapGraphRepository[T] that belongs to children(key)
+   * Returns the MemoryMapGraphRepository[T] that belongs to children(key).
    *
    * Returns an existing repository or creates a new one and adds it to children.
    *
@@ -31,7 +31,7 @@ class MemoryMapGraphRepository[T <: Node[T]] extends GraphRepository[T] {
 
   private def put(path: Path, value: T): Unit = {
     path match {
-      case Path() => throw new RuntimeException("Cannot store in MemoryMapGraphItemStore without a path")
+      case Path() => throw new RuntimeException("Cannot store in MemoryMapGraphRepository without a path")
       case Path(key) => leafs += key -> value.copy; putChildren(value)
       case Path(headKey, tail @ _*) => getOrCreateChildrenRepository(headKey).put(Path(tail:_*), value)
     }

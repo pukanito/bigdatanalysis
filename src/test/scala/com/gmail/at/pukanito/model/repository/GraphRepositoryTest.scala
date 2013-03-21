@@ -5,16 +5,16 @@ import org.scalatest.matchers.ShouldMatchers
 import com.gmail.at.pukanito.model.graph.{Node,Path}
 import com.gmail.at.pukanito.controller.config.Configuration
 
-class GraphItemRepositoryTest extends FunSpec with ShouldMatchers {
+class GraphRepositoryTest extends FunSpec with ShouldMatchers {
 
-  private class TestSimpleGraphItem(val k: String, var v: Int) extends Node[TestSimpleGraphItem] {
+  private class TestSimpleNode(val k: String, var v: Int) extends Node[TestSimpleNode] {
     override def key = k
 
-    def copy: TestSimpleGraphItem = new TestSimpleGraphItem(k, v)
+    def copy: TestSimpleNode = new TestSimpleNode(k, v)
 
     override def equals(other: Any): Boolean = {
       other match {
-        case that: TestSimpleGraphItem =>
+        case that: TestSimpleNode =>
           (that canEqual this) && this.children == that.children &&
           that.k == this.k && that.v == this.v
         case _ => false
@@ -23,63 +23,63 @@ class GraphItemRepositoryTest extends FunSpec with ShouldMatchers {
 
     override def hashCode: Int = 41 * (key.hashCode + (41 + v)) //+super.hashCode
 
-    def canEqual(other: Any): Boolean = other.isInstanceOf[TestSimpleGraphItem]
+    def canEqual(other: Any): Boolean = other.isInstanceOf[TestSimpleNode]
 
     override def toString: String = {
-      "TestSimpleGraphItem(" + key + "," + v + "," + children.toString + ")"
+      "TestSimpleNode(" + key + "," + v + "," + children.toString + ")"
     }
 
   }
 
   private object TestRepository {
-    def getNewRepository: GraphRepository[TestSimpleGraphItem] = {
+    def getNewRepository: GraphRepository[TestSimpleNode] = {
       new Configuration("configuration") getString("repository", "test") match {
-        case "M" => new MemoryMapGraphRepository[TestSimpleGraphItem]
+        case "M" => new MemoryMapGraphRepository[TestSimpleNode]
         // Will throw match error exception in other cases.
       }
     }
   }
 
-  describe("GraphItemRepository") {
+  describe("GraphRepository") {
 
-    it("should be possible to add and retrieve items to/from the repository") {
+    it("should be possible to add and retrieve nodes to/from the repository") {
       val repository = TestRepository.getNewRepository
-      val t1 = new TestSimpleGraphItem("A", 1)
-      val t2 = new TestSimpleGraphItem("B", 2)
+      val t1 = new TestSimpleNode("A", 1)
+      val t2 = new TestSimpleNode("B", 2)
       repository.put(t1, t2)
-      repository(t1.key).head should equal (new TestSimpleGraphItem("A", 1))
-      repository(t2.key).head should equal (new TestSimpleGraphItem("B", 2))
+      repository(t1.key).head should equal (new TestSimpleNode("A", 1))
+      repository(t2.key).head should equal (new TestSimpleNode("B", 2))
       intercept[NoSuchElementException] { repository(t1.key, t2.key, Path("C")) }
       repository.get(t1.key, Path("C")) should equal (Set(Some(t1), None))
     }
 
-    it("should be possible to check if items exist in the repository") {
+    it("should be possible to check if nodes exist in the repository") {
       val repository = TestRepository.getNewRepository
-      val t1 = new TestSimpleGraphItem("A", 1)
-      val t2 = new TestSimpleGraphItem("B", 2)
-      val t3 = new TestSimpleGraphItem("C", 3)
+      val t1 = new TestSimpleNode("A", 1)
+      val t2 = new TestSimpleNode("B", 2)
+      val t3 = new TestSimpleNode("C", 3)
       repository.put(t1, t2)
       repository.contains(t1.key, t3.key) should equal (
         Map(Path(t1.key) -> true, Path(t3.key) -> false))
     }
 
-    it("should be possible to replace items in the repository") {
+    it("should be possible to replace nodes in the repository") {
       val repository = TestRepository.getNewRepository
-      val t1 = new TestSimpleGraphItem("A", 1)
-      val t2 = new TestSimpleGraphItem("B", 2)
-      val t3 = new TestSimpleGraphItem("A", 3)
+      val t1 = new TestSimpleNode("A", 1)
+      val t2 = new TestSimpleNode("B", 2)
+      val t3 = new TestSimpleNode("A", 3)
       repository.put(t1, t2)
       repository(t1.key).head should equal (t1)
       repository(t2.key).head should equal (t2)
       repository.put(t3)
-      repository(t1.key).head should equal (new TestSimpleGraphItem("A", 3))
+      repository(t1.key).head should equal (new TestSimpleNode("A", 3))
     }
 
-    it("should be possible to delete items from the repository") {
+    it("should be possible to delete nodes from the repository") {
       val repository = TestRepository.getNewRepository
-      val t1 = new TestSimpleGraphItem("A", 1)
-      val t2 = new TestSimpleGraphItem("B", 2)
-      val t3 = new TestSimpleGraphItem("C", 3)
+      val t1 = new TestSimpleNode("A", 1)
+      val t2 = new TestSimpleNode("B", 2)
+      val t3 = new TestSimpleNode("C", 3)
       repository.put(t1, t2, t3)
       repository.contains(t1.key, t2.key, t3.key) should equal (
         Map(Path(t1.key) -> true, Path(t2.key) -> true, Path(t3.key) -> true))
@@ -88,11 +88,11 @@ class GraphItemRepositoryTest extends FunSpec with ShouldMatchers {
         Map(Path(t1.key) -> false, Path(t2.key) -> false, Path(t3.key) -> true))
     }
 
-    it("should be possible to create and check an item by its path") {
+    it("should be possible to create and check a node by its path") {
       val repository = TestRepository.getNewRepository
-      val t1 = new TestSimpleGraphItem("A", 1)
-      val t2 = new TestSimpleGraphItem("B", 2)
-      val t3 = new TestSimpleGraphItem("C", 3)
+      val t1 = new TestSimpleNode("A", 1)
+      val t2 = new TestSimpleNode("B", 2)
+      val t3 = new TestSimpleNode("C", 3)
       repository.put(t1)
       repository.contains(t1.key) should equal (Map(Path(t1.key) -> true))
       t1 += t2
@@ -107,12 +107,12 @@ class GraphItemRepositoryTest extends FunSpec with ShouldMatchers {
       repository.contains(p3) should equal (Map(p3 -> true))
     }
 
-    it("should be possible to create and check an graph by its path") {
+    it("should be possible to create and check a graph by its path") {
       val repository = TestRepository.getNewRepository
-      val t1 = new TestSimpleGraphItem("A", 10)
-      val t2a = new TestSimpleGraphItem("Ba", 20)
-      val t2b = new TestSimpleGraphItem("Bb", 20)
-      val t3 = new TestSimpleGraphItem("C", 30)
+      val t1 = new TestSimpleNode("A", 10)
+      val t2a = new TestSimpleNode("Ba", 20)
+      val t2b = new TestSimpleNode("Bb", 20)
+      val t3 = new TestSimpleNode("C", 30)
       t1 += t2b
       t1 += t2a
       t2a += t3
@@ -120,11 +120,11 @@ class GraphItemRepositoryTest extends FunSpec with ShouldMatchers {
       repository(t1.key).head should equal (t1)
     }
 
-    it("should be possible to modify an item by its path") {
+    it("should be possible to modify a node by its path") {
       val repository = TestRepository.getNewRepository
-      val t1 = new TestSimpleGraphItem("A", 1)
-      val t2 = new TestSimpleGraphItem("B", 2)
-      val t2a = new TestSimpleGraphItem("B", 3)
+      val t1 = new TestSimpleNode("A", 1)
+      val t2 = new TestSimpleNode("B", 2)
+      val t2a = new TestSimpleNode("B", 3)
       repository.put(t1)
       t1 += t2
       repository.put(t2)
@@ -135,12 +135,12 @@ class GraphItemRepositoryTest extends FunSpec with ShouldMatchers {
       repository(p).head should equal (t2a)
     }
 
-    it("should be possible to delete an item and all its children (a graph) by its path") {
+    it("should be possible to delete a node and all its children (a graph) by its path") {
       val repository = TestRepository.getNewRepository
-      val t1 = new TestSimpleGraphItem("A", 10)
-      val t2a = new TestSimpleGraphItem("Ba", 20)
-      val t2b = new TestSimpleGraphItem("Bb", 20)
-      val t3 = new TestSimpleGraphItem("C", 30)
+      val t1 = new TestSimpleNode("A", 10)
+      val t2a = new TestSimpleNode("Ba", 20)
+      val t2b = new TestSimpleNode("Bb", 20)
+      val t3 = new TestSimpleNode("C", 30)
       t1 += t2b
       val r1 = t1.copyGraph
       r1 should equal (t1)
@@ -155,10 +155,10 @@ class GraphItemRepositoryTest extends FunSpec with ShouldMatchers {
 
     it("should be possible to retrieve a graph by its path") {
       val repository = TestRepository.getNewRepository
-      val t1 = new TestSimpleGraphItem("A", 10)
-      val t2a = new TestSimpleGraphItem("Ba", 20)
-      val t2b = new TestSimpleGraphItem("Bb", 20)
-      val t3 = new TestSimpleGraphItem("C", 30)
+      val t1 = new TestSimpleNode("A", 10)
+      val t2a = new TestSimpleNode("Ba", 20)
+      val t2b = new TestSimpleNode("Bb", 20)
+      val t3 = new TestSimpleNode("C", 30)
       repository.put(t1)
       t1 += t2a
       repository(t1.key).head should not equal (t1)
@@ -172,10 +172,10 @@ class GraphItemRepositoryTest extends FunSpec with ShouldMatchers {
       repository(t1.key).head should not equal (t1)
       repository.put(t3)
       repository(t1.key).head should equal (t1)
-      val r1 = new TestSimpleGraphItem("A", 10)
-      val r2a = new TestSimpleGraphItem("Ba", 20)
-      val r2b = new TestSimpleGraphItem("Bb", 20)
-      val r3 = new TestSimpleGraphItem("C", 30)
+      val r1 = new TestSimpleNode("A", 10)
+      val r2a = new TestSimpleNode("Ba", 20)
+      val r2b = new TestSimpleNode("Bb", 20)
+      val r3 = new TestSimpleNode("C", 30)
       r1 += r2a
       r1 += r2b
       r2a += r3
@@ -185,11 +185,11 @@ class GraphItemRepositoryTest extends FunSpec with ShouldMatchers {
 
     it("should throw an exception or return None when a non existing path is retreived") {
       val repository = TestRepository.getNewRepository
-      val t1 = new TestSimpleGraphItem("A", 10)
-      val t2a = new TestSimpleGraphItem("Ba", 20)
-      val t2b = new TestSimpleGraphItem("Bb", 20)
-      val t2c = new TestSimpleGraphItem("Bc", 30)
-      val t3 = new TestSimpleGraphItem("C", 30)
+      val t1 = new TestSimpleNode("A", 10)
+      val t2a = new TestSimpleNode("Ba", 20)
+      val t2b = new TestSimpleNode("Bb", 20)
+      val t2c = new TestSimpleNode("Bc", 30)
+      val t3 = new TestSimpleNode("C", 30)
       t1 += t2b
       t1 += t2a
       t2a += t3
@@ -203,12 +203,12 @@ class GraphItemRepositoryTest extends FunSpec with ShouldMatchers {
 
     it("should be possible to retrieve all graphs with a specific sub path, even from the root") {
       val repository = TestRepository.getNewRepository
-      val t1 = new TestSimpleGraphItem("A", 10)
-      val t2a = new TestSimpleGraphItem("Ba", 20)
-      val t2b = new TestSimpleGraphItem("Bb", 20)
-      val t2c = new TestSimpleGraphItem("Bc", 30)
-      val t3 = new TestSimpleGraphItem("C", 30)
-      val t4 = new TestSimpleGraphItem("D", 40)
+      val t1 = new TestSimpleNode("A", 10)
+      val t2a = new TestSimpleNode("Ba", 20)
+      val t2b = new TestSimpleNode("Bb", 20)
+      val t2c = new TestSimpleNode("Bc", 30)
+      val t3 = new TestSimpleNode("C", 30)
+      val t4 = new TestSimpleNode("D", 40)
       t1 += t2b
       t1 += t2a
       t1 += t2c
@@ -223,10 +223,10 @@ class GraphItemRepositoryTest extends FunSpec with ShouldMatchers {
 
     it("should be possible to create a graph by its path") {
       val repository = TestRepository.getNewRepository
-      val t1 = new TestSimpleGraphItem("A", 10)
-      val t2a = new TestSimpleGraphItem("Ba", 20)
-      val t2b = new TestSimpleGraphItem("Bb", 20)
-      val t3 = new TestSimpleGraphItem("C", 30)
+      val t1 = new TestSimpleNode("A", 10)
+      val t2a = new TestSimpleNode("Ba", 20)
+      val t2b = new TestSimpleNode("Bb", 20)
+      val t3 = new TestSimpleNode("C", 30)
       repository.put(t1)
       t1 += t2b
       t1 += t2a
@@ -238,18 +238,18 @@ class GraphItemRepositoryTest extends FunSpec with ShouldMatchers {
 
     it("should be possible to modify a graph by its path") {
       val repository = TestRepository.getNewRepository
-      val t1 = new TestSimpleGraphItem("A", 10)
-      val t2a = new TestSimpleGraphItem("Ba", 20)
-      val t2b = new TestSimpleGraphItem("Bb", 20)
-      val t3 = new TestSimpleGraphItem("C", 30)
+      val t1 = new TestSimpleNode("A", 10)
+      val t2a = new TestSimpleNode("Ba", 20)
+      val t2b = new TestSimpleNode("Bb", 20)
+      val t3 = new TestSimpleNode("C", 30)
       t1 += t2a
       t1 += t2b
       t2a += t3
       repository.put(t1)
-      val r1 = new TestSimpleGraphItem("A", 10)
-      val r2a = new TestSimpleGraphItem("Ba", 40)
-      val r2b = new TestSimpleGraphItem("Bb", 20)
-      val r3 = new TestSimpleGraphItem("C", 30)
+      val r1 = new TestSimpleNode("A", 10)
+      val r2a = new TestSimpleNode("Ba", 40)
+      val r2b = new TestSimpleNode("Bb", 20)
+      val r3 = new TestSimpleNode("C", 30)
       r1 += r2a
       repository.put(r1)
       r1 += r2b

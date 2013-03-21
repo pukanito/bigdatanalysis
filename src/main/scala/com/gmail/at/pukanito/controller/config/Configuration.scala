@@ -5,10 +5,10 @@ import com.typesafe.config._
 /**
  * Wrapper for https://github.com/typesafehub/config.
  *
- * Get configuration items for a specific environment and specification, or fall back
- * to a lower prioritized configuration value if the specific one is not defined.
+ * Get configuration values for a specific environment and specification, or fall back
+ * to lower prioritized configuration values if the specific ones are not defined.
  *
- * With environment and specification given the path priorization order will be:
+ * With environment and specification given the path prioritization will be:
  *
    - environment.specification.path
    - specification.path
@@ -30,7 +30,7 @@ import com.typesafe.config._
    - path
  *
  * The configuration value that is defined at the highest prioritized
- * path priorization will be returned.
+ * path will be returned.
  *
  * This allows for creating a default configuration, environment specific
  * configuration settings (for example development, test, production) and
@@ -62,7 +62,7 @@ import com.typesafe.config._
  *
  * Retrieving path 'configuration.setting2' for environment 'test'
  * and specification 'platform' would result in X. It is not defined
- * for the environment and specification so falls back to a lower
+ * for the environment and/or specification so falls back to a lower
  * prioritized path.
  *
  * @constructor Open a configuration for a specific environment.

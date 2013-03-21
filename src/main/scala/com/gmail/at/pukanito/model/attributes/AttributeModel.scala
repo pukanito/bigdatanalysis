@@ -10,8 +10,8 @@ class DuplicateAttributeDefinitionException(value: AttributeDefinition)
   extends RuntimeException(s"Duplicate attribute definition: ${value.attributeId}") {}
 
 /**
- * Trait for constructing an attribute definition nodes hierarchy with a special DSL.
- * The attribute definition nodes hierarchy is the attribute model.
+ * Trait for constructing an attribute definition graph with a special DSL.
+ * The attribute definition graph is the attribute model.
  *
  * To create a model:
  * {{{

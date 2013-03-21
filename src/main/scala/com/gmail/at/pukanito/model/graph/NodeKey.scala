@@ -57,7 +57,7 @@ object NodeKey extends {
   import scala.language.implicitConversions
 
   // When using non-compound keys a standard String can be used in the map.
-  private def simpleGraphItemId = "!id!"
+  private def simpleNodeId = "!id!"
 
   /**
    * Helps to convert String to a NodeKey (for implicit conversion).
@@ -65,8 +65,8 @@ object NodeKey extends {
    * @param key string to use as simple key.
    * @return a NodeKey
    */
-  implicit def string2GraphItemKey(key: String): NodeKey = {
-    NodeKey(simpleGraphItemId -> key)
+  implicit def string2NodeKey(key: String): NodeKey = {
+    NodeKey(simpleNodeId -> key)
   }
 
   /**
@@ -75,7 +75,7 @@ object NodeKey extends {
    * @param key tuple to use as a key.
    * @return a NodeKey
    */
-  implicit def tuple2GraphItemKey(key: (String, Any)): NodeKey = {
+  implicit def tuple2NodeKey(key: (String, Any)): NodeKey = {
     NodeKey(key._1 -> key._2)
   }
 

@@ -3,7 +3,7 @@ package com.gmail.at.pukanito.model.graph
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
-class GraphPathTest extends FunSpec with ShouldMatchers  {
+class PathTest extends FunSpec with ShouldMatchers  {
 
   describe("Path") {
 
@@ -53,8 +53,8 @@ class GraphPathTest extends FunSpec with ShouldMatchers  {
     }
 
     it("should create a special Path when using implicit conversion from String to NodeKey") {
-      import NodeKey.string2GraphItemKey
-      Path("A", "B") should equal (Path(string2GraphItemKey("A"), string2GraphItemKey("B")))
+      import NodeKey.string2NodeKey
+      Path("A", "B") should equal (Path(string2NodeKey("A"), string2NodeKey("B")))
     }
 
     it("should be possible to extract a Path to GraphItemKeys in a match expression") {
