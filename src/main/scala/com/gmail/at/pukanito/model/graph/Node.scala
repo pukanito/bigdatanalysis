@@ -141,7 +141,13 @@ trait Node[T <: Node[T]] {
   def +=(childNode: T) = {
     if (testCycleExistsInParents(List(this), childNode)) throw new GraphCycleException(childNode)
     if (childNodes contains childNode.key) throw new DuplicateChildNodeException(childNode)
-    childNode.setContainer(containerOption)
+    childNode.container match {
+      case None => childNode.setContainer(containerOption)
+      case Some(c) => containerOption match {
+        case None => setContainer(Some(c))
+        case Some(g) => if (c ne g) 1 // Need copy
+      }
+    }
     childNodes += (childNode.key -> childNode)
     childNode.parentNodes += this
   }
