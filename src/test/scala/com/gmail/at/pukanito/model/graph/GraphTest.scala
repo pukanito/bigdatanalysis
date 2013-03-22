@@ -11,7 +11,7 @@ class GraphTest extends FunSpec with ShouldMatchers {
 
     it("should be possible for a node to be at different locations in a graph without being duplicated") (pending)
 
-    it("should not be possible for a node to be in two different graphs") (pending)
+    it("should be possible for a node to be in two different graphs, parents and children will be different in each graph") (pending)
 
   }
 
