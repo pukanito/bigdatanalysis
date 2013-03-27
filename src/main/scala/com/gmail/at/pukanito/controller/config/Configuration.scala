@@ -74,45 +74,44 @@ class Configuration (
   private val conf = ConfigFactory.load
 
   /**
-   * Returns a list consisting of:
-   * - prefix.path (if prefix is not empty string)
-   * - path
-   */
-  private def explodePathWithPrefix(path: String, prefix: String): List[String] = {
-    (if (prefix.isEmpty) List() else List(prefix + "." + path)) ++  List(path)
-  }
-
-  /**
    * Returns the highest prioritized path that can be created from 'environment',
-   * 'spec' and 'path' and has a configuration value defined, or None.
+   * 'specification' and 'path' and has a configuration value defined, or None.
    *
    * @param path Base path to the configuration value.
-   * @param spec Optional specialized value for the configuration value.
+   * @param specification Optional specialized value for the configuration value.
    */
-  def whichPath(path: String, spec: String = ""): Option[String] = {
-    explodePathWithPrefix(path, spec).map((p) =>
-      explodePathWithPrefix(p, environment))
-    .flatten.find(conf.hasPath(_))
+  def whichPath(path: String, specification: String = ""): Option[String] = {
+    /**
+     * Returns a list consisting of:
+     * - prefix.path (if prefix is not empty string)
+     * - path
+     */
+    def explodePathWithPrefix(path: String, environment: String): List[String] = {
+      (if (environment.isEmpty) List() else List(environment + "." + path)) ++  List(path)
+    }
+    explodePathWithPrefix(path, specification)
+      .map((p) => explodePathWithPrefix(p, environment))
+      .flatten.find(conf.hasPath(_))
   }
 
   /**
    * Returns true when a path has a configuration value defined.
    *
    * @param path Base path to the configuration value.
-   * @param spec Optional specialized value for the configuration value.
+   * @param specification Optional specialized value for the configuration value.
    */
-  def hasPath(path: String, spec: String = ""): Boolean = {
-    ! whichPath(path, spec).isEmpty
+  def hasPath(path: String, specification: String = ""): Boolean = {
+    ! whichPath(path, specification).isEmpty
   }
 
   /**
    * Returns the string value of a path.
    *
    * @param path Base path to the configuration value.
-   * @param spec Optional specialized value for the configuration value.
+   * @param specification Optional specialized value for the configuration value.
    */
-  def getString(path: String, spec: String = ""): String = {
-    whichPath(path, spec) match {
+  def getString(path: String, specification: String = ""): String = {
+    whichPath(path, specification) match {
       case Some(p) => conf.getString(p)
       case None => ""
     }
