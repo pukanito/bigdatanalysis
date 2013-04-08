@@ -7,4 +7,14 @@ package com.gmail.at.pukanito.model.graph
  */
 class Graph[T] {
 
+  /**
+   * All the nodes in the graph.
+   */
+  private var nodes: Set[T] = Set()
+
+  /**
+   * All the edges in the graph.
+   */
+  private var edges: Set[Edge[T]] = Set()
+
 }
