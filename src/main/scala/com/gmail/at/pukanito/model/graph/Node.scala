@@ -47,7 +47,7 @@ trait Node[T <: Node[T]] {
 
   private var parentNodes: Set[T] = Set[T]()
   private[this] var childNodes: Map[NodeKey, T] = Map[NodeKey, T]()
-  private[this] var containerOption: Option[Graph] = None
+  private[this] var containerOption: Option[Graph[T]] = None
 
   /**
    * Returns the key of a node. Should be immutable!
@@ -65,7 +65,7 @@ trait Node[T <: Node[T]] {
    * @param graph the graph to assign to this node.
    * @throws RuntimeException when container is already assigned to something else.
    */
-  private def setContainer(graph: Option[Graph]):Unit = {
+  private def setContainer(graph: Option[Graph[T]]):Unit = {
     if (graph != None) containerOption match {
       case None => containerOption = graph;
                    childNodes.foreach { case (_,node) => node.setContainer(graph) }
