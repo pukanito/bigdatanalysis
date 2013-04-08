@@ -17,21 +17,13 @@ class NodeKey private (
 
   private val nodeKeyElements = Map[String, Any](elems:_*)
 
-  override def get(key: String): Option[Any] =
-    if (key.isEmpty) None
-    else nodeKeyElements get key
+  override def get(key: String): Option[Any] = if (key.isEmpty) None else nodeKeyElements get key
 
-  override def +[B1 >: Any](kv: (String, B1)): NodeKey = {
-    new NodeKey((nodeKeyElements + kv).toSeq:_*)
-  }
+  override def +[B1 >: Any](kv: (String, B1)): NodeKey = new NodeKey((nodeKeyElements + kv).toSeq:_*)
 
-  override def -(key: String): NodeKey = {
-    new NodeKey((nodeKeyElements - key).toSeq:_*)
-  }
+  override def -(key: String): NodeKey = new NodeKey((nodeKeyElements - key).toSeq:_*)
 
-  override def iterator: Iterator[(String, Any)] = {
-    nodeKeyElements.iterator
-  }
+  override def iterator: Iterator[(String, Any)] = nodeKeyElements.iterator
 
   override def stringPrefix: String = "NodeKey"
 
@@ -65,9 +57,7 @@ object NodeKey extends {
    * @param key string to use as simple key.
    * @return a NodeKey
    */
-  implicit def string2NodeKey(key: String): NodeKey = {
-    NodeKey(simpleNodeId -> key)
-  }
+  implicit def string2NodeKey(key: String): NodeKey = NodeKey(simpleNodeId -> key)
 
   /**
    * Helper to convert Tuple to a NodeKey (for implicit conversion).
@@ -75,17 +65,13 @@ object NodeKey extends {
    * @param key tuple to use as a key.
    * @return a NodeKey
    */
-  implicit def tuple2NodeKey(key: (String, Any)): NodeKey = {
-    NodeKey(key._1 -> key._2)
-  }
+  implicit def tuple2NodeKey(key: (String, Any)): NodeKey = NodeKey(key._1 -> key._2)
 
   /**
    * Helper to create a new NodeKey.
    *
    * @param elems the keys representing a level of a path.
    */
-  def apply(elems: (String, Any)*): NodeKey = {
-    new NodeKey(elems:_*)
-  }
+  def apply(elems: (String, Any)*): NodeKey = new NodeKey(elems:_*)
 
 }

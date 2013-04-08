@@ -21,8 +21,7 @@ class Path private (
 
   def length: Int = pathElements.length
 
-  override protected[this] def newBuilder: Builder[NodeKey, Path] =
-    Path.newBuilder
+  override protected[this] def newBuilder: Builder[NodeKey, Path] = Path.newBuilder
 
   /**
    * Appends another path to this path.
@@ -30,9 +29,7 @@ class Path private (
    * @param p the other path to append.
    * @return a new path consisting of this path with p appended.
    */
-  def +(p: Path) = {
-    new Path((this.pathElements ++ p.pathElements):_*)
-  }
+  def +(p: Path) = new Path((this.pathElements ++ p.pathElements):_*)
 }
 
 /**
@@ -61,9 +58,7 @@ object Path {
    * @param key graph item key to convert.
    * @return a Path
    */
-  implicit def nodeKey2Path(key: NodeKey): Path = {
-    Path(key)
-  }
+  implicit def nodeKey2Path(key: NodeKey): Path = Path(key)
 
   /**
    * Helper to create a Path from keys.
@@ -71,19 +66,14 @@ object Path {
    * @param keys maps containing the keys of each level in the path to be created.
    * @return a Path with the specified keys.
    */
-  def apply(keys: NodeKey*): Path = {
-    new Path(keys:_*)
-  }
+  def apply(keys: NodeKey*): Path = new Path(keys:_*)
 
   /**
    * Helper for match ... case extraction.
    */
   def unapplySeq(x: Seq[NodeKey]): Option[Seq[NodeKey]] = Some(x)
 
-  def fromSeq(buf: Seq[NodeKey]): Path = {
-    new Path(buf:_*)
-  }
+  def fromSeq(buf: Seq[NodeKey]): Path = new Path(buf:_*)
 
-  def newBuilder: Builder[NodeKey, Path] =
-    new ArrayBuffer mapResult fromSeq
+  def newBuilder: Builder[NodeKey, Path] = new ArrayBuffer mapResult fromSeq
 }
