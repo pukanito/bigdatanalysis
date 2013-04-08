@@ -22,27 +22,34 @@ class NodeKeyTest extends FunSpec with ShouldMatchers {
     }
 
     it("should be possible to request non existing items with 'get'") {
-      var k: NodeKey = NodeKey("A" -> 1, "B" -> 2)
+      val k: NodeKey = NodeKey("A" -> 1, "B" -> 2)
       k get "A" should equal (Some(1))
       k get "B" should equal (Some(2))
       k get "C" should equal (None)
     }
 
     it("should not be possible to request non existing items with 'apply'") {
-      var k: NodeKey = NodeKey("A" -> 1, "B" -> 2)
+      val k: NodeKey = NodeKey("A" -> 1, "B" -> 2)
       k("A") should equal (1)
       k("B") should equal (2)
       intercept[NoSuchElementException] { k("C") }
     }
 
     it("should be possible to iterate over items with 'iterator'") {
-      var k: NodeKey = NodeKey("A" -> 1, "B" -> 2)
-      val i = k.iterator
+      val i = NodeKey("A" -> 1, "B" -> 2).iterator
       i.hasNext should equal (true)
       i.next should equal ("A" -> 1)
       i.hasNext should equal (true)
       i.next should equal ("B" -> 2)
       i.hasNext should equal (false)
+    }
+
+    it("should compare different node keys with equal value as equal") {
+      NodeKey("A" -> 1, "B" -> 2) should equal ( NodeKey("B" -> 2, "A" -> 1))
+    }
+
+    it("should compare different node keys with different value as not equal") {
+      NodeKey("A" -> 1, "B" -> 2) should not equal (NodeKey("B" -> 1, "A" -> 2))
     }
 
   }

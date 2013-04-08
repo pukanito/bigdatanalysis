@@ -32,18 +32,6 @@ class NodeTest extends FunSpec with ShouldMatchers {
 
   describe("Node") {
 
-    it("should compare keys of different nodes with the same key as equal") {
-      val t1 = new TestNode(1)
-      val t2 = new TestNode(1)
-      t1.key should equal (t2.key)
-    }
-
-    it("should compare keys of different nodes with different keys as not equal") {
-      val t1 = new TestNode(1)
-      val t2 = new TestNode(2)
-      t1.key should not equal (t2.key)
-    }
-
     it("should model parent-child relations between nodes") {
       val t1 = new TestNode(1)
       val t2 = new TestNode(1)
@@ -198,18 +186,6 @@ class NodeTest extends FunSpec with ShouldMatchers {
   }
 
   describe("simple Node") {
-
-    it("should compare keys of different nodes with the same key as equal") {
-      val t1 = new TestSimpleNode("A")
-      val t2 = new TestSimpleNode("A")
-      t1.key should equal (t2.key)
-    }
-
-    it("should compare keys of different nodes with different keys as not equal") {
-      val t1 = new TestSimpleNode("A")
-      val t2 = new TestSimpleNode("B")
-      t1.key should not equal (t2.key)
-    }
 
     it("should be possible to uniquely identify a node by its path (root / childkey / childkey / ...)") {
       val t1 = new TestSimpleNode("1")
