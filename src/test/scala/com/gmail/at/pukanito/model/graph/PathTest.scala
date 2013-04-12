@@ -24,6 +24,24 @@ class PathTest extends FunSpec with ShouldMatchers  {
       val y = Path("A" -> 1)
       val z = x + y
       z should have size (2)
+      z should not be theSameInstanceAs(x)
+      z should not be theSameInstanceAs(y)
+    }
+
+    it("should be possible to add an empty path to another path giving the other path") {
+      val x = Path()
+      val y = Path("A" -> 1)
+      val z = x + y
+      z should have size (1)
+      z should be theSameInstanceAs(y)
+    }
+
+    it("should be possible to add a path to an empty path giving the original path") {
+      val x = Path("A" -> 1)
+      val y = Path()
+      val z = x + y
+      z should have size (1)
+      z should be theSameInstanceAs(x)
     }
 
     it("should return the first item of the path with 'head'") {
