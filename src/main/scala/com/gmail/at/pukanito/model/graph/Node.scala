@@ -104,21 +104,17 @@ trait Node[T <: Node[T]] {
   /**
    * Returns the path(s) of the node.
    */
-  def paths: Set[Path] = {
-    if (parents.size == 0)
-      Set(Path(key))
-    else
-      parents flatMap { _.paths } map { _ + Path(key) }
+  def paths: Set[Path] = parents.size match {
+    case 0 => Set(Path(key))
+    case _ => parents flatMap { _.paths } map { _ + Path(key) }
   }
 
   /**
    * Returns a path of the node. If multiple paths exist one of them is returned.
    */
-  def path: Path = {
-    if (parents.size == 0)
-      Path(key)
-    else
-      parents.head.path + Path(key)
+  def path: Path = parents.size match {
+    case 0 => Path(key)
+    case _ => parents.head.path + Path(key)
   }
 
   /**
@@ -158,11 +154,9 @@ trait Node[T <: Node[T]] {
    * @param path path to the node.
    * @throws NoSuchElementException if a node in the path does not exist.
    */
-  def apply(path: Path): T = {
-    if (path.size == 0)
-      this
-    else
-      children(path.head)(path.tail)
+  def apply(path: Path): T = path match {
+    case _: EmptyPath => this
+    case p: NonEmptyPath => children(p.head)(p.tail)
   }
 
 }
