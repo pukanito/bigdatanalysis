@@ -52,7 +52,7 @@ class NonEmptyPath(
   def length: Int = pathElements.length
 
   def +(p: Path) = p match {
-    case that: EmptyPath => this
+    case _: EmptyPath => this
     case that: NonEmptyPath => new NonEmptyPath((this.pathElements ++ that.pathElements):_*)
   }
 }
