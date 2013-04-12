@@ -72,6 +72,9 @@ object NodeKey extends {
    *
    * @param elems the keys representing a level of a path.
    */
-  def apply(elems: (String, Any)*): NodeKey = new NodeKey(elems:_*)
+  def apply(elems: (String, Any)*): NodeKey = {
+    require { elems.size > 0 }
+    new NodeKey(elems:_*)
+  }
 
 }

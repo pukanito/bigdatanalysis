@@ -41,6 +41,22 @@ class PathTest extends FunSpec with ShouldMatchers  {
       y.tail should equal (Path(NodeKey("B" -> 2, "C" -> 3)))
     }
 
+    it("should be possible to iterate over path items") {
+      val i = Path("A"->1, "B" -> 2, "C" -> 3).iterator
+      i.hasNext should equal (true)
+      i.next should equal (NodeKey("A" -> 1))
+      i.hasNext should equal (true)
+      i.next should equal (NodeKey("B" -> 2))
+      i.hasNext should equal (true)
+      i.next should equal (NodeKey("C" -> 3))
+      i.hasNext should equal (false)
+    }
+
+    it("should be possible to iterate over an empty path") {
+      val i = Path().iterator
+      i.hasNext should equal (false)
+    }
+
     it("should behave correctly when testing equality") {
       val p1, p2 = Path("A" -> 1, "B" -> 2)
       p1 should equal (p2)

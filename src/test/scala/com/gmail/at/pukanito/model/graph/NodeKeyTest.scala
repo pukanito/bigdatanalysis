@@ -7,6 +7,10 @@ class NodeKeyTest extends FunSpec with ShouldMatchers {
 
   describe("NodeKey") {
 
+    it("should throw an exception when creating an empty NodeKey") {
+      intercept[IllegalArgumentException] { NodeKey() }
+    }
+
     it("should be possible to add items to the node key") {
       var k: NodeKey = NodeKey("A" -> 1, "B" -> 2)
       k.size should equal (2)

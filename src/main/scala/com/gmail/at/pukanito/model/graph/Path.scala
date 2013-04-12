@@ -6,20 +6,8 @@ import scala.collection.mutable.Builder
 
 /**
  * Representation of a relative or absolute path through GraphItems.
- *
- * @param path the keys representing the path.
  */
-class Path private (
-  path: NodeKey*
-) extends Seq[NodeKey] with SeqLike[NodeKey, Path] {
-
-  private val pathElements = Seq[NodeKey](path:_*)
-
-  def apply(idx: Int): NodeKey = pathElements(idx)
-
-  def iterator: Iterator[NodeKey] = pathElements.iterator
-
-  def length: Int = pathElements.length
+abstract class Path extends Seq[NodeKey] with SeqLike[NodeKey, Path] {
 
   override protected[this] def newBuilder: Builder[NodeKey, Path] = Path.newBuilder
 
@@ -29,7 +17,44 @@ class Path private (
    * @param p the other path to append.
    * @return a new path consisting of this path with p appended.
    */
-  def +(p: Path) = new Path((this.pathElements ++ p.pathElements):_*)
+  def +(p: Path): Path
+}
+
+/**
+ * Implementation for the empty path.
+ */
+class EmptyPath extends Path {
+
+  def apply(idx: Int): NodeKey = throw new NoSuchElementException
+
+  def iterator: Iterator[NodeKey] = Iterator.empty
+
+  def length: Int = 0
+
+  def +(p: Path) = p
+}
+
+/**
+ * Implementation for the non-empty path.
+ *
+ * @param path the keys representing the path.
+ */
+class NonEmptyPath(
+  path: NodeKey*
+) extends Path {
+
+  val pathElements = Seq[NodeKey](path:_*)
+
+  def apply(idx: Int): NodeKey = pathElements(idx)
+
+  def iterator: Iterator[NodeKey] = pathElements.iterator
+
+  def length: Int = pathElements.length
+
+  def +(p: Path) = p match {
+    case that: EmptyPath => this
+    case that: NonEmptyPath => new NonEmptyPath((this.pathElements ++ that.pathElements):_*)
+  }
 }
 
 /**
@@ -66,14 +91,17 @@ object Path {
    * @param keys maps containing the keys of each level in the path to be created.
    * @return a Path with the specified keys.
    */
-  def apply(keys: NodeKey*): Path = new Path(keys:_*)
+  def apply(keys: NodeKey*): Path = keys.size match {
+    case 0 => new EmptyPath
+    case _ => new NonEmptyPath(keys:_*)
+  }
 
   /**
    * Helper for match ... case extraction.
    */
   def unapplySeq(x: Seq[NodeKey]): Option[Seq[NodeKey]] = Some(x)
 
-  def fromSeq(buf: Seq[NodeKey]): Path = new Path(buf:_*)
+  def fromSeq(buf: Seq[NodeKey]): Path = apply(buf:_*)
 
   def newBuilder: Builder[NodeKey, Path] = new ArrayBuffer mapResult fromSeq
 }
