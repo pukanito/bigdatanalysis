@@ -96,9 +96,11 @@ trait Node[T <: Node[T]] {
    * Returns a copy of this object and all its children.
    */
   def copyGraph: T = {
-    val item = this.copy
-    childNodes.values foreach { item += _.copyGraph }
-    item
+    def addChildren(item: T): T = {
+      childNodes.values foreach { item += _.copyGraph }
+      item
+    }
+    addChildren(this.copy)
   }
 
   /**
