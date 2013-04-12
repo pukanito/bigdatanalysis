@@ -23,6 +23,43 @@ abstract class Path extends Seq[NodeKey] with SeqLike[NodeKey, Path] {
 }
 
 /**
+ * Implementation for the empty path.
+ */
+class EmptyPath private[graph] extends Path {
+
+  def apply(idx: Int): NodeKey = throw new NoSuchElementException
+
+  def iterator: Iterator[NodeKey] = Iterator.empty
+
+  def length: Int = 0
+
+  def +(p: Path) = p
+}
+
+/**
+ * Implementation for the non-empty path.
+ *
+ * @param path the keys representing the path.
+ */
+class NonEmptyPath private[graph] (
+  path: NodeKey*
+) extends Path {
+
+  val pathElements = Seq[NodeKey](path:_*)
+
+  def apply(idx: Int): NodeKey = pathElements(idx)
+
+  def iterator: Iterator[NodeKey] = pathElements.iterator
+
+  def length: Int = pathElements.length
+
+  def +(p: Path) = p match {
+    case _: EmptyPath => this
+    case that: NonEmptyPath => new NonEmptyPath((this.pathElements ++ that.pathElements):_*)
+  }
+}
+
+/**
  * Types and helper methods for Path.
  *
  * Creating a graph path from simple keys:
@@ -41,43 +78,6 @@ abstract class Path extends Seq[NodeKey] with SeqLike[NodeKey, Path] {
 object Path {
 
   import scala.language.implicitConversions
-
-  /**
-   * Implementation for the empty path.
-   */
-  class EmptyPath private[Path] extends Path {
-
-    def apply(idx: Int): NodeKey = throw new NoSuchElementException
-
-    def iterator: Iterator[NodeKey] = Iterator.empty
-
-    def length: Int = 0
-
-    def +(p: Path) = p
-  }
-
-  /**
-   * Implementation for the non-empty path.
-   *
-   * @param path the keys representing the path.
-   */
-  class NonEmptyPath private[Path] (
-    path: NodeKey*
-  ) extends Path {
-
-    val pathElements = Seq[NodeKey](path:_*)
-
-    def apply(idx: Int): NodeKey = pathElements(idx)
-
-    def iterator: Iterator[NodeKey] = pathElements.iterator
-
-    def length: Int = pathElements.length
-
-    def +(p: Path) = p match {
-      case _: EmptyPath => this
-      case that: NonEmptyPath => new NonEmptyPath((this.pathElements ++ that.pathElements):_*)
-    }
-  }
 
   /**
    * Helper to convert a NodeKey to a Path (for implicit conversion).
