@@ -6,6 +6,8 @@ import scala.collection.mutable.Builder
 
 /**
  * Representation of a relative or absolute path through GraphItems.
+ *
+ * A path is a sequence of NodeKeys.
  */
 abstract class Path extends Seq[NodeKey] with SeqLike[NodeKey, Path] {
 
