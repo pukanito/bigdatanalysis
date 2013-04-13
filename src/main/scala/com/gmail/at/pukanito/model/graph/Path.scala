@@ -105,5 +105,8 @@ object Path {
 
   def fromSeq(buf: Seq[NodeKey]): Path = apply(buf:_*)
 
+  /**
+   * Helper for creating new instances.
+   */
   def newBuilder: Builder[NodeKey, Path] = new ArrayBuffer mapResult fromSeq
 }
