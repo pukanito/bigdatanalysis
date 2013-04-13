@@ -7,7 +7,8 @@ import scala.collection.MapLike
 /**
  * Represents the (compound) key of a [[com.gmail.at.pukanito.model.graph.Node]].
  *
- * The key is implemented as a wrapper around Map[String, Any]
+ * The key is implemented as a wrapper around Map[String, Any]. A NodeKey consists
+ * of one or more (key,value) elements.
  *
  * @param elems the keys representing a level of a path.
  */
