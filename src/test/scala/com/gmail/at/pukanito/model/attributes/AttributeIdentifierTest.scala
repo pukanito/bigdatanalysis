@@ -26,7 +26,7 @@ class AttributeIdentifierTest extends FunSpec with ShouldMatchers {
 
     it("should convert from String implicitely") {
       def testConvert(id: AttributeIdentifier) {
-    	  new AttributeIdentifier("XXX") should equal (id)
+          new AttributeIdentifier("XXX") should equal (id)
       }
       testConvert("XXX")
     }
