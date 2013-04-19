@@ -1,5 +1,7 @@
 package com.gmail.at.pukanito.model.attributes
 
+// scalastyle:off object.name
+
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 

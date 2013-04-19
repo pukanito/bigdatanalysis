@@ -18,7 +18,9 @@ abstract class AttributeValue(
   /**
    * The default key of an attribute definition: its attribute id.
    */
+  // scalastyle:off public.methods.have.type
   override def key = attributeDefinition.attributeId.toString
+  // scalastyle:on public.methods.have.type
 
   /**
    * Its value.

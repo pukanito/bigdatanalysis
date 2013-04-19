@@ -20,15 +20,21 @@ class NodeKey private (
 
   override def get(key: String): Option[Any] = if (key.isEmpty) None else nodeKeyElements get key
 
+  // scalastyle:off method.name spaces.after.plus
   override def +[B1 >: Any](kv: (String, B1)): NodeKey = new NodeKey((nodeKeyElements + kv).toSeq:_*)
+  // scalastyle:on method.name spaces.after.plus
 
+  // scalastyle:off method.name
   override def -(key: String): NodeKey = new NodeKey((nodeKeyElements - key).toSeq:_*)
+  // scalastyle:on method.name
 
   override def iterator: Iterator[(String, Any)] = nodeKeyElements.iterator
 
   override def stringPrefix: String = "NodeKey"
 
+  // scalastyle:off public.methods.have.type
   override def empty = new NodeKey
+  // scalastyle:on public.methods.have.type
 }
 
 /**

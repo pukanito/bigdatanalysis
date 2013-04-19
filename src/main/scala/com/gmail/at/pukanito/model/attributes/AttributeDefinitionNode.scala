@@ -17,7 +17,9 @@ class AttributeDefinitionNode (
   /**
    * The key of an attribute definition: its attribute id.
    */
+  // scalastyle:off public.methods.have.type
   override def key = attributeId.toString
+  // scalastyle:on public.methods.have.type
 
   override def copy: AttributeDefinitionNode = new AttributeDefinitionNode(attributeId, attributeValueKeyIds)
 

@@ -14,7 +14,11 @@ import com.gmail.at.pukanito.model.repository.GraphRepository
 class BigDataModel (
   val graphRepository: GraphRepository[AttributeDefinitionNode]
 ) extends AttributeModel {
+  // scalastyle:off public.methods.have.type
   def load = graphRepository.get()
+  // scalastyle:on public.methods.have.type
 
+  // scalastyle:off public.methods.have.type
   def store = graphRepository.put(rootAttributes.toSeq:_*)
+  // scalastyle:on public.methods.have.type
 }

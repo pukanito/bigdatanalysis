@@ -59,7 +59,9 @@ class MemoryMapGraphRepository[T <: graph.Node[T]] extends GraphRepository[T] {
 
   override def apply(paths: graph.Path*): Set[T] = {
     // When an empty path is supplied, get all the root leaves.
+    // scalastyle:off if.brace
     if (paths.isEmpty)
+    // scalastyle:on if.brace
       apply((leafs map {case (key,_) => graph.Path(key) }).toSeq:_*)
     else (paths map { p =>
       p match {
@@ -72,7 +74,9 @@ class MemoryMapGraphRepository[T <: graph.Node[T]] extends GraphRepository[T] {
 
   override def get(paths: graph.Path*): Set[Option[T]] = {
     // When an empty path is supplied, get all the root leaves.
+    // scalastyle:off if.brace
     if (paths.isEmpty)
+    // scalastyle:on if.brace
       get((leafs map {case (key,_) => graph.Path(key) }).toSeq:_*)
     else (paths map { p =>
       p match {
@@ -94,7 +98,9 @@ class MemoryMapGraphRepository[T <: graph.Node[T]] extends GraphRepository[T] {
     ) } ) (collection.breakOut)
   }
 
+  // scalastyle:off public.methods.have.type
   override def delete(paths: graph.Path*) = {
+  // scalastyle:on public.methods.have.type
     paths foreach { p =>
       p match {
         case graph.Path() => throw new RuntimeException("Cannot delete from MemoryMapGraphRepository without a path")

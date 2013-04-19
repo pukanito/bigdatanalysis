@@ -19,7 +19,9 @@ abstract class Path extends Seq[NodeKey] with SeqLike[NodeKey, Path] {
    * @param p the other path to append.
    * @return a new path consisting of this path with p appended.
    */
+  // scalastyle:off method.name spaces.after.plus
   def +(p: Path): Path
+  // scalastyle:on method.name spaces.after.plus
 }
 
 /**
@@ -33,7 +35,9 @@ class EmptyPath private[graph] extends Path {
 
   def length: Int = 0
 
+  // scalastyle:off method.name spaces.after.plus public.methods.have.type
   def +(p: Path) = p
+  // scalastyle:on method.name spaces.after.plus public.methods.have.type
 }
 
 /**
@@ -53,7 +57,9 @@ class NonEmptyPath private[graph] (
 
   def length: Int = pathElements.length
 
+  // scalastyle:off method.name spaces.after.plus public.methods.have.type
   def +(p: Path) = p match {
+  // scalastyle:on method.name spaces.after.plus public.methods.have.type
     case _: EmptyPath => this
     case that: NonEmptyPath => new NonEmptyPath((this.pathElements ++ that.pathElements):_*)
   }

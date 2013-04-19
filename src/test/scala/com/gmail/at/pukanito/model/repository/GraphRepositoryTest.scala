@@ -1,5 +1,7 @@
 package com.gmail.at.pukanito.model.repository
 
+// scalastyle:off magic.number
+
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 import com.gmail.at.pukanito.model.graph
@@ -8,7 +10,9 @@ import com.gmail.at.pukanito.controller.config.Configuration
 class GraphRepositoryTest extends FunSpec with ShouldMatchers {
 
   private class TestSimpleNode(val k: String, var v: Int) extends graph.Node[TestSimpleNode] {
+    // scalastyle:off public.methods.have.type
     override def key = k
+    // scalastyle:on public.methods.have.type
 
     def copy: TestSimpleNode = new TestSimpleNode(k, v)
 

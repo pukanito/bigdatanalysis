@@ -1,12 +1,16 @@
 package com.gmail.at.pukanito.model.graph
 
+// scalastyle:off magic.number
+
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
 class NodeTest extends FunSpec with ShouldMatchers {
 
   private class TestNode(val k: Int) extends Node[TestNode] {
+    // scalastyle:off public.methods.have.type
     override def key = "A" -> k
+    // scalastyle:on public.methods.have.type
 
     override def copy: TestNode = new TestNode(k)
 
@@ -25,7 +29,9 @@ class NodeTest extends FunSpec with ShouldMatchers {
   }
 
   private class TestSimpleNode (val k: String) extends Node[TestSimpleNode] {
+    // scalastyle:off public.methods.have.type
     override def key = k
+    // scalastyle:on public.methods.have.type
 
     override def copy: TestSimpleNode = new TestSimpleNode(k)
   }

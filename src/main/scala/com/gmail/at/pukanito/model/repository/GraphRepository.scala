@@ -12,7 +12,9 @@ trait GraphRepository[T <: graph.Node[T]] {
    *
    * @param node the value(s) to store.
    */
+  // scalastyle:off public.methods.have.type
   def put(node: T*)
+  // scalastyle:on public.methods.have.type
 
   /**
    * Returns nodes (including their children) belonging to the specified paths.
@@ -45,6 +47,8 @@ trait GraphRepository[T <: graph.Node[T]] {
    * @param paths the path(s) of the item(s) to delete.
    * @throws RuntimeException when the graph path is empty.
    */
+  // scalastyle:off public.methods.have.type
   def delete(paths: graph.Path*)
+  // scalastyle:on public.methods.have.type
 
 }
