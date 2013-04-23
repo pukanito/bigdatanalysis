@@ -27,7 +27,7 @@ abstract class Path extends Seq[NodeKey] with SeqLike[NodeKey, Path] {
 /**
  * Implementation for the empty path.
  */
-class EmptyPath private[graph] extends Path {
+case class EmptyPath private[graph] extends Path {
 
   def apply(idx: Int): NodeKey = throw new NoSuchElementException
 
@@ -45,7 +45,7 @@ class EmptyPath private[graph] extends Path {
  *
  * @param path the keys representing the path.
  */
-class NonEmptyPath private[graph] (
+case class NonEmptyPath private[graph] (
   path: NodeKey*
 ) extends Path {
 

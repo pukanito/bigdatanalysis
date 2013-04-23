@@ -157,8 +157,8 @@ trait Node[T <: Node[T]] {
    * @throws NoSuchElementException if a node in the path does not exist.
    */
   def apply(path: Path): T = path match {
-    case _: EmptyPath => this
-    case p: NonEmptyPath => children(p.head)(p.tail)
+    case EmptyPath() => this
+    case NonEmptyPath(p) => children(p.head)(p.tail)
   }
 
 }
