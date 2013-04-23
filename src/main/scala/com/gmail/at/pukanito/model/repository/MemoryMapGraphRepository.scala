@@ -47,6 +47,7 @@ class MemoryMapGraphRepository[T <: graph.Node[T]] extends GraphRepository[T] {
    * @return a copy of the item and children.
    */
   private def getChildren(item: Option[T]): Option[T] = {
+    implicit val g = new graph.Graph[T]
     item foreach { (i) =>
       children.get(i.key) foreach { (m) =>
         m.leafs foreach { case (_, leafItem) =>

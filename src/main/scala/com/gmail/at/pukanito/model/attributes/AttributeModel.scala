@@ -55,6 +55,9 @@ class DuplicateAttributeDefinitionException(value: AttributeDefinition)
  */
 trait AttributeModel {
 
+  import com.gmail.at.pukanito.model.graph.Graph
+  implicit val graph = new Graph[AttributeDefinitionNode]
+
   /**
    * Map of known attribute nodes in this model.
    */

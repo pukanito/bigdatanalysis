@@ -93,6 +93,7 @@ class GraphRepositoryTest extends FunSpec with ShouldMatchers {
     }
 
     it("should be possible to create and check a node by its path") {
+      implicit val g = new graph.Graph[TestSimpleNode]
       val repository = TestRepository.getNewRepository
       val t1 = new TestSimpleNode("A", 1)
       val t2 = new TestSimpleNode("B", 2)
@@ -112,6 +113,7 @@ class GraphRepositoryTest extends FunSpec with ShouldMatchers {
     }
 
     it("should be possible to create and check a graph by its path") {
+      implicit val g = new graph.Graph[TestSimpleNode]
       val repository = TestRepository.getNewRepository
       val t1 = new TestSimpleNode("A", 10)
       val t2a = new TestSimpleNode("Ba", 20)
@@ -125,6 +127,7 @@ class GraphRepositoryTest extends FunSpec with ShouldMatchers {
     }
 
     it("should be possible to modify a node by its path") {
+      implicit val g = new graph.Graph[TestSimpleNode]
       val repository = TestRepository.getNewRepository
       val t1 = new TestSimpleNode("A", 1)
       val t2 = new TestSimpleNode("B", 2)
@@ -140,6 +143,7 @@ class GraphRepositoryTest extends FunSpec with ShouldMatchers {
     }
 
     it("should be possible to delete a node and all its children (a graph) by its path") {
+      implicit val g = new graph.Graph[TestSimpleNode]
       val repository = TestRepository.getNewRepository
       val t1 = new TestSimpleNode("A", 10)
       val t2a = new TestSimpleNode("Ba", 20)
@@ -158,36 +162,39 @@ class GraphRepositoryTest extends FunSpec with ShouldMatchers {
     }
 
     it("should be possible to retrieve a graph by its path") {
+      val g1 = new graph.Graph[TestSimpleNode]
       val repository = TestRepository.getNewRepository
       val t1 = new TestSimpleNode("A", 10)
       val t2a = new TestSimpleNode("Ba", 20)
       val t2b = new TestSimpleNode("Bb", 20)
       val t3 = new TestSimpleNode("C", 30)
       repository.put(t1)
-      t1 += t2a
+      t1.+=(t2a)(g1)
       repository(t1.key).head should not equal (t1)
       repository.put(t2a)
       repository(t1.key).head should equal (t1)
-      t1 += t2b
+      t1.+=(t2b)(g1)
       repository(t1.key).head should not equal (t1)
       repository.put(t2b)
       repository(t1.key).head should equal (t1)
-      t2a += t3
+      t2a.+=(t3)(g1)
       repository(t1.key).head should not equal (t1)
       repository.put(t3)
       repository(t1.key).head should equal (t1)
+      val g2 = new graph.Graph[TestSimpleNode]
       val r1 = new TestSimpleNode("A", 10)
       val r2a = new TestSimpleNode("Ba", 20)
       val r2b = new TestSimpleNode("Bb", 20)
       val r3 = new TestSimpleNode("C", 30)
-      r1 += r2a
-      r1 += r2b
-      r2a += r3
+      r1.+=(r2a)(g2)
+      r1.+=(r2b)(g2)
+      r2a.+=(r3)(g2)
       repository(t1.key).head should equal (r1)
       repository(graph.Path(t1.key, t2a.key)).head should equal (r2a)
     }
 
     it("should throw an exception or return None when a non existing path is retreived") {
+      implicit val g = new graph.Graph[TestSimpleNode]
       val repository = TestRepository.getNewRepository
       val t1 = new TestSimpleNode("A", 10)
       val t2a = new TestSimpleNode("Ba", 20)
@@ -206,6 +213,7 @@ class GraphRepositoryTest extends FunSpec with ShouldMatchers {
     }
 
     it("should be possible to retrieve all graphs with a specific sub path, even from the root") {
+      implicit val g = new graph.Graph[TestSimpleNode]
       val repository = TestRepository.getNewRepository
       val t1 = new TestSimpleNode("A", 10)
       val t2a = new TestSimpleNode("Ba", 20)
@@ -226,6 +234,7 @@ class GraphRepositoryTest extends FunSpec with ShouldMatchers {
     }
 
     it("should be possible to create a graph by its path") {
+      implicit val g = new graph.Graph[TestSimpleNode]
       val repository = TestRepository.getNewRepository
       val t1 = new TestSimpleNode("A", 10)
       val t2a = new TestSimpleNode("Ba", 20)
@@ -241,23 +250,25 @@ class GraphRepositoryTest extends FunSpec with ShouldMatchers {
     }
 
     it("should be possible to modify a graph by its path") {
+      val g1 = new graph.Graph[TestSimpleNode]
       val repository = TestRepository.getNewRepository
       val t1 = new TestSimpleNode("A", 10)
       val t2a = new TestSimpleNode("Ba", 20)
       val t2b = new TestSimpleNode("Bb", 20)
       val t3 = new TestSimpleNode("C", 30)
-      t1 += t2a
-      t1 += t2b
-      t2a += t3
+      t1.+=(t2a)(g1)
+      t1.+=(t2b)(g1)
+      t2a.+=(t3)(g1)
       repository.put(t1)
+      val g2 = new graph.Graph[TestSimpleNode]
       val r1 = new TestSimpleNode("A", 10)
       val r2a = new TestSimpleNode("Ba", 40)
       val r2b = new TestSimpleNode("Bb", 20)
       val r3 = new TestSimpleNode("C", 30)
-      r1 += r2a
+      r1.+=(r2a)(g2)
       repository.put(r1)
-      r1 += r2b
-      r2a += r3
+      r1.+=(r2b)(g2)
+      r2a.+=(r3)(g2)
       repository(t1.key).head should equal (r1)
     }
 

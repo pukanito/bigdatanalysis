@@ -39,6 +39,7 @@ class NodeTest extends FunSpec with ShouldMatchers {
   describe("Node") {
 
     it("should model parent-child relations between nodes") {
+      implicit val g = new Graph[TestNode]
       val t1 = new TestNode(1)
       val t2 = new TestNode(1)
       t1 += t2
@@ -51,6 +52,7 @@ class NodeTest extends FunSpec with ShouldMatchers {
     }
 
     it("should be possible to get the path(s) of a node") {
+      implicit val g = new Graph[TestNode]
       val t1 = new TestNode(1)
       val t2 = new TestNode(2)
       val t3 = new TestNode(3)
@@ -61,20 +63,24 @@ class NodeTest extends FunSpec with ShouldMatchers {
     }
 
     it("should be possible to compare different graphs with each other") {
+      val g1 = new Graph[TestNode]
       val t1 = new TestNode(1)
       val t2 = new TestNode(2)
-      t1 += t2
+      t1.+=(t2)(g1)
+      val g2 = new Graph[TestNode]
       val s1 = new TestNode(1)
       val s2 = new TestNode(2)
-      s1 += s2
+      s1.+=(s2)(g2)
       s1 should equal (t1)
+      val g3 = new Graph[TestNode]
       val r1 = new TestNode(1)
       val r2 = new TestNode(3)
-      r1 += r2
+      r1.+=(r2)(g3)
       r1 should not equal (t1)
     }
 
     it("should be possible to take a copy of a node") {
+      implicit val g = new Graph[TestNode]
       val t1 = new TestNode(1)
       val t2 = t1.copy
       t1 should equal (t2)
@@ -83,26 +89,29 @@ class NodeTest extends FunSpec with ShouldMatchers {
     }
 
     it("should be possible to take a copy of a graph or subgraph") {
+      val g1 = new Graph[TestNode]
       val t1 = new TestNode(1)
       val t2 = new TestNode(2)
       val t3 = new TestNode(3)
-      t1 += t2
-      t2 += t3
-      t1 += t3
+      t1.+=(t2)(g1)
+      t2.+=(t3)(g1)
+      t1.+=(t3)(g1)
+      val g2 = new Graph[TestNode]
       val s1 = new TestNode(1)
       val s2 = new TestNode(2)
       val s3 = new TestNode(3)
-      s1 += s2
-      s2 += s3
-      s1 += s3
+      s1.+=(s2)(g2)
+      s2.+=(s3)(g2)
+      s1.+=(s3)(g2)
       t1 should equal (s1)
       t1.copy should not equal (s1)
       t2 should equal (s2)
-      t2.copyGraph should equal (s2)
-      t3.copyGraph should equal (s3)
+      t2.copyGraph(g1) should equal (s2)
+      t3.copyGraph(g1) should equal (s3)
     }
 
     it("should throw an exception when a cycle is detected when adding a child that is also parent") {
+      implicit val g = new Graph[TestNode]
       val t1 = new TestNode(1)
       def testRecursively(depth: Int, item: TestNode): Unit = {
         intercept[GraphCycleException] { item += t1 }
@@ -114,6 +123,7 @@ class NodeTest extends FunSpec with ShouldMatchers {
     }
 
     it("should throw an exception when a cycle is detected when adding a child that has a child that is also parent") {
+      implicit val g = new Graph[TestNode]
       val t1 = new TestNode(1)
       def testRecursively(depth: Int, item1: TestNode, item2: TestNode): Unit = {
         val t3 = new TestNode(1)
@@ -127,6 +137,7 @@ class NodeTest extends FunSpec with ShouldMatchers {
     }
 
     it("should throw an exception when a cycle is detected in specific use cases") {
+      implicit val g = new Graph[TestNode]
       val t4 = new TestNode(1)
       val t3 = new TestNode(2)
       t3 += t4
@@ -146,6 +157,7 @@ class NodeTest extends FunSpec with ShouldMatchers {
     }
 
     it("should be possible to uniquely identify a node by its path (root / childkey / childkey / ...)") {
+      implicit val g = new Graph[TestNode]
       val t1 = new TestNode(1)
       val t2 = new TestNode(2)
       val t3 = new TestNode(3)
@@ -174,6 +186,7 @@ class NodeTest extends FunSpec with ShouldMatchers {
     }
 
     it("should throw a DuplicateAttributeException when a child node is added with an already existing key") {
+      implicit val g = new Graph[TestNode]
       val t1 = new TestNode(1)
       val t2 = new TestNode(2)
       val t3 = new TestNode(2)
@@ -194,6 +207,7 @@ class NodeTest extends FunSpec with ShouldMatchers {
   describe("simple Node") {
 
     it("should be possible to uniquely identify a node by its path (root / childkey / childkey / ...)") {
+      implicit val g = new Graph[TestSimpleNode]
       val t1 = new TestSimpleNode("1")
       val t2 = new TestSimpleNode("2")
       val t3 = new TestSimpleNode("3")

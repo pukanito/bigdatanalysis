@@ -95,7 +95,7 @@ trait Node[T <: Node[T]] {
   /**
    * Returns a copy of this object and all its children.
    */
-  def copyGraph: T = {
+  def copyGraph(implicit graph: Graph[T]): T = {
     def addChildren(item: T): T = {
       childNodes.values foreach { item += _.copyGraph }
       item
@@ -136,7 +136,7 @@ trait Node[T <: Node[T]] {
    * @throws GraphCycleException when a cycle is detected when the value would be added.
    * @throws DuplicateGraphItemException when an item with the same key already exists.
    */
-  def +=(childNode: T) = {
+  def +=(childNode: T)(implicit graph: Graph[T]) = {
     if (testCycleExistsInParents(List(this), childNode)) throw new GraphCycleException(childNode)
     if (childNodes contains childNode.key) throw new DuplicateChildNodeException(childNode)
     childNode.container match {
@@ -157,8 +157,8 @@ trait Node[T <: Node[T]] {
    * @throws NoSuchElementException if a node in the path does not exist.
    */
   def apply(path: Path): T = path match {
-    case EmptyPath() => this
-    case NonEmptyPath(p) => children(p.head)(p.tail)
+    case _: EmptyPath => this
+    case p: NonEmptyPath => children(p.head)(p.tail)
   }
 
 }
