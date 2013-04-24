@@ -29,14 +29,14 @@ abstract class Path extends Seq[NodeKey] with SeqLike[NodeKey, Path] {
  */
 case class EmptyPath private[graph] () extends Path {
 
-  def apply(idx: Int): NodeKey = throw new NoSuchElementException
+  override def apply(idx: Int): NodeKey = throw new NoSuchElementException
 
-  def iterator: Iterator[NodeKey] = Iterator.empty
+  override def iterator: Iterator[NodeKey] = Iterator.empty
 
-  def length: Int = 0
+  override def length: Int = 0
 
   // scalastyle:off method.name spaces.after.plus public.methods.have.type
-  def +(p: Path) = p
+  override def +(p: Path) = p
   // scalastyle:on method.name spaces.after.plus public.methods.have.type
 }
 
@@ -51,14 +51,14 @@ case class NonEmptyPath private[graph] (
 
   val pathElements = Seq[NodeKey](path:_*)
 
-  def apply(idx: Int): NodeKey = pathElements(idx)
+  override def apply(idx: Int): NodeKey = pathElements(idx)
 
-  def iterator: Iterator[NodeKey] = pathElements.iterator
+  override def iterator: Iterator[NodeKey] = pathElements.iterator
 
-  def length: Int = pathElements.length
+  override def length: Int = pathElements.length
 
   // scalastyle:off method.name spaces.after.plus public.methods.have.type
-  def +(p: Path) = p match {
+  override def +(p: Path) = p match {
   // scalastyle:on method.name spaces.after.plus public.methods.have.type
     case _: EmptyPath => this
     case that: NonEmptyPath => new NonEmptyPath((this.pathElements ++ that.pathElements):_*)
