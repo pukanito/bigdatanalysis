@@ -47,7 +47,6 @@ trait Node[T <: Node[T]] {
 
   private var parentNodes: Set[T] = Set[T]()
   private[this] var childNodes: Map[NodeKey, T] = Map[NodeKey, T]()
-  private[this] var containerOption: Option[Graph[T]] = None
 
   /**
    * Returns the key of a node. Should be immutable!
@@ -58,23 +57,6 @@ trait Node[T <: Node[T]] {
    * Returns a copy of this object.
    */
   def copy: T
-
-  /**
-   * Set the container, when not yet set. Also set the container of all parents and children.
-   *
-   * @param graph the graph to assign to this node.
-   * @throws RuntimeException when container is already assigned to something else.
-   */
-  private def setContainer(graph: Option[Graph[T]]):Unit = {
-    if (graph != None) containerOption match {
-      case None => containerOption = graph;
-                   childNodes.foreach { case (_,node) => node.setContainer(graph) }
-                   parentNodes.foreach { p => p.setContainer(graph) }
-      case Some(c) => if (c ne graph) throw new RuntimeException(s"Cannot reassign node container of node: $this")
-    }
-  }
-
-  private def container = containerOption
 
   /**
    * Returns true if child node is equal (object equality) to one of the nodes or one
@@ -139,13 +121,6 @@ trait Node[T <: Node[T]] {
   def +=(childNode: T)(implicit graph: Graph[T]) = {
     if (testCycleExistsInParents(List(this), childNode)) throw new GraphCycleException(childNode)
     if (childNodes contains childNode.key) throw new DuplicateChildNodeException(childNode)
-    childNode.container match {
-      case None => childNode.setContainer(containerOption)
-      case Some(c) => containerOption match {
-        case None => setContainer(Some(c))
-        case Some(g) => if (c ne g) 1 // Need copy
-      }
-    }
     childNodes += (childNode.key -> childNode)
     childNode.parentNodes += this
   }
