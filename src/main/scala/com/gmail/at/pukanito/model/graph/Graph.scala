@@ -20,7 +20,9 @@ class Graph[T <: Node[T]] {
   /**
    * Add a root node (including child nodes).
    */
-  def addAtRoot(node: Node[T]): Graph[T] = {
+  // scalastyle:off method.name
+  def +=(node: Node[T]): Graph[T] = {
+  // scalastyle:on method.name
 
     this
   }
