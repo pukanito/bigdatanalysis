@@ -5,7 +5,7 @@ package com.gmail.at.pukanito.model.graph
  *
  * @param T the type that can be contained within this graph.
  */
-class Graph[T] {
+class Graph[T <: Node[T]] {
 
   /**
    * All the nodes in the graph.
@@ -16,5 +16,13 @@ class Graph[T] {
    * All the edges in the graph.
    */
   private var edges: Set[Edge[T]] = Set()
+
+  /**
+   * Add a root node (including child nodes).
+   */
+  def addAtRoot(node: Node[T]): Graph[T] = {
+
+    this
+  }
 
 }

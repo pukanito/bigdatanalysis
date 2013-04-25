@@ -5,6 +5,6 @@ package com.gmail.at.pukanito.model.graph
  *
  * @param T the type that can be contained within the graph this edge belongs to.
  */
-class Edge[T] {
+class Edge[T <: Node[T]] {
 
 }
